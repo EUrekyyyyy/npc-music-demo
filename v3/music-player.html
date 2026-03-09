@@ -59,9 +59,6 @@ body {
   padding: 0 24px 40px;
   position: relative;
 }
-.player .song-info,
-.player .progress-area,
-.player .controls { flex-shrink: 0; }
 
 /* Top bar */
 .top-bar {
@@ -162,8 +159,7 @@ body {
 
 /* Lyrics */
 .lyrics-container {
-  flex: 1;
-  min-height: 0;
+  height: 40vh;
   overflow-y: auto;
   margin-bottom: 24px;
   text-align: center;
@@ -172,7 +168,7 @@ body {
   -webkit-overflow-scrolling: touch;
 }
 .lyrics-container::-webkit-scrollbar { display: none; }
-.lyrics-container.hidden { flex: 0; height: 0; opacity: 0; margin-bottom: 0; }
+.lyrics-container.hidden { height: 0; opacity: 0; margin-bottom: 0; }
 .lyrics-line {
   font-size: 14px;
   line-height: 2.2;
