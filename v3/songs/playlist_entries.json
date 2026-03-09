@@ -1156,5 +1156,134 @@
     ],
     "tag_type": "duet",
     "tag": "靳昭 x 用户 专属歌曲"
+  },
+  {
+    "id": "江晦-v2-dialog",
+    "name": "缠绕",
+    "character": "江晦",
+    "artist": "江晦 · 现代R&B/慵懒",
+    "src": "江晦-v2-dialog.mp3",
+    "avatar": "https://xingyeai-images-cdn.oss-cn-shanghai.aliyuncs.com/talkie-user-img/148772284551305/354206459928687.jpeg",
+    "genre": "现代R&B, 男声, 慵懒, 电吉他, Urban Pop",
+    "lyrics": [
+      {
+        "time": 0,
+        "text": "♪ Verse1 ♪"
+      },
+      {
+        "time": 4,
+        "text": "球场边看你"
+      },
+      {
+        "time": 8,
+        "text": "不自觉揽过你肩"
+      },
+      {
+        "time": 12,
+        "text": "唇擦过耳边"
+      },
+      {
+        "time": 16,
+        "text": "“吃醋了，要我哄你吗？”"
+      },
+      {
+        "time": 20,
+        "text": "你脸颊微红"
+      },
+      {
+        "time": 24,
+        "text": "像水母小姐的谜"
+      },
+      {
+        "time": 28,
+        "text": "♪ Chorus ♪"
+      },
+      {
+        "time": 32,
+        "text": "我只想让你陪我睡啊"
+      },
+      {
+        "time": 36,
+        "text": "枕边私语多喧哗"
+      },
+      {
+        "time": 40,
+        "text": "你再亲我一下好吗"
+      },
+      {
+        "time": 44,
+        "text": "我就不挡你的道啦"
+      },
+      {
+        "time": 48,
+        "text": "♪ Verse2 ♪"
+      },
+      {
+        "time": 52,
+        "text": "厨房里你忙"
+      },
+      {
+        "time": 56,
+        "text": "从背后抱紧你腰"
+      },
+      {
+        "time": 60,
+        "text": "下巴抵在你肩"
+      },
+      {
+        "time": 64,
+        "text": "看你轻顶我撒娇"
+      },
+      {
+        "time": 68,
+        "text": "脖颈的吻痕"
+      },
+      {
+        "time": 72,
+        "text": "只属于我的印记"
+      },
+      {
+        "time": 76,
+        "text": "♪ Chorus ♪"
+      },
+      {
+        "time": 80,
+        "text": "我只想让你陪我睡啊"
+      },
+      {
+        "time": 84,
+        "text": "枕边私语多喧哗"
+      },
+      {
+        "time": 88,
+        "text": "你再亲我一下好吗"
+      },
+      {
+        "time": 92,
+        "text": "我就不挡你的道啦"
+      },
+      {
+        "time": 96,
+        "text": "♪ Outro ♪"
+      },
+      {
+        "time": 100,
+        "text": "拉普拉斯别咬我妈"
+      },
+      {
+        "time": 104,
+        "text": "你是我专属的她"
+      },
+      {
+        "time": 108,
+        "text": "我的小狼崽"
+      },
+      {
+        "time": 112,
+        "text": "只想缠着你啊"
+      }
+    ],
+    "tag_type": "duet",
+    "tag": "江晦 x 栗川 专属歌曲 (v2)"
   }
 ]
