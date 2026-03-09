@@ -59,6 +59,9 @@ body {
   padding: 0 24px 40px;
   position: relative;
 }
+.player .song-info,
+.player .progress-area,
+.player .controls { flex-shrink: 0; }
 
 /* Top bar */
 .top-bar {
@@ -159,15 +162,17 @@ body {
 
 /* Lyrics */
 .lyrics-container {
-  height: 200px;
+  flex: 1;
+  min-height: 0;
   overflow-y: auto;
   margin-bottom: 24px;
   text-align: center;
   transition: all 0.4s ease;
   scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
 }
 .lyrics-container::-webkit-scrollbar { display: none; }
-.lyrics-container.hidden { height: 0; opacity: 0; margin-bottom: 0; }
+.lyrics-container.hidden { flex: 0; height: 0; opacity: 0; margin-bottom: 0; }
 .lyrics-line {
   font-size: 14px;
   line-height: 2.2;
@@ -1065,6 +1070,11 @@ const totalTimeEl = document.getElementById('totalTime');
 const songNameEl = document.getElementById('songName');
 const songArtistEl = document.getElementById('songArtist');
 const lyricsContainer = document.getElementById('lyricsContainer');
+let userScrolling = false;
+let userScrollTimer = null;
+lyricsContainer.addEventListener('touchstart', () => { userScrolling = true; clearTimeout(userScrollTimer); });
+lyricsContainer.addEventListener('touchend', () => { userScrollTimer = setTimeout(() => { userScrolling = false; }, 3000); });
+lyricsContainer.addEventListener('wheel', () => { userScrolling = true; clearTimeout(userScrollTimer); userScrollTimer = setTimeout(() => { userScrolling = false; }, 3000); });
 const modeBtn = document.getElementById('modeBtn');
 const modeText = document.getElementById('modeText');
 const lockMarker = document.getElementById('lockMarker');
@@ -1397,7 +1407,7 @@ audio.addEventListener('timeupdate', () => {
     const lines = lyricsContainer.querySelectorAll('.lyrics-line');
     lines.forEach((l, i) => {
       l.classList.toggle('active', i === activeIdx);
-      if (i === activeIdx) { l.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+      if (i === activeIdx && !userScrolling) { l.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
     });
   }
 });
