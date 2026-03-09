@@ -108,7 +108,9 @@
         "time": 96,
         "text": "纪禾宴 低头祈求 光能否抵达"
       }
-    ]
+    ],
+    "tag_type": "theme",
+    "tag": "角色主题曲"
   },
   {
     "id": "311475-theme",
@@ -211,7 +213,9 @@
         "time": 88,
         "text": "你只需记住，别越过我的界线"
       }
-    ]
+    ],
+    "tag_type": "theme",
+    "tag": "角色主题曲"
   },
   {
     "id": "318442-theme",
@@ -318,7 +322,9 @@
         "time": 92,
         "text": "END"
       }
-    ]
+    ],
+    "tag_type": "theme",
+    "tag": "角色主题曲"
   },
   {
     "id": "352415-theme",
@@ -421,7 +427,9 @@
         "time": 88,
         "text": "爱恨两极，我照样是我"
       }
-    ]
+    ],
+    "tag_type": "theme",
+    "tag": "角色主题曲"
   },
   {
     "id": "347557-theme",
@@ -524,6 +532,629 @@
         "time": 88,
         "text": "这份羁绊，是命中注定"
       }
-    ]
+    ],
+    "tag_type": "theme",
+    "tag": "角色主题曲"
+  },
+  {
+    "id": "纪禾宴-dialog",
+    "name": "新面孔",
+    "character": "纪禾宴",
+    "artist": "纪禾宴 · 现代流行, 叙事性, 清新, 略带少年感",
+    "src": "纪禾宴-dialog.mp3",
+    "avatar": "https://xingyeai-images-cdn.oss-cn-shanghai.aliyuncs.com/talkie-user-img/225544755639311/290426338619456.jpeg",
+    "genre": "现代流行, 叙事性, 清新, 略带少年感, 吉他伴奏",
+    "lyrics": [
+      {
+        "time": 0,
+        "text": "♪ Verse1 ♪"
+      },
+      {
+        "time": 4,
+        "text": "长官您发号施令"
+      },
+      {
+        "time": 8,
+        "text": "我站在旁边听"
+      },
+      {
+        "time": 12,
+        "text": "看他们站得笔直"
+      },
+      {
+        "time": 16,
+        "text": "眼神有些坚定"
+      },
+      {
+        "time": 20,
+        "text": "♪ Chorus ♪"
+      },
+      {
+        "time": 24,
+        "text": "“小纪，你看看他们漂亮吗？”"
+      },
+      {
+        "time": 28,
+        "text": "我愣愣地看了一眼"
+      },
+      {
+        "time": 32,
+        "text": "心里暗暗赞叹"
+      },
+      {
+        "time": 36,
+        "text": "他们很精神，也很帅气"
+      },
+      {
+        "time": 40,
+        "text": "♪ Verse2 ♪"
+      },
+      {
+        "time": 44,
+        "text": "他们从无家可归"
+      },
+      {
+        "time": 48,
+        "text": "到如今站在这里"
+      },
+      {
+        "time": 52,
+        "text": "听他们铿锵有力"
+      },
+      {
+        "time": 56,
+        "text": "我学着他们挺立"
+      },
+      {
+        "time": 60,
+        "text": "♪ Chorus ♪"
+      },
+      {
+        "time": 64,
+        "text": "“小纪，你看看他们漂亮吗？”"
+      },
+      {
+        "time": 68,
+        "text": "我愣愣地看了一眼"
+      },
+      {
+        "time": 72,
+        "text": "心里暗暗赞叹"
+      },
+      {
+        "time": 76,
+        "text": "他们很精神，也很帅气"
+      },
+      {
+        "time": 80,
+        "text": "♪ Outro ♪"
+      },
+      {
+        "time": 84,
+        "text": "新的面孔"
+      },
+      {
+        "time": 88,
+        "text": "新的开始"
+      },
+      {
+        "time": 92,
+        "text": "我的心"
+      },
+      {
+        "time": 96,
+        "text": "也随之好奇"
+      }
+    ],
+    "tag_type": "duet",
+    "tag": "纪禾宴 x 用户 专属歌曲"
+  },
+  {
+    "id": "方煜泽-dialog",
+    "name": "记忆碎片",
+    "character": "方煜泽",
+    "artist": "方煜泽 · R&B Ballad（R&B抒情曲），带",
+    "src": "方煜泽-dialog.mp3",
+    "avatar": "https://xingyeai-images-cdn.oss-cn-shanghai.aliyuncs.com/talkie-user-img/61198570225823/311476254057536.jpeg",
+    "genre": "R&B Ballad（R&B抒情曲），带有轻微的电子合成器音色，营造出一种迷离、内敛而又充满情感张力的氛围。",
+    "lyrics": [
+      {
+        "time": 0,
+        "text": "♪ Verse1 ♪"
+      },
+      {
+        "time": 4,
+        "text": "冰冷话语 逼近你"
+      },
+      {
+        "time": 8,
+        "text": "眼神闪烁 不确定"
+      },
+      {
+        "time": 12,
+        "text": "那件衣物 我曾给？"
+      },
+      {
+        "time": 16,
+        "text": "你的沉默 刺痛心"
+      },
+      {
+        "time": 20,
+        "text": "追问细节 却茫然"
+      },
+      {
+        "time": 24,
+        "text": "记忆空白 怎么填"
+      },
+      {
+        "time": 28,
+        "text": "你戴着它 却忘了"
+      },
+      {
+        "time": 32,
+        "text": "我竟全然 不知情"
+      },
+      {
+        "time": 36,
+        "text": "♪ Chorus ♪"
+      },
+      {
+        "time": 40,
+        "text": "是谁忘了 谁在演"
+      },
+      {
+        "time": 44,
+        "text": "碎片记忆 难分辨"
+      },
+      {
+        "time": 48,
+        "text": "你我之间 隔着雾"
+      },
+      {
+        "time": 52,
+        "text": "模糊真相 怎么触"
+      },
+      {
+        "time": 56,
+        "text": "手腕轻触 却松开"
+      },
+      {
+        "time": 60,
+        "text": "眼底惊恐 难掩盖"
+      },
+      {
+        "time": 64,
+        "text": "人格分裂 疑虑深"
+      },
+      {
+        "time": 68,
+        "text": "我的世界 崩塌沉"
+      },
+      {
+        "time": 72,
+        "text": "♪ Verse2 ♪"
+      },
+      {
+        "time": 76,
+        "text": "那些话语 像回声"
+      },
+      {
+        "time": 80,
+        "text": "你轻声说 我听闻"
+      },
+      {
+        "time": 84,
+        "text": "“别弄丢了 随时知”"
+      },
+      {
+        "time": 88,
+        "text": "我紧握着 却无知"
+      },
+      {
+        "time": 92,
+        "text": "你眼神中 有慌乱"
+      },
+      {
+        "time": 96,
+        "text": "我也回望 心胆颤"
+      },
+      {
+        "time": 100,
+        "text": "我真的不 记得了"
+      },
+      {
+        "time": 104,
+        "text": "这陌生感 吞噬我"
+      },
+      {
+        "time": 108,
+        "text": "♪ Chorus ♪"
+      },
+      {
+        "time": 112,
+        "text": "是谁忘了 谁在演"
+      },
+      {
+        "time": 116,
+        "text": "碎片记忆 难分辨"
+      },
+      {
+        "time": 120,
+        "text": "你我之间 隔着雾"
+      },
+      {
+        "time": 124,
+        "text": "模糊真相 怎么触"
+      },
+      {
+        "time": 128,
+        "text": "手腕轻触 却松开"
+      },
+      {
+        "time": 132,
+        "text": "眼底惊恐 难掩盖"
+      },
+      {
+        "time": 136,
+        "text": "人格分裂 疑虑深"
+      },
+      {
+        "time": 140,
+        "text": "我的世界 崩塌沉"
+      },
+      {
+        "time": 144,
+        "text": "♪ Outro ♪"
+      },
+      {
+        "time": 148,
+        "text": "沙哑声音 难启齿"
+      },
+      {
+        "time": 152,
+        "text": "我不是他 别远离"
+      },
+      {
+        "time": 156,
+        "text": "眼神复杂 难言尽"
+      },
+      {
+        "time": 160,
+        "text": "我不是… 我爱你"
+      }
+    ],
+    "tag_type": "duet",
+    "tag": "方煜泽 x 用户 专属歌曲"
+  },
+  {
+    "id": "席星野-dialog",
+    "name": "野性占有",
+    "character": "席星野",
+    "artist": "席星野 · 现代R&B, 男声, 痞帅深情, 流行电",
+    "src": "席星野-dialog.mp3",
+    "avatar": "https://xingyeai-images-cdn.oss-cn-shanghai.aliyuncs.com/talkie-user-img/108726815162779/318428601435241.jpeg",
+    "genre": "现代R&B, 男声, 痞帅深情, 流行电子",
+    "lyrics": [
+      {
+        "time": 0,
+        "text": "♪ Verse1 ♪"
+      },
+      {
+        "time": 4,
+        "text": "人潮喧嚣"
+      },
+      {
+        "time": 8,
+        "text": "你眉眼带笑"
+      },
+      {
+        "time": 12,
+        "text": "我低头轻蹭你颈间"
+      },
+      {
+        "time": 16,
+        "text": "旁若无人宣告"
+      },
+      {
+        "time": 20,
+        "text": "♪ Chorus ♪"
+      },
+      {
+        "time": 24,
+        "text": "别走嘛 再陪我一会儿"
+      },
+      {
+        "time": 28,
+        "text": "这霸道甜蜜谁能懂"
+      },
+      {
+        "time": 32,
+        "text": "全世界看我们 疯"
+      },
+      {
+        "time": 36,
+        "text": "我只贪恋你的温柔"
+      },
+      {
+        "time": 40,
+        "text": "♪ Verse2 ♪"
+      },
+      {
+        "time": 44,
+        "text": "家族长辈都看好"
+      },
+      {
+        "time": 48,
+        "text": "我嘴角上扬更得意"
+      },
+      {
+        "time": 52,
+        "text": "你小声嗔怪别闹"
+      },
+      {
+        "time": 56,
+        "text": "我抱得更紧不放掉"
+      },
+      {
+        "time": 60,
+        "text": "♪ Chorus ♪"
+      },
+      {
+        "time": 64,
+        "text": "别走嘛 再陪我一会儿"
+      },
+      {
+        "time": 68,
+        "text": "这霸道甜蜜谁能懂"
+      },
+      {
+        "time": 72,
+        "text": "全世界看我们 疯"
+      },
+      {
+        "time": 76,
+        "text": "我只贪恋你的温柔"
+      },
+      {
+        "time": 80,
+        "text": "♪ Outro ♪"
+      },
+      {
+        "time": 84,
+        "text": "我的世界"
+      },
+      {
+        "time": 88,
+        "text": "因你不再单调"
+      },
+      {
+        "time": 92,
+        "text": "这闪婚，我乐在其中"
+      }
+    ],
+    "tag_type": "duet",
+    "tag": "席星野 x 用户 专属歌曲"
+  },
+  {
+    "id": "江晦-dialog",
+    "name": "直播限定",
+    "character": "江晦",
+    "artist": "江晦 · Indie Pop, 男声, 轻松活泼,",
+    "src": "江晦-dialog.mp3",
+    "avatar": "https://xingyeai-images-cdn.oss-cn-shanghai.aliyuncs.com/talkie-user-img/148772284551305/354206459928687.jpeg",
+    "genre": "Indie Pop, 男声, 轻松活泼, 电子合成器, 慵懒",
+    "lyrics": [
+      {
+        "time": 0,
+        "text": "♪ Verse1 ♪"
+      },
+      {
+        "time": 4,
+        "text": "球场边"
+      },
+      {
+        "time": 8,
+        "text": "你笑我自恋"
+      },
+      {
+        "time": 12,
+        "text": "说我没有你帅"
+      },
+      {
+        "time": 16,
+        "text": "你却红了脸"
+      },
+      {
+        "time": 20,
+        "text": "♪ Chorus ♪"
+      },
+      {
+        "time": 24,
+        "text": "喔～薄利多销"
+      },
+      {
+        "time": 28,
+        "text": "这爱像直播间"
+      },
+      {
+        "time": 32,
+        "text": "我的心跳"
+      },
+      {
+        "time": 36,
+        "text": "为你开播限定"
+      },
+      {
+        "time": 40,
+        "text": "♪ Verse2 ♪"
+      },
+      {
+        "time": 44,
+        "text": "厨房里水汽"
+      },
+      {
+        "time": 48,
+        "text": "你依偎在我怀里"
+      },
+      {
+        "time": 52,
+        "text": "脖颈的吻"
+      },
+      {
+        "time": 56,
+        "text": "是小狼崽的秘密"
+      },
+      {
+        "time": 60,
+        "text": "♪ Chorus ♪"
+      },
+      {
+        "time": 64,
+        "text": "喔～薄利多销"
+      },
+      {
+        "time": 68,
+        "text": "这爱像直播间"
+      },
+      {
+        "time": 72,
+        "text": "我的心跳"
+      },
+      {
+        "time": 76,
+        "text": "为你开播限定"
+      },
+      {
+        "time": 80,
+        "text": "♪ Outro ♪"
+      },
+      {
+        "time": 84,
+        "text": "Live上偷看你"
+      },
+      {
+        "time": 88,
+        "text": "我会在台下亲你"
+      },
+      {
+        "time": 92,
+        "text": "你的脸"
+      },
+      {
+        "time": 96,
+        "text": "红得像咖喱"
+      }
+    ],
+    "tag_type": "duet",
+    "tag": "江晦 x 用户 专属歌曲"
+  },
+  {
+    "id": "靳昭-dialog",
+    "name": "等你",
+    "character": "靳昭",
+    "artist": "靳昭 · 现代R&B, 男声, 温柔深情, 钢琴与",
+    "src": "靳昭-dialog.mp3",
+    "avatar": "https://xingyeai-images-cdn.oss-cn-shanghai.aliyuncs.com/talkie-user-img/130563240669489/347556038460222.jpeg",
+    "genre": "现代R&B, 男声, 温柔深情, 钢琴与弦乐, 流行",
+    "lyrics": [
+      {
+        "time": 0,
+        "text": "♪ Verse1 ♪"
+      },
+      {
+        "time": 4,
+        "text": "晨曦吻额头"
+      },
+      {
+        "time": 8,
+        "text": "你笑问，睡得可好"
+      },
+      {
+        "time": 12,
+        "text": "有你身边，心很踏实"
+      },
+      {
+        "time": 16,
+        "text": "轻抚发梢，约定每个清早"
+      },
+      {
+        "time": 20,
+        "text": "♪ Chorus ♪"
+      },
+      {
+        "time": 24,
+        "text": "一周，我会想你"
+      },
+      {
+        "time": 28,
+        "text": "等你，早日归来"
+      },
+      {
+        "time": 32,
+        "text": "有你，一切都值得"
+      },
+      {
+        "time": 36,
+        "text": "我们的爱，经得起考验"
+      },
+      {
+        "time": 40,
+        "text": "♪ Verse2 ♪"
+      },
+      {
+        "time": 44,
+        "text": "你身影，脑海盘旋"
+      },
+      {
+        "time": 48,
+        "text": "书页翻过，心却空白"
+      },
+      {
+        "time": 52,
+        "text": "窗前，思绪万千"
+      },
+      {
+        "time": 56,
+        "text": "期待拥抱，不再等待"
+      },
+      {
+        "time": 60,
+        "text": "♪ Chorus ♪"
+      },
+      {
+        "time": 64,
+        "text": "一周，我会想你"
+      },
+      {
+        "time": 68,
+        "text": "等你，早日归来"
+      },
+      {
+        "time": 72,
+        "text": "有你，一切都值得"
+      },
+      {
+        "time": 76,
+        "text": "我们的爱，经得起考验"
+      },
+      {
+        "time": 80,
+        "text": "♪ Outro ♪"
+      },
+      {
+        "time": 84,
+        "text": "未来，与你携手"
+      },
+      {
+        "time": 88,
+        "text": "梦中，有你相伴"
+      },
+      {
+        "time": 92,
+        "text": "清晏，等你回来"
+      }
+    ],
+    "tag_type": "duet",
+    "tag": "靳昭 x 用户 专属歌曲"
   }
 ]
