@@ -1462,5 +1462,683 @@
     ],
     "tag_type": "duet",
     "tag": "江晦 x 栗川 专属歌曲 (v3)"
+  },
+  {
+    "id": "271604-v3-theme",
+    "name": "低头也要走完",
+    "character": "纪禾宴",
+    "artist": "纪禾宴 · 抒情摇滚，少年感的倔强",
+    "src": "纪禾宴-v3-theme.mp3",
+    "avatar": "https://xingyeai-images-cdn.oss-cn-shanghai.aliyuncs.com/talkie-user-img/225544755639311/290426338619456.jpeg",
+    "genre": "抒情摇滚，男声，略带沙哑和压抑，副歌逐渐爆发，吉他与弦乐交织",
+    "lyrics": [
+      {
+        "time": 0,
+        "text": "♪ Verse 1 ♪"
+      },
+      {
+        "time": 4,
+        "text": "十八年冷眼 我早就习惯"
+      },
+      {
+        "time": 8,
+        "text": "零花钱数着花 兼职做到凌晨三点半"
+      },
+      {
+        "time": 12,
+        "text": "别墅的灯光 从没照过我的房间"
+      },
+      {
+        "time": 16,
+        "text": "私生子三个字 刻在骨头里面"
+      },
+      {
+        "time": 20,
+        "text": "♪ Chorus ♪"
+      },
+      {
+        "time": 24,
+        "text": "我不要你的荣华富贵"
+      },
+      {
+        "time": 28,
+        "text": "也不稀罕这虚假的家"
+      },
+      {
+        "time": 32,
+        "text": "既然嫌弃我来到这世界"
+      },
+      {
+        "time": 36,
+        "text": "当初为何要把我带回来"
+      },
+      {
+        "time": 40,
+        "text": "求你 救救她 我什么都可以不要"
+      },
+      {
+        "time": 44,
+        "text": "求你 看看我 我从没为自己求过"
+      },
+      {
+        "time": 48,
+        "text": "♪ Verse 2 ♪"
+      },
+      {
+        "time": 52,
+        "text": "妈妈病床前 我偷偷擦掉眼泪"
+      },
+      {
+        "time": 56,
+        "text": "三份工的手 磨出茧也不喊累"
+      },
+      {
+        "time": 60,
+        "text": "那天鼓起勇气 敲响你的门"
+      },
+      {
+        "time": 64,
+        "text": "一面之缘的姐姐 是最后的光"
+      },
+      {
+        "time": 68,
+        "text": "♪ Outro ♪"
+      },
+      {
+        "time": 72,
+        "text": "低着头 也要把路走完"
+      },
+      {
+        "time": 76,
+        "text": "尘埃里开出的花 不需要谁来浇灌"
+      }
+    ],
+    "tag_type": "theme",
+    "tag": "v3 角色主题曲"
+  },
+  {
+    "id": "271604-v3-dialog",
+    "name": "被看见的光",
+    "character": "纪禾宴",
+    "artist": "纪禾宴 · 少年感抒情民谣",
+    "src": "纪禾宴-v3-dialog.mp3",
+    "avatar": "https://xingyeai-images-cdn.oss-cn-shanghai.aliyuncs.com/talkie-user-img/225544755639311/290426338619456.jpeg",
+    "genre": "少年感抒情民谣，男声，温暖略带沙哑，吉他指弹为主",
+    "lyrics": [
+      {
+        "time": 0,
+        "text": "♪ Verse 1 ♪"
+      },
+      {
+        "time": 4,
+        "text": "排队 立正 报上名来"
+      },
+      {
+        "time": 8,
+        "text": "十九岁的孤儿 说他什么都能扛"
+      },
+      {
+        "time": 12,
+        "text": "你站在旁边看着 眼睛里有光"
+      },
+      {
+        "time": 16,
+        "text": "从来不曾被保护的人 想守护谁的模样"
+      },
+      {
+        "time": 20,
+        "text": "♪ Chorus ♪"
+      },
+      {
+        "time": 24,
+        "text": "你问他们漂亮吗 我说是挺精神的"
+      },
+      {
+        "time": 28,
+        "text": "你笑着拍拍我肩 说这就是咱们的兵"
+      },
+      {
+        "time": 32,
+        "text": "我低着头 不敢说 其实最想当那个"
+      },
+      {
+        "time": 36,
+        "text": "站在你身后 替你挡风的人"
+      },
+      {
+        "time": 40,
+        "text": "♪ Outro ♪"
+      },
+      {
+        "time": 44,
+        "text": "从来没有人问过我 漂不漂亮"
+      },
+      {
+        "time": 48,
+        "text": "你是第一个让我觉得 被看见的光"
+      }
+    ],
+    "tag_type": "dialog",
+    "tag": "v3 纪禾宴 x 用户"
+  },
+  {
+    "id": "311475-v3-theme",
+    "name": "一点即燃",
+    "character": "方煜泽",
+    "artist": "方煜泽 · 暗黑流行/Trap",
+    "src": "方煜泽-v3-theme.mp3",
+    "avatar": "https://xingyeai-images-cdn.oss-cn-shanghai.aliyuncs.com/talkie-user-img/61198570225823/311476254057536.jpeg",
+    "genre": "哥特式摇滚/暗黑流行，男声，冷酷，Trap元素，低沉磁性",
+    "lyrics": [
+      {
+        "time": 0,
+        "text": "♪ Verse 1 ♪"
+      },
+      {
+        "time": 4,
+        "text": "A市的霓虹 只映出我的姓"
+      },
+      {
+        "time": 8,
+        "text": "走廊里让路 没人敢对视我的眼睛"
+      },
+      {
+        "time": 12,
+        "text": "情书堆满桌 我懒得翻一页"
+      },
+      {
+        "time": 16,
+        "text": "谁靠近都一样 不过是利用和算计"
+      },
+      {
+        "time": 20,
+        "text": "♪ Chorus ♪"
+      },
+      {
+        "time": 24,
+        "text": "别试探我的底线 后果你承担不起"
+      },
+      {
+        "time": 28,
+        "text": "冰冷不是伪装 是我活下来的方式"
+      },
+      {
+        "time": 32,
+        "text": "一点就燃的脾气 谁碰谁知道"
+      },
+      {
+        "time": 36,
+        "text": "但总有个位置 我留着没人知道"
+      },
+      {
+        "time": 40,
+        "text": "♪ Outro ♪"
+      },
+      {
+        "time": 44,
+        "text": "我的规则 不需要谁来明了"
+      },
+      {
+        "time": 48,
+        "text": "你只需记住 别越过我的边界"
+      }
+    ],
+    "tag_type": "theme",
+    "tag": "v3 角色主题曲"
+  },
+  {
+    "id": "311475-v3-dialog",
+    "name": "暗处的线索",
+    "character": "方煜泽",
+    "artist": "方煜泽 · 暗黑Trap流行",
+    "src": "方煜泽-v3-dialog.mp3",
+    "avatar": "https://xingyeai-images-cdn.oss-cn-shanghai.aliyuncs.com/talkie-user-img/61198570225823/311476254057536.jpeg",
+    "genre": "暗黑Trap流行，男声，低沉危险，强节奏，合成器bass",
+    "lyrics": [
+      {
+        "time": 0,
+        "text": "♪ Verse 1 ♪"
+      },
+      {
+        "time": 4,
+        "text": "窃听器 摄像头 定位器"
+      },
+      {
+        "time": 8,
+        "text": "你身上全是我看不见的秘密"
+      },
+      {
+        "time": 12,
+        "text": "你说是我给的 我却毫无印象"
+      },
+      {
+        "time": 16,
+        "text": "这一切到底是谁在操控着方向"
+      },
+      {
+        "time": 20,
+        "text": "♪ Chorus ♪"
+      },
+      {
+        "time": 24,
+        "text": "小狗 你别怕 把衣服全换了"
+      },
+      {
+        "time": 28,
+        "text": "不管谁在暗处动手 我都查得到"
+      },
+      {
+        "time": 32,
+        "text": "你听话地站在那里 眨着无辜的眼"
+      },
+      {
+        "time": 36,
+        "text": "可我心里的火 已经烧到了边界"
+      },
+      {
+        "time": 40,
+        "text": "♪ Outro ♪"
+      },
+      {
+        "time": 44,
+        "text": "别装哑巴 别装可怜"
+      },
+      {
+        "time": 48,
+        "text": "在我身边的人 只能是安全的"
+      }
+    ],
+    "tag_type": "dialog",
+    "tag": "v3 方煜泽 x 用户"
+  },
+  {
+    "id": "318442-v3-theme",
+    "name": "浪子坠星",
+    "character": "席星野",
+    "artist": "席星野 · R&B融合Trap",
+    "src": "席星野-v3-theme.mp3",
+    "avatar": "https://xingyeai-images-cdn.oss-cn-shanghai.aliyuncs.com/talkie-user-img/108726815162779/318428601435241.jpeg",
+    "genre": "现代R&B融合Trap，男声，慵懒带痞，低沉磁性，流行电子",
+    "lyrics": [
+      {
+        "time": 0,
+        "text": "♪ Verse 1 ♪"
+      },
+      {
+        "time": 4,
+        "text": "二十五岁 姓席 京世的传说"
+      },
+      {
+        "time": 8,
+        "text": "基金会总监 不过是个摆设"
+      },
+      {
+        "time": 12,
+        "text": "桃花眼微挑 看谁都像深情"
+      },
+      {
+        "time": 16,
+        "text": "限量潮牌叠搭 锁骨链闪着光"
+      },
+      {
+        "time": 20,
+        "text": "♪ Chorus ♪"
+      },
+      {
+        "time": 24,
+        "text": "浪子 小爷乐意 闯祸就闯到底"
+      },
+      {
+        "time": 28,
+        "text": "闪婚不过是一场游戏 你别太入戏"
+      },
+      {
+        "time": 32,
+        "text": "不是所有浪子都无药可救"
+      },
+      {
+        "time": 36,
+        "text": "总有颗星会为你坠落 信不信由你"
+      },
+      {
+        "time": 40,
+        "text": "♪ Outro ♪"
+      },
+      {
+        "time": 44,
+        "text": "别像她一样 扔下我 去无人的角落"
+      },
+      {
+        "time": 48,
+        "text": "这牢笼 我画地为牢 等一个人来解锁"
+      }
+    ],
+    "tag_type": "theme",
+    "tag": "v3 角色主题曲"
+  },
+  {
+    "id": "318442-v3-dialog",
+    "name": "只蹭你",
+    "character": "席星野",
+    "artist": "席星野 · 甜蜜R&B Pop",
+    "src": "席星野-v3-dialog.mp3",
+    "avatar": "https://xingyeai-images-cdn.oss-cn-shanghai.aliyuncs.com/talkie-user-img/108726815162779/318428601435241.jpeg",
+    "genre": "甜蜜R&B Pop，男声，慵懒甜蜜，节奏感强，轻快电子",
+    "lyrics": [
+      {
+        "time": 0,
+        "text": "♪ Verse 1 ♪"
+      },
+      {
+        "time": 4,
+        "text": "酒吧的灯光 照着我的领地"
+      },
+      {
+        "time": 8,
+        "text": "你的脖颈是我 最爱停留的地方"
+      },
+      {
+        "time": 12,
+        "text": "燕琳在尖叫 容流光在翻白眼"
+      },
+      {
+        "time": 16,
+        "text": "我偏要当着所有人的面 宣示我的主权"
+      },
+      {
+        "time": 20,
+        "text": "♪ Chorus ♪"
+      },
+      {
+        "time": 24,
+        "text": "让全世界都看见 你是我的人"
+      },
+      {
+        "time": 28,
+        "text": "我蹭你 我抱你 我不管谁在拍"
+      },
+      {
+        "time": 32,
+        "text": "妈妈在笑 爷爷在拍手"
+      },
+      {
+        "time": 36,
+        "text": "席太太 你就是我唯一的弱点"
+      },
+      {
+        "time": 40,
+        "text": "♪ Outro ♪"
+      },
+      {
+        "time": 44,
+        "text": "浪子收了心 也不觉得亏"
+      },
+      {
+        "time": 48,
+        "text": "因为全世界都知道 我只蹭你"
+      }
+    ],
+    "tag_type": "dialog",
+    "tag": "v3 席星野 x 用户"
+  },
+  {
+    "id": "354204-v3-theme",
+    "name": "爱搭不理",
+    "character": "江晦",
+    "artist": "江晦 · Indie Pop/Trap",
+    "src": "江晦-v3-theme.mp3",
+    "avatar": "https://xingyeai-images-cdn.oss-cn-shanghai.aliyuncs.com/talkie-user-img/148772284551305/354206459928687.jpeg",
+    "genre": "Indie Pop混合Trap，男声，慵懒不屑，校园感节奏，吉他riff",
+    "lyrics": [
+      {
+        "time": 0,
+        "text": "♪ Verse 1 ♪"
+      },
+      {
+        "time": 4,
+        "text": "球场边一站 送水的排到校门口"
+      },
+      {
+        "time": 8,
+        "text": "接不接看心情 多半是懒得伸手"
+      },
+      {
+        "time": 12,
+        "text": "情书瞥一眼 字太丑"
+      },
+      {
+        "time": 16,
+        "text": "表白听完一个哦 转身就走"
+      },
+      {
+        "time": 20,
+        "text": "♪ Chorus ♪"
+      },
+      {
+        "time": 24,
+        "text": "别费心猜 我懒得解释太多"
+      },
+      {
+        "time": 28,
+        "text": "看不顺眼你就走 别杵在我面前碍眼"
+      },
+      {
+        "time": 32,
+        "text": "天生就这样 爱搭不理又如何"
+      },
+      {
+        "time": 36,
+        "text": "我的世界 你进不来 也别想搅乱"
+      },
+      {
+        "time": 40,
+        "text": "♪ Outro ♪"
+      },
+      {
+        "time": 44,
+        "text": "晦涩难懂 随便你怎么说"
+      },
+      {
+        "time": 48,
+        "text": "爱恨两极 我照样是我"
+      }
+    ],
+    "tag_type": "theme",
+    "tag": "v3 角色主题曲"
+  },
+  {
+    "id": "354204-v3-dialog",
+    "name": "水母小姐",
+    "character": "江晦",
+    "artist": "江晦 · Indie Pop独立流行",
+    "src": "江晦-v3-dialog.mp3",
+    "avatar": "https://xingyeai-images-cdn.oss-cn-shanghai.aliyuncs.com/talkie-user-img/148772284551305/354206459928687.jpeg",
+    "genre": "Indie Pop独立流行，男声，慵懒温暖，吉他riff，日常感",
+    "lyrics": [
+      {
+        "time": 0,
+        "text": "♪ Verse 1 ♪"
+      },
+      {
+        "time": 4,
+        "text": "有人说你很特别 我说确实帅"
+      },
+      {
+        "time": 8,
+        "text": "不过没有我帅 这话说得够坦白"
+      },
+      {
+        "time": 12,
+        "text": "薄利多销的玩笑 直播带货的梗"
+      },
+      {
+        "time": 16,
+        "text": "你笑着陪我胡说 全世界都安静"
+      },
+      {
+        "time": 20,
+        "text": "♪ Chorus ♪"
+      },
+      {
+        "time": 24,
+        "text": "水母小姐 你的发尾被我缠绕"
+      },
+      {
+        "time": 28,
+        "text": "蛋包饭的香气 飘满了我们的小窝"
+      },
+      {
+        "time": 32,
+        "text": "拉普拉斯在前面走 我揽着你的肩"
+      },
+      {
+        "time": 36,
+        "text": "这种日子 我懒得跟任何人分享"
+      },
+      {
+        "time": 40,
+        "text": "♪ Outro ♪"
+      },
+      {
+        "time": 44,
+        "text": "跟你有共同语言 还是跟狗有"
+      },
+      {
+        "time": 48,
+        "text": "答案是 哪个让你吃醋 我就选哪个"
+      }
+    ],
+    "tag_type": "dialog",
+    "tag": "v3 江晦 x 栗川"
+  },
+  {
+    "id": "347557-v3-theme",
+    "name": "裂缝里的光",
+    "character": "靳昭",
+    "artist": "靳昭 · Urban Pop",
+    "src": "靳昭-v3-theme.mp3",
+    "avatar": "https://xingyeai-images-cdn.oss-cn-shanghai.aliyuncs.com/talkie-user-img/130563240669489/347556038460222.jpeg",
+    "genre": "华丽Urban Pop，男声，沉稳内敛，钢琴为主，深情克制",
+    "lyrics": [
+      {
+        "time": 0,
+        "text": "♪ Verse 1 ♪"
+      },
+      {
+        "time": 4,
+        "text": "一纸契约 八百万的距离"
+      },
+      {
+        "time": 8,
+        "text": "客房到主卧 隔着整个银河"
+      },
+      {
+        "time": 12,
+        "text": "雨夜的烟 烫不暖指尖"
+      },
+      {
+        "time": 16,
+        "text": "她的影子早就散了 为什么还在看那张照片"
+      },
+      {
+        "time": 20,
+        "text": "♪ Chorus ♪"
+      },
+      {
+        "time": 24,
+        "text": "我曾发誓 与你毫无牵连"
+      },
+      {
+        "time": 28,
+        "text": "这场联姻 不过是家族的棋盘"
+      },
+      {
+        "time": 32,
+        "text": "可你的笑 像裂缝里的光"
+      },
+      {
+        "time": 36,
+        "text": "所有规矩 都开始为你崩裂"
+      },
+      {
+        "time": 40,
+        "text": "♪ Outro ♪"
+      },
+      {
+        "time": 44,
+        "text": "互不干扰的约定 我先打破了"
+      },
+      {
+        "time": 48,
+        "text": "你是禁区 但我已经越了界"
+      }
+    ],
+    "tag_type": "theme",
+    "tag": "v3 角色主题曲"
+  },
+  {
+    "id": "347557-v3-dialog",
+    "name": "客房很久没回去",
+    "character": "靳昭",
+    "artist": "靳昭 · 深情Urban Pop",
+    "src": "靳昭-v3-dialog.mp3",
+    "avatar": "https://xingyeai-images-cdn.oss-cn-shanghai.aliyuncs.com/talkie-user-img/130563240669489/347556038460222.jpeg",
+    "genre": "深情Urban Pop，男声，沉稳内敛，钢琴弦乐交织，克制但深情",
+    "lyrics": [
+      {
+        "time": 0,
+        "text": "♪ Verse 1 ♪"
+      },
+      {
+        "time": 4,
+        "text": "清晨的阳光 落在你睫毛上"
+      },
+      {
+        "time": 8,
+        "text": "你的呼吸很轻 像怕惊醒什么一样"
+      },
+      {
+        "time": 12,
+        "text": "早安靳先生 你这句话太轻"
+      },
+      {
+        "time": 16,
+        "text": "可我的心跳 已经重到装不下"
+      },
+      {
+        "time": 20,
+        "text": "♪ Chorus ♪"
+      },
+      {
+        "time": 24,
+        "text": "一周的距离 够不够想你"
+      },
+      {
+        "time": 28,
+        "text": "你说按时吃饭不要熬夜 像在哄小孩"
+      },
+      {
+        "time": 32,
+        "text": "我靠在门上 看你的背影消失"
+      },
+      {
+        "time": 36,
+        "text": "才发现原来冷硬的人 也会怕分离"
+      },
+      {
+        "time": 40,
+        "text": "♪ Outro ♪"
+      },
+      {
+        "time": 44,
+        "text": "八百万的距离 我早就不在意"
+      },
+      {
+        "time": 48,
+        "text": "清晏 这间客房 我已经很久没回去"
+      }
+    ],
+    "tag_type": "dialog",
+    "tag": "v3 靳昭 x 谢清晏"
   }
 ]
