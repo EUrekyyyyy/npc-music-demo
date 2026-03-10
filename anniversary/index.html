@@ -185,7 +185,7 @@ body {
 .calendar-grid {
   flex: 1;
   overflow-y: auto;
-  padding: 0 16px 100px;
+  padding: 0 16px 24px;
   -webkit-overflow-scrolling: touch;
 }
 
@@ -282,36 +282,172 @@ body {
   border-radius: 50%;
 }
 
-/* Bottom tab bar */
-.tab-bar {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 83px;
-  background: rgba(28,28,30,0.95);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  padding-top: 8px;
-  border-top: 0.5px solid rgba(255,255,255,0.08);
-  z-index: 50;
-}
-
-.tab-item {
+/* ===== Write Page ===== */
+.write-page {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 2px;
-  padding: 4px 32px;
-  font-size: 10px;
-  color: var(--text-tertiary);
+  height: 100%;
+  background: var(--bg);
+}
+
+.write-nav {
+  height: 54px;
+  display: flex;
+  align-items: flex-end;
+  padding: 0 16px 8px;
+  justify-content: space-between;
+}
+
+.write-nav .cancel-btn {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 15px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.write-nav .write-date {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.write-nav .save-btn {
+  background: var(--accent);
+  border: none;
+  border-radius: 16px;
+  padding: 6px 20px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
   cursor: pointer;
 }
 
-.tab-item.active { color: var(--accent); }
+.write-nav .save-btn:active {
+  opacity: 0.8;
+}
+
+.write-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  gap: 20px;
+}
+
+.write-body textarea {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  font-size: 16px;
+  line-height: 1.8;
+  resize: none;
+  font-family: inherit;
+  outline: none;
+  min-height: 200px;
+}
+
+.write-body textarea::placeholder {
+  color: var(--text-tertiary);
+}
+
+.write-footer {
+  padding: 0 24px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.write-char-count {
+  font-size: 13px;
+  color: var(--text-tertiary);
+}
+
+.write-photo-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: var(--bg-card);
+  border: 1.5px dashed rgba(255,255,255,0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.write-photo-btn input[type="file"] {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.write-photo-preview {
+  margin-top: -8px;
+  position: relative;
+  display: none;
+}
+
+.write-photo-preview img {
+  width: 100%;
+  max-height: 200px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.write-photo-preview .remove-photo {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.6);
+  border: none;
+  color: #fff;
+  font-size: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.saved-toast {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.8);
+  background: var(--bg-elevated);
+  border-radius: 16px;
+  padding: 20px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  opacity: 0;
+  transition: all 0.3s;
+  z-index: 300;
+  pointer-events: none;
+}
+
+.saved-toast.show {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.saved-toast .toast-icon {
+  font-size: 36px;
+}
+
+.saved-toast .toast-text {
+  font-size: 14px;
+  color: var(--text-primary);
+  font-weight: 500;
+}
 
 .tab-item .tab-icon { font-size: 22px; }
 
@@ -355,7 +491,7 @@ body {
 .detail-content {
   flex: 1;
   overflow-y: auto;
-  padding: 16px 24px 100px;
+  padding: 16px 24px 24px;
   -webkit-overflow-scrolling: touch;
 }
 
@@ -539,109 +675,7 @@ body {
   filter: blur(6px);
 }
 
-/* Write modal */
-.write-modal {
-  position: absolute;
-  inset: 0;
-  background: rgba(0,0,0,0.6);
-  backdrop-filter: blur(10px);
-  z-index: 200;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  transition: opacity 0.3s;
-}
-
-.write-modal.hidden {
-  opacity: 0;
-  pointer-events: none;
-}
-
-.write-panel {
-  background: var(--bg-card);
-  border-radius: 20px 20px 0 0;
-  padding: 20px 24px 40px;
-}
-
-.write-panel .panel-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
-}
-
-.write-panel .panel-title {
-  font-size: 17px;
-  font-weight: 600;
-}
-
-.write-panel .close-btn {
-  background: var(--bg-elevated);
-  border: none;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  color: var(--text-secondary);
-  font-size: 14px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.write-panel textarea {
-  width: 100%;
-  height: 120px;
-  background: var(--bg-elevated);
-  border: none;
-  border-radius: 12px;
-  padding: 12px 16px;
-  color: var(--text-primary);
-  font-size: 14px;
-  line-height: 1.6;
-  resize: none;
-  font-family: inherit;
-}
-
-.write-panel textarea::placeholder {
-  color: var(--text-tertiary);
-}
-
-.write-panel .panel-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 12px;
-}
-
-.write-panel .char-count {
-  font-size: 12px;
-  color: var(--text-tertiary);
-}
-
-.write-panel .panel-actions {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-}
-
-.write-panel .add-photo {
-  background: none;
-  border: none;
-  font-size: 20px;
-  cursor: pointer;
-}
-
-.write-panel .submit-btn {
-  background: var(--accent);
-  border: none;
-  border-radius: 20px;
-  padding: 8px 24px;
-  color: #fff;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-}
+/* (old write modal removed) */
 
 /* Animations */
 @keyframes fadeInUp {
@@ -705,12 +739,7 @@ body {
     </div>
   </div>
 
-  <div class="tab-bar">
-    <div class="tab-item active">
-      <span class="tab-icon">📅</span>
-      <span>日历</span>
-    </div>
-  </div>
+  <!-- tab bar removed -->
 </div>
 
 <!-- ===== Detail Page ===== -->
@@ -726,22 +755,33 @@ body {
   </div>
 </div>
 
-<!-- ===== Write Modal ===== -->
-<div class="write-modal hidden" id="writeModal">
-  <div class="write-panel">
-    <div class="panel-header">
-      <div class="panel-title">记录今天</div>
-      <button class="close-btn" onclick="closeWrite()">✕</button>
-    </div>
-    <textarea id="writeText" placeholder="写下今天想对他说的话..." maxlength="280" oninput="updateCharCount()"></textarea>
-    <div class="panel-footer">
-      <span class="char-count" id="charCount">0/280</span>
-      <div class="panel-actions">
-        <button class="add-photo">🖼</button>
-        <button class="submit-btn" onclick="submitEntry()">记录</button>
-      </div>
+<!-- ===== Write Page ===== -->
+<div class="page write-page hidden" id="writePage">
+  <div class="write-nav">
+    <button class="cancel-btn" onclick="cancelWrite()">取消</button>
+    <div class="write-date" id="writeDate">3月10日</div>
+    <button class="save-btn" onclick="saveEntry()">记录</button>
+  </div>
+  <div class="write-body">
+    <textarea id="writeText" placeholder="写下这一天想说的话..." maxlength="280" oninput="updateCharCount()"></textarea>
+    <div class="write-photo-preview" id="photoPreview">
+      <img id="photoPreviewImg" src="" alt="">
+      <button class="remove-photo" onclick="removePhoto()">✕</button>
     </div>
   </div>
+  <div class="write-footer">
+    <span class="write-char-count" id="charCount">0 / 280</span>
+    <div class="write-photo-btn">
+      📷
+      <input type="file" accept="image/*" onchange="previewPhoto(event)">
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="saved-toast" id="savedToast">
+  <span class="toast-icon">✨</span>
+  <span class="toast-text">记录成功</span>
 </div>
 
 <script>
@@ -838,7 +878,9 @@ function renderCalendar() {
       dotsHtml = `<div class="record-dots"><div class="record-dot empty"></div><div class="record-dot empty"></div></div>`;
     }
     
-    html += `<div class="day-cell ${isToday ? 'today' : ''} ${isFuture ? 'future' : ''}" onclick="showDetail(${d})">
+    const hasUserEntry = entry && entry.user;
+    const clickAction = (!isFuture && !hasUserEntry) ? `openWrite(${d})` : `showDetail(${d})`;
+    html += `<div class="day-cell ${isToday ? 'today' : ''} ${isFuture ? 'future' : ''}" onclick="${isFuture ? '' : clickAction}">`;
       <div class="day-num">${d}</div>
       ${dotsHtml}
     </div>`;
@@ -889,7 +931,7 @@ function showDetail(day) {
         <div class="timeline-avatar-col">
           <img class="timeline-avatar" src="${mockData.userAvatar}" alt="我">
         </div>
-        <div class="empty-slot" onclick="openWrite()">
+        <div class="empty-slot" onclick="writingFromPage='detail';openWrite(${day})">
           <div class="plus-icon">+</div>
           <div class="empty-text">记录今天的心情</div>
         </div>
@@ -962,23 +1004,80 @@ function showCalendar() {
   document.getElementById('calendarPage').classList.remove('hidden');
 }
 
-function openWrite() {
-  document.getElementById('writeModal').classList.remove('hidden');
-  document.getElementById('writeText').focus();
+let writingDay = null;
+let writingFromPage = 'calendar'; // track where we came from
+
+function openWrite(day) {
+  writingDay = day;
+  const weekdays = ['周日','周一','周二','周三','周四','周五','周六'];
+  const dow = weekdays[new Date(currentYear, currentMonth - 1, day).getDay()];
+  document.getElementById('writeDate').textContent = `${currentMonth}月${day}日 ${dow}`;
+  document.getElementById('writeText').value = '';
+  document.getElementById('charCount').textContent = '0 / 280';
+  document.getElementById('photoPreview').style.display = 'none';
+  
+  document.getElementById('calendarPage').classList.add('hidden');
+  document.getElementById('detailPage').classList.add('hidden');
+  document.getElementById('writePage').classList.remove('hidden');
+  
+  setTimeout(() => document.getElementById('writeText').focus(), 100);
 }
 
-function closeWrite() {
-  document.getElementById('writeModal').classList.add('hidden');
+function cancelWrite() {
+  document.getElementById('writePage').classList.add('hidden');
+  if (writingFromPage === 'detail') {
+    document.getElementById('detailPage').classList.remove('hidden');
+  } else {
+    document.getElementById('calendarPage').classList.remove('hidden');
+  }
 }
 
 function updateCharCount() {
   const len = document.getElementById('writeText').value.length;
-  document.getElementById('charCount').textContent = `${len}/280`;
+  document.getElementById('charCount').textContent = `${len} / 280`;
 }
 
-function submitEntry() {
-  closeWrite();
-  // Demo: just close
+function previewPhoto(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    document.getElementById('photoPreviewImg').src = ev.target.result;
+    document.getElementById('photoPreview').style.display = 'block';
+  };
+  reader.readAsDataURL(file);
+}
+
+function removePhoto() {
+  document.getElementById('photoPreview').style.display = 'none';
+  document.getElementById('photoPreviewImg').src = '';
+}
+
+function saveEntry() {
+  const text = document.getElementById('writeText').value.trim();
+  if (!text) return;
+  
+  // Save to mock data
+  const dateKey = `${currentYear}-${String(currentMonth).padStart(2,'0')}-${String(writingDay).padStart(2,'0')}`;
+  if (!mockData.entries[dateKey]) {
+    mockData.entries[dateKey] = { user: null, npc: null };
+  }
+  const now = new Date();
+  mockData.entries[dateKey].user = {
+    text: text,
+    time: `${now.getHours()}:${String(now.getMinutes()).padStart(2,'0')}`
+  };
+  
+  // Show toast
+  document.getElementById('writePage').classList.add('hidden');
+  const toast = document.getElementById('savedToast');
+  toast.classList.add('show');
+  
+  setTimeout(() => {
+    toast.classList.remove('show');
+    document.getElementById('calendarPage').classList.remove('hidden');
+    renderCalendar();
+  }, 1200);
 }
 
 function unlockEntry(btn, dateKey) {
