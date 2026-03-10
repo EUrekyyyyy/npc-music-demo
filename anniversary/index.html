@@ -1065,21 +1065,28 @@ function saveEntry() {
     mockData.entries[dateKey] = { user: null, npc: null };
   }
   const now = new Date();
+  const imgSrc = document.getElementById('photoPreviewImg').src;
+  const hasImage = imgSrc && document.getElementById('photoPreview').style.display !== 'none';
+  
   mockData.entries[dateKey].user = {
     text: text,
     time: `${now.getHours()}:${String(now.getMinutes()).padStart(2,'0')}`
   };
+  if (hasImage) {
+    mockData.entries[dateKey].user.image = imgSrc;
+  }
   
-  // Show toast
+  // Show toast then go to detail page
   document.getElementById('writePage').classList.add('hidden');
   const toast = document.getElementById('savedToast');
   toast.classList.add('show');
   
+  const savedDay = writingDay;
   setTimeout(() => {
     toast.classList.remove('show');
-    document.getElementById('calendarPage').classList.remove('hidden');
     renderCalendar();
-  }, 1200);
+    showDetail(savedDay);
+  }, 1000);
 }
 
 function unlockEntry(btn, dateKey) {
