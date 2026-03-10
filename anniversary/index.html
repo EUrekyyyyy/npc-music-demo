@@ -880,7 +880,7 @@ function renderCalendar() {
     
     const hasUserEntry = entry && entry.user;
     const clickAction = (!isFuture && !hasUserEntry) ? `openWrite(${d})` : `showDetail(${d})`;
-    html += `<div class="day-cell ${isToday ? 'today' : ''} ${isFuture ? 'future' : ''}" onclick="${isFuture ? '' : clickAction}">`;
+    html += `<div class="day-cell ${isToday ? 'today' : ''} ${isFuture ? 'future' : ''}" onclick="${isFuture ? '' : clickAction}">
       <div class="day-num">${d}</div>
       ${dotsHtml}
     </div>`;
