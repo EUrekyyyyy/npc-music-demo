@@ -390,19 +390,21 @@ body {
   margin-top: -8px;
   position: relative;
   display: none;
+  width: 120px;
 }
 
 .write-photo-preview img {
-  width: 100%;
-  max-height: 200px;
-  object-fit: cover;
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
   border-radius: 12px;
+  background: var(--bg-card);
 }
 
 .write-photo-preview .remove-photo {
   position: absolute;
-  top: 8px;
-  right: 8px;
+  top: -6px;
+  right: -6px;
   width: 24px;
   height: 24px;
   border-radius: 50%;
