@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>纪念日</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+:root {
+  --bg: #121214;
+  --bg-card: #1C1C1E;
+  --bg-elevated: #2C2C2E;
+  --text-primary: #FFFFFF;
+  --text-secondary: rgba(255,255,255,0.6);
+  --text-tertiary: rgba(255,255,255,0.3);
+  --accent: #A78BFA;
+  --accent-soft: rgba(167,139,250,0.15);
+  --user-color: #60A5FA;
+  --npc-color: #F472B6;
+  --user-dot: #60A5FA;
+  --npc-dot: #F472B6;
+  --locked-color: rgba(255,255,255,0.2);
+  --diamond: #A78BFA;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif;
+  background: var(--bg);
+  color: var(--text-primary);
+  width: 390px;
+  height: 844px;
+  overflow: hidden;
+  position: relative;
+  margin: 0 auto;
+}
+
+/* Status bar */
+.status-bar {
+  height: 54px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  position: relative;
+  z-index: 100;
+}
+
+/* Pages */
+.page {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.35s;
+  will-change: transform, opacity;
+}
+
+.page.hidden {
+  transform: translateX(100%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ===== Calendar Page ===== */
+.calendar-page {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--bg);
+}
+
+.calendar-header {
+  padding: 0 24px;
+  padding-top: 8px;
+}
+
+.calendar-header h1 {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.calendar-header .subtitle {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+/* Character info bar */
+.character-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 16px 24px 0;
+  padding: 12px 16px;
+  background: var(--bg-card);
+  border-radius: 16px;
+}
+
+.character-bar .avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--npc-color);
+}
+
+.character-bar .info {
+  flex: 1;
+}
+
+.character-bar .name {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.character-bar .days-together {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-top: 1px;
+}
+
+.character-bar .streak {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* Month navigation */
+.month-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px 12px;
+}
+
+.month-nav .month-title {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.month-nav .nav-btns {
+  display: flex;
+  gap: 8px;
+}
+
+.month-nav .nav-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--bg-card);
+  border: none;
+  color: var(--text-primary);
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Weekday header */
+.weekday-header {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  padding: 0 16px;
+  margin-bottom: 4px;
+}
+
+.weekday-header span {
+  text-align: center;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+}
+
+/* Calendar grid */
+.calendar-grid {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 16px 100px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.calendar-grid::-webkit-scrollbar { display: none; }
+
+.days-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+.day-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 0;
+  cursor: pointer;
+  border-radius: 12px;
+  transition: background 0.2s;
+  min-height: 72px;
+}
+
+.day-cell:active {
+  background: var(--bg-elevated);
+}
+
+.day-cell.empty {
+  cursor: default;
+}
+
+.day-cell.empty:active {
+  background: transparent;
+}
+
+.day-cell .day-num {
+  font-size: 15px;
+  font-weight: 500;
+  margin-bottom: 6px;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.day-cell.today .day-num {
+  background: var(--accent);
+  color: #fff;
+  font-weight: 700;
+}
+
+.day-cell.future .day-num {
+  color: var(--text-tertiary);
+}
+
+/* Record dots */
+.record-dots {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.record-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.record-dot.user { background: var(--user-dot); }
+.record-dot.npc { background: var(--npc-dot); }
+.record-dot.empty { background: var(--text-tertiary); opacity: 0.3; }
+
+/* Legend */
+.legend {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  padding: 12px 0;
+  margin-top: 8px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+/* Bottom tab bar */
+.tab-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 83px;
+  background: rgba(28,28,30,0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 8px;
+  border-top: 0.5px solid rgba(255,255,255,0.08);
+  z-index: 50;
+}
+
+.tab-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 4px 32px;
+  font-size: 10px;
+  color: var(--text-tertiary);
+  cursor: pointer;
+}
+
+.tab-item.active { color: var(--accent); }
+
+.tab-item .tab-icon { font-size: 22px; }
+
+/* ===== Detail Page ===== */
+.detail-page {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--bg);
+}
+
+.detail-nav {
+  height: 54px;
+  display: flex;
+  align-items: flex-end;
+  padding: 0 16px 8px;
+  justify-content: space-between;
+}
+
+.detail-nav .back-btn {
+  background: none;
+  border: none;
+  color: var(--accent);
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 500;
+}
+
+.detail-nav .date-label {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.detail-nav .placeholder {
+  width: 60px;
+}
+
+.detail-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 24px 100px;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Timeline style */
+.timeline {
+  position: relative;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 19px;
+  top: 20px;
+  bottom: 20px;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--user-dot), var(--npc-dot));
+  border-radius: 1px;
+  opacity: 0.3;
+}
+
+.timeline-entry {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+  position: relative;
+}
+
+.timeline-avatar-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 40px;
+  flex-shrink: 0;
+}
+
+.timeline-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid;
+  position: relative;
+  z-index: 2;
+}
+
+.timeline-entry.user .timeline-avatar { border-color: var(--user-dot); }
+.timeline-entry.npc .timeline-avatar { border-color: var(--npc-dot); }
+
+.timeline-card {
+  flex: 1;
+  background: var(--bg-card);
+  border-radius: 16px;
+  padding: 16px;
+  position: relative;
+}
+
+.timeline-card .entry-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.timeline-card .entry-name {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.timeline-entry.user .entry-name { color: var(--user-dot); }
+.timeline-entry.npc .entry-name { color: var(--npc-dot); }
+
+.timeline-card .entry-time {
+  font-size: 11px;
+  color: var(--text-tertiary);
+}
+
+.timeline-card .entry-text {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-primary);
+}
+
+.timeline-card .entry-image {
+  width: 100%;
+  border-radius: 12px;
+  margin-top: 12px;
+  max-height: 200px;
+  object-fit: cover;
+}
+
+/* Empty slot */
+.empty-slot {
+  flex: 1;
+  border: 1.5px dashed rgba(255,255,255,0.15);
+  border-radius: 16px;
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.empty-slot .plus-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--bg-elevated);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  color: var(--text-secondary);
+}
+
+.empty-slot .empty-text {
+  font-size: 13px;
+  color: var(--text-tertiary);
+}
+
+/* Locked content */
+.locked-card {
+  flex: 1;
+  background: var(--bg-card);
+  border-radius: 16px;
+  padding: 20px 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+.locked-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(18,18,20,0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 16px;
+  z-index: 1;
+}
+
+.locked-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  z-index: 2;
+}
+
+.locked-overlay .lock-icon {
+  font-size: 28px;
+}
+
+.locked-overlay .unlock-btn {
+  background: var(--accent);
+  border: none;
+  border-radius: 20px;
+  padding: 8px 20px;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.locked-overlay .unlock-hint {
+  font-size: 11px;
+  color: var(--text-tertiary);
+}
+
+.locked-card .blur-text {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  filter: blur(6px);
+}
+
+/* Write modal */
+.write-modal {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(10px);
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  transition: opacity 0.3s;
+}
+
+.write-modal.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.write-panel {
+  background: var(--bg-card);
+  border-radius: 20px 20px 0 0;
+  padding: 20px 24px 40px;
+}
+
+.write-panel .panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.write-panel .panel-title {
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.write-panel .close-btn {
+  background: var(--bg-elevated);
+  border: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  color: var(--text-secondary);
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.write-panel textarea {
+  width: 100%;
+  height: 120px;
+  background: var(--bg-elevated);
+  border: none;
+  border-radius: 12px;
+  padding: 12px 16px;
+  color: var(--text-primary);
+  font-size: 14px;
+  line-height: 1.6;
+  resize: none;
+  font-family: inherit;
+}
+
+.write-panel textarea::placeholder {
+  color: var(--text-tertiary);
+}
+
+.write-panel .panel-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+}
+
+.write-panel .char-count {
+  font-size: 12px;
+  color: var(--text-tertiary);
+}
+
+.write-panel .panel-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.write-panel .add-photo {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.write-panel .submit-btn {
+  background: var(--accent);
+  border: none;
+  border-radius: 20px;
+  padding: 8px 24px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.timeline-entry {
+  animation: fadeInUp 0.4s ease-out;
+}
+
+.timeline-entry:nth-child(2) { animation-delay: 0.1s; }
+</style>
+</head>
+<body>
+
+<!-- ===== Calendar Page ===== -->
+<div class="page calendar-page" id="calendarPage">
+  <div class="status-bar">9:41</div>
+  
+  <div class="calendar-header">
+    <h1>纪念日</h1>
+    <div class="subtitle">记录你们的每一天</div>
+  </div>
+
+  <div class="character-bar">
+    <img class="avatar" src="https://xingyeai-images-cdn.oss-cn-shanghai.aliyuncs.com/talkie-user-img/148772284551305/354206459928687.jpeg" alt="江晦">
+    <div class="info">
+      <div class="name">江晦</div>
+      <div class="days-together">在一起的第 128 天</div>
+    </div>
+    <div class="streak">🔥 7天连续</div>
+  </div>
+
+  <div class="month-nav">
+    <div class="nav-btns">
+      <button class="nav-btn" onclick="changeMonth(-1)">‹</button>
+    </div>
+    <div class="month-title" id="monthTitle">2026年3月</div>
+    <div class="nav-btns">
+      <button class="nav-btn" onclick="changeMonth(1)">›</button>
+    </div>
+  </div>
+
+  <div class="weekday-header">
+    <span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span>
+  </div>
+
+  <div class="calendar-grid">
+    <div class="days-grid" id="daysGrid"></div>
+    
+    <div class="legend">
+      <div class="legend-item">
+        <div class="legend-dot" style="background:var(--user-dot)"></div>
+        <span>我的记录</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot" style="background:var(--npc-dot)"></div>
+        <span>江晦的记录</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-bar">
+    <div class="tab-item active">
+      <span class="tab-icon">📅</span>
+      <span>日历</span>
+    </div>
+    <div class="tab-item">
+      <span class="tab-icon">💫</span>
+      <span>回忆</span>
+    </div>
+    <div class="tab-item">
+      <span class="tab-icon">👤</span>
+      <span>我的</span>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Detail Page ===== -->
+<div class="page detail-page hidden" id="detailPage">
+  <div class="detail-nav">
+    <button class="back-btn" onclick="showCalendar()">‹ 返回</button>
+    <div class="date-label" id="detailDate">3月5日 周三</div>
+    <div class="placeholder"></div>
+  </div>
+
+  <div class="detail-content" id="detailContent">
+    <!-- Dynamic content -->
+  </div>
+</div>
+
+<!-- ===== Write Modal ===== -->
+<div class="write-modal hidden" id="writeModal">
+  <div class="write-panel">
+    <div class="panel-header">
+      <div class="panel-title">记录今天</div>
+      <button class="close-btn" onclick="closeWrite()">✕</button>
+    </div>
+    <textarea id="writeText" placeholder="写下今天想对他说的话..." maxlength="280" oninput="updateCharCount()"></textarea>
+    <div class="panel-footer">
+      <span class="char-count" id="charCount">0/280</span>
+      <div class="panel-actions">
+        <button class="add-photo">🖼</button>
+        <button class="submit-btn" onclick="submitEntry()">记录</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Mock data
+const mockData = {
+  userAvatar: 'https://xingyeai-images-cdn.oss-cn-shanghai.aliyuncs.com/talkie-user-img/225544755639311/290426338619456.jpeg',
+  npcAvatar: 'https://xingyeai-images-cdn.oss-cn-shanghai.aliyuncs.com/talkie-user-img/148772284551305/354206459928687.jpeg',
+  npcName: '江晦',
+  userName: '栗川',
+  entries: {
+    '2026-03-01': {
+      user: { text: '今天第一次一起去了球场，他打球的样子真的好帅，虽然他嘴上说"随便看看"，但我知道他偷偷在我面前多投了好几个三分球。', time: '14:23' },
+      npc: { text: '她来球场了。我假装没看见，但投篮的时候手感突然变好了，可能是因为有人在看吧。……才怪，跟她没关系。', time: '23:15', locked: false }
+    },
+    '2026-03-02': {
+      user: { text: '拉普拉斯今天特别黏我，江晦看起来有点吃醋了😂 他嘴上说"跟狗更有共同语言"，但转头就偷偷揽了我的肩膀。', time: '18:40' },
+      npc: { text: '拉普拉斯这家伙今天很不给面子，一直往她身上蹭。我揽了她的肩，她没躲。嗯，今天心情还行。', time: '22:30', locked: true }
+    },
+    '2026-03-03': {
+      user: { text: '给他做了蛋包饭，他从背后抱住我的时候头发还在滴水。他的下巴抵在我肩膀上，说"那怎么办，水母小姐？"。心跳漏了一拍。', time: '20:15' },
+      npc: { text: '洗完澡出来，她在厨房忙。我从后面抱住她，头发的水滴到她肩上，她嫌我烦。但她没推开我。蛋包饭很好吃。', time: '23:45', locked: true }
+    },
+    '2026-03-04': {
+      user: { text: '有人说我很特别，江晦跟在后面小声重复了一遍。然后补了句"不过没有我帅"。行行行，你最帅🙄', time: '19:19' },
+      npc: null
+    },
+    '2026-03-05': {
+      user: { text: '今天突然下雨了，他把外套脱下来给我披上，自己淋着雨走。我说你不冷吗，他说"我体温高"。骗子。', time: '16:30', image: 'https://images.unsplash.com/photo-1501691223387-dd0500403074?w=400&h=300&fit=crop' },
+      npc: { text: '下雨了。她没带伞。我把外套给她了。她问我冷不冷，我说不冷。其实挺冷的。但看她穿着我外套的样子，好像也没那么冷了。', time: '22:00', locked: true }
+    },
+    '2026-03-06': {
+      user: null,
+      npc: { text: '今天她没来。教室空了一个位置，连阳光照进来都觉得多余。我翻了翻手机，打了几个字又删掉了。', time: '21:30', locked: true }
+    },
+    '2026-03-07': {
+      user: { text: '周末一起遛拉普拉斯，他牵着我的手说"防走丢"。拉普拉斯跑在前面，我们慢慢走在后面，什么也不用说。', time: '15:00' },
+      npc: { text: '遛狗。牵了她的手。她没问为什么。拉普拉斯回头看了我们一眼，然后继续跑。这家伙，偶尔还挺识趣的。', time: '23:10', locked: true }
+    },
+    '2026-03-08': {
+      user: { text: '三八节收到一束花，没有卡片。问他是不是他送的，他说"关我什么事"。但他耳朵红了。', time: '12:00' },
+      npc: null
+    },
+    '2026-03-09': {
+      user: { text: '他上课又在睡觉，我偷偷画了他的侧脸。画完发现画得还挺好看的，但不能让他知道。', time: '11:30' },
+      npc: { text: '她以为我在睡觉。但我从手臂的缝隙里看到她在画什么。好奇，但不想被她发现我醒着。有些秘密，知道就够了。', time: '22:50', locked: true }
+    },
+    '2026-03-10': {
+      user: null,
+      npc: null
+    }
+  }
+};
+
+let currentYear = 2026;
+let currentMonth = 3; // March
+
+function getDaysInMonth(year, month) {
+  return new Date(year, month, 0).getDate();
+}
+
+function getFirstDayOfMonth(year, month) {
+  return new Date(year, month - 1, 1).getDay();
+}
+
+function renderCalendar() {
+  const grid = document.getElementById('daysGrid');
+  const title = document.getElementById('monthTitle');
+  title.textContent = `${currentYear}年${currentMonth}月`;
+  
+  const daysInMonth = getDaysInMonth(currentYear, currentMonth);
+  const firstDay = getFirstDayOfMonth(currentYear, currentMonth);
+  const today = 10; // March 10
+  
+  let html = '';
+  
+  // Empty cells for offset
+  for (let i = 0; i < firstDay; i++) {
+    html += '<div class="day-cell empty"></div>';
+  }
+  
+  // Day cells
+  for (let d = 1; d <= daysInMonth; d++) {
+    const dateKey = `${currentYear}-${String(currentMonth).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const entry = mockData.entries[dateKey];
+    const isToday = d === today && currentMonth === 3 && currentYear === 2026;
+    const isFuture = d > today && currentMonth === 3 && currentYear === 2026;
+    
+    let dotsHtml = '';
+    if (entry) {
+      const userDot = entry.user ? 'user' : 'empty';
+      const npcDot = entry.npc ? 'npc' : 'empty';
+      dotsHtml = `<div class="record-dots"><div class="record-dot ${userDot}"></div><div class="record-dot ${npcDot}"></div></div>`;
+    } else if (!isFuture) {
+      dotsHtml = `<div class="record-dots"><div class="record-dot empty"></div><div class="record-dot empty"></div></div>`;
+    }
+    
+    html += `<div class="day-cell ${isToday ? 'today' : ''} ${isFuture ? 'future' : ''}" onclick="showDetail(${d})">
+      <div class="day-num">${d}</div>
+      ${dotsHtml}
+    </div>`;
+  }
+  
+  grid.innerHTML = html;
+}
+
+function changeMonth(delta) {
+  currentMonth += delta;
+  if (currentMonth > 12) { currentMonth = 1; currentYear++; }
+  if (currentMonth < 1) { currentMonth = 12; currentYear--; }
+  renderCalendar();
+}
+
+function showDetail(day) {
+  const dateKey = `${currentYear}-${String(currentMonth).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+  const entry = mockData.entries[dateKey];
+  const weekdays = ['周日','周一','周二','周三','周四','周五','周六'];
+  const dow = weekdays[new Date(currentYear, currentMonth - 1, day).getDay()];
+  
+  document.getElementById('detailDate').textContent = `${currentMonth}月${day}日 ${dow}`;
+  
+  const content = document.getElementById('detailContent');
+  let html = '<div class="timeline">';
+  
+  const isToday = day === 10 && currentMonth === 3 && currentYear === 2026;
+  
+  // User entry
+  if (entry && entry.user) {
+    html += `
+      <div class="timeline-entry user">
+        <div class="timeline-avatar-col">
+          <img class="timeline-avatar" src="${mockData.userAvatar}" alt="我">
+        </div>
+        <div class="timeline-card">
+          <div class="entry-header">
+            <span class="entry-name">${mockData.userName}</span>
+            <span class="entry-time">${entry.user.time}</span>
+          </div>
+          <div class="entry-text">${entry.user.text}</div>
+          ${entry.user.image ? `<img class="entry-image" src="${entry.user.image}" alt="">` : ''}
+        </div>
+      </div>`;
+  } else if (isToday) {
+    html += `
+      <div class="timeline-entry user">
+        <div class="timeline-avatar-col">
+          <img class="timeline-avatar" src="${mockData.userAvatar}" alt="我">
+        </div>
+        <div class="empty-slot" onclick="openWrite()">
+          <div class="plus-icon">+</div>
+          <div class="empty-text">记录今天的心情</div>
+        </div>
+      </div>`;
+  } else {
+    html += `
+      <div class="timeline-entry user">
+        <div class="timeline-avatar-col">
+          <img class="timeline-avatar" src="${mockData.userAvatar}" alt="我">
+        </div>
+        <div class="empty-slot" style="cursor:default;border-style:dotted;opacity:0.5">
+          <div class="empty-text">这天没有记录</div>
+        </div>
+      </div>`;
+  }
+  
+  // NPC entry
+  if (entry && entry.npc) {
+    if (entry.npc.locked) {
+      html += `
+        <div class="timeline-entry npc">
+          <div class="timeline-avatar-col">
+            <img class="timeline-avatar" src="${mockData.npcAvatar}" alt="${mockData.npcName}">
+          </div>
+          <div class="locked-card">
+            <div class="blur-text">${entry.npc.text}</div>
+            <div class="locked-overlay">
+              <span class="lock-icon">🔒</span>
+              <button class="unlock-btn" onclick="unlockEntry(this, '${dateKey}')">💎 100 解锁</button>
+              <span class="unlock-hint">查看${mockData.npcName}的记录</span>
+            </div>
+          </div>
+        </div>`;
+    } else {
+      html += `
+        <div class="timeline-entry npc">
+          <div class="timeline-avatar-col">
+            <img class="timeline-avatar" src="${mockData.npcAvatar}" alt="${mockData.npcName}">
+          </div>
+          <div class="timeline-card">
+            <div class="entry-header">
+              <span class="entry-name">${mockData.npcName}</span>
+              <span class="entry-time">${entry.npc.time}</span>
+            </div>
+            <div class="entry-text">${entry.npc.text}</div>
+          </div>
+        </div>`;
+    }
+  } else {
+    html += `
+      <div class="timeline-entry npc">
+        <div class="timeline-avatar-col">
+          <img class="timeline-avatar" src="${mockData.npcAvatar}" alt="${mockData.npcName}">
+        </div>
+        <div class="empty-slot" style="cursor:default;border-style:dotted;opacity:0.5">
+          <div class="empty-text">${mockData.npcName}还没记录</div>
+        </div>
+      </div>`;
+  }
+  
+  html += '</div>';
+  content.innerHTML = html;
+  
+  document.getElementById('calendarPage').classList.add('hidden');
+  document.getElementById('detailPage').classList.remove('hidden');
+}
+
+function showCalendar() {
+  document.getElementById('detailPage').classList.add('hidden');
+  document.getElementById('calendarPage').classList.remove('hidden');
+}
+
+function openWrite() {
+  document.getElementById('writeModal').classList.remove('hidden');
+  document.getElementById('writeText').focus();
+}
+
+function closeWrite() {
+  document.getElementById('writeModal').classList.add('hidden');
+}
+
+function updateCharCount() {
+  const len = document.getElementById('writeText').value.length;
+  document.getElementById('charCount').textContent = `${len}/280`;
+}
+
+function submitEntry() {
+  closeWrite();
+  // Demo: just close
+}
+
+function unlockEntry(btn, dateKey) {
+  const entry = mockData.entries[dateKey];
+  if (entry && entry.npc) {
+    entry.npc.locked = false;
+    // Re-render
+    const day = parseInt(dateKey.split('-')[2]);
+    showDetail(day);
+  }
+}
+
+// Init
+renderCalendar();
+</script>
+</body>
+</html>
