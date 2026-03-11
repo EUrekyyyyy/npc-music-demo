@@ -1003,7 +1003,8 @@ async function callGeminiText(prompt, imageBase64) {
       contents: [{ parts }],
       generationConfig: {
         temperature: 0.9,
-        maxOutputTokens: 1024
+        maxOutputTokens: 4096,
+        thinkingConfig: { thinkingBudget: 0 }
       }
     })
   });
