@@ -550,13 +550,13 @@ body {
 /* Room view */
 .room-view {
   margin: 0 24px 20px;
-  height: 200px;
+  height: 180px;
   background: var(--bg-card);
   border-radius: 20px;
   position: relative;
   overflow: hidden;
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: center;
 }
 .room-bg {
@@ -569,11 +569,11 @@ body {
   position: relative;
   z-index: 1;
   display: flex;
-  gap: 8px;
-  padding: 16px;
+  gap: 10px;
+  padding: 40px 16px 16px;
   flex-wrap: wrap;
   justify-content: center;
-  align-items: flex-end;
+  align-items: center;
 }
 .room-item {
   font-size: 28px;
@@ -595,15 +595,16 @@ body {
 }
 .room-char {
   position: absolute;
-  bottom: 16px;
-  right: 20px;
+  top: 12px;
+  right: 16px;
   z-index: 2;
 }
 .room-char img {
-  width: 80px; height: 80px;
+  width: 48px; height: 48px;
   border-radius: 50%;
   object-fit: cover;
-  opacity: 0.8;
+  opacity: 0.7;
+  border: 2px solid rgba(124,156,255,0.3);
 }
 
 /* Filter tabs */
@@ -919,7 +920,7 @@ body {
 
     <div class="room-view">
       <div class="room-bg"></div>
-      <div class="room-label">💭 江晦的房间</div>
+      <div class="room-label">🎒 江晦的背包</div>
       <div class="room-items" id="roomItems"></div>
       <div class="room-char">
         <img src="https://xingyeai-images-cdn.oss-cn-shanghai.aliyuncs.com/talkie-user-img/241049801728340/272571779465624.jpeg" alt="江晦">
