@@ -1009,10 +1009,12 @@ async function callGeminiText(prompt, imageBase64) {
   });
 
   const data = await resp.json();
-  if (data.candidates && data.candidates[0]) {
+  console.log('Gemini text response:', JSON.stringify(data).slice(0, 500));
+  if (data.candidates && data.candidates[0] && data.candidates[0].content) {
     return data.candidates[0].content.parts[0].text;
   }
-  throw new Error('Gemini API error: ' + JSON.stringify(data));
+  const errMsg = data.error ? data.error.message : JSON.stringify(data).slice(0, 200);
+  throw new Error('API错误: ' + errMsg);
 }
 
 async function callGeminiImage(prompt, imageBase64) {
@@ -1042,7 +1044,8 @@ async function callGeminiImage(prompt, imageBase64) {
   });
 
   const data = await resp.json();
-  if (data.candidates && data.candidates[0]) {
+  console.log('Gemini image response:', JSON.stringify(data).slice(0, 500));
+  if (data.candidates && data.candidates[0] && data.candidates[0].content) {
     const resultParts = data.candidates[0].content.parts;
     let image = null;
     let text = '';
@@ -1056,7 +1059,8 @@ async function callGeminiImage(prompt, imageBase64) {
     }
     return { image, text };
   }
-  throw new Error('Gemini image API error: ' + JSON.stringify(data));
+  const errMsg = data.error ? data.error.message : JSON.stringify(data).slice(0, 200);
+  throw new Error('生图API错误: ' + errMsg);
 }
 
 // ============================================
@@ -1094,12 +1098,14 @@ async function startTransform() {
     // Parse JSON from response
     let meta;
     try {
-      // Try to extract JSON from response
-      const jsonMatch = metaText.match(/\{[\s\S]*\}/);
-      meta = JSON.parse(jsonMatch ? jsonMatch[0] : metaText);
+      // Strip markdown code blocks if present
+      let cleaned = metaText.replace(/```json\s*/gi, '').replace(/```\s*/g, '').trim();
+      // Extract the first JSON object
+      const jsonMatch = cleaned.match(/\{[\s\S]*\}/);
+      meta = JSON.parse(jsonMatch ? jsonMatch[0] : cleaned);
     } catch(e) {
-      console.error('Parse error:', metaText);
-      throw new Error('无法解析物品信息');
+      console.error('Parse error, raw response:', metaText);
+      throw new Error('无法解析物品信息，请重试');
     }
 
     // Step 2: Generate stylized item image
@@ -1159,6 +1165,7 @@ async function startTransform() {
   } catch (err) {
     console.error('Transform error:', err);
     document.getElementById('scanOverlay').classList.remove('show');
+    console.error('Full error:', err);
     showToast('生成失败：' + err.message, true);
   } finally {
     btn.disabled = false;
