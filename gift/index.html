@@ -882,9 +882,12 @@ body {
 // ============================================
 // CONFIG
 // ============================================
-const GEMINI_API_KEY = 'AIzaSyB_8uFSMpPC2HnG0ttySNx4bZFPjf0H4LQ';
+const GEMINI_API_KEY = 'AIzaSyAAgwt-l7daP-1OQR1XH2N-jZ89VaFf5zk';
 const GEMINI_MODEL = 'gemini-2.5-flash';
 const AVATAR_URL = 'https://xingyeai-images-cdn.oss-cn-shanghai.aliyuncs.com/talkie-user-img/241049801728340/272571779465624.jpeg';
+
+// Mock image for demo — always return this as the "stylized" result
+const MOCK_STYLIZED_IMAGE = 'https://filecdn-images.xingyeai.com/tool/amadeus/i2i/image_0_07388ec5aa87485aa9196492b578257f.jpg';
 
 // Character profile for generating reactions
 const CHARACTER_PROFILE = `你是江晦，一个表面爱搭不理、嘴硬心软的男生。性格像一只大型犬——嘴上说不在乎，行动上却很诚实。
@@ -1076,69 +1079,43 @@ async function startTransform() {
   btn.disabled = true;
   btn.textContent = '处理中…';
   
-  // Show scanning animation
+  // Show scanning animation for 1 second
   document.getElementById('scanOverlay').classList.add('show');
-  document.getElementById('scanText').textContent = '正在识别物品…';
+  document.getElementById('scanText').textContent = '正在生成物品…';
+  
+  await new Promise(r => setTimeout(r, 1000));
+  document.getElementById('scanOverlay').classList.remove('show');
 
   try {
-    // Step 1: Identify item + generate metadata + character reaction
-    document.getElementById('scanText').textContent = '正在识别物品…';
-    
-    const identifyPrompt = `看这张照片，识别出照片中最主要的物品。然后按以下JSON格式返回（不要加markdown代码块标记，直接返回JSON）：
+    // Mock data for demo
+    const meta = {
+      name: '小灰猫',
+      category: 'special',
+      rarity: 'epic',
+      rarityName: '史诗',
+      desc: '一只蜷成一团的灰色小猫，睡得很香。',
+      reaction: '……猫？（江晦愣了一秒，然后蹲下来小心翼翼地伸出手）你从哪弄来的。别告诉我是捡的。（嘴上说着，手已经开始摸猫了）',
+      action: '（半夜被发现抱着猫一起睡着了）'
+    };
 
-{
-  "name": "物品的中文名称（2-4个字，简洁有趣）",
-  "category": "分类，只能是以下之一：food/accessory/toy/daily/special",
-  "rarity": "稀有度，基于物品的情感价值而非物质价值判断：common（普通日用品）/uncommon（有点特别）/rare（用心准备的）/epic（很有心意的）/legendary（极其珍贵或独特的）",
-  "rarityName": "稀有度中文名：普通/稀有/精良/史诗/传说",
-  "desc": "物品描述，一句话，要有画面感（20字以内）",
-  "reaction": "江晦收到这个礼物的反应。${CHARACTER_PROFILE} 要求：1.对话+动作混合 2.嘴硬心软 3.用括号写动作描写 4.总共50-80字",
-  "action": "（一个括号内的后续小动作描写，展示江晦其实很在意，15-25字）"
-}`;
-
-    const metaText = await callGeminiText(identifyPrompt, currentPhotoBase64);
+    const styledImage = MOCK_STYLIZED_IMAGE;
     
-    // Parse JSON from response
-    let meta;
-    try {
-      // Strip markdown code blocks if present
-      let cleaned = metaText.replace(/```json\s*/gi, '').replace(/```\s*/g, '').trim();
-      // Extract the first JSON object
-      const jsonMatch = cleaned.match(/\{[\s\S]*\}/);
-      meta = JSON.parse(jsonMatch ? jsonMatch[0] : cleaned);
-    } catch(e) {
-      console.error('Parse error, raw response:', metaText);
-      throw new Error('无法解析物品信息，请重试');
-    }
-
-    document.getElementById('scanText').textContent = '正在生成物品…';
-
-    // Use the original photo with CSS stylization effect
-    const styledImage = 'data:image/jpeg;base64,' + currentPhotoBase64;
-    
-    document.getElementById('scanOverlay').classList.remove('show');
-    
-    // Store current item
     currentItem = {
       id: Date.now(),
       emoji: null,
       image: styledImage,
       name: meta.name,
-      category: meta.category || 'daily',
-      rarity: meta.rarity || 'common',
-      rarityName: meta.rarityName || '普通',
+      category: meta.category,
+      rarity: meta.rarity,
+      rarityName: meta.rarityName,
       desc: meta.desc,
       date: formatNow(),
       reaction: meta.reaction,
-      action: meta.action || ''
+      action: meta.action
     };
 
-    // Navigate to transform page
     document.getElementById('transformPhotoOrig').src = 'data:image/jpeg;base64,' + currentPhotoBase64;
-    
-    if (imageResult.image) {
-      document.getElementById('transformResultImg').src = imageResult.image;
-    }
+    document.getElementById('transformResultImg').src = styledImage;
     
     document.getElementById('transformName').textContent = meta.name;
     
