@@ -172,6 +172,10 @@ body {
   border-radius: 18px;
   display: none;
 }
+.camera-preview:not([src]),
+.camera-preview[src=""] {
+  display: none !important;
+}
 .camera-area.has-photo { border: none; }
 .camera-area.has-photo .camera-icon,
 .camera-area.has-photo p,
@@ -752,7 +756,7 @@ body {
   <div class="camera-section">
     <h2>拍一件礼物送给TA</h2>
     <div class="camera-area" id="cameraArea" onclick="document.getElementById('fileInput').click()">
-      <img class="camera-preview" id="cameraPreview">
+      <img class="camera-preview" id="cameraPreview" src="" style="display:none">
       <div class="scanning-overlay" id="scanOverlay">
         <div class="scanning-line"></div>
         <div class="scanning-spinner"></div>
@@ -876,8 +880,8 @@ body {
 // CONFIG
 // ============================================
 const GEMINI_API_KEY = 'AIzaSyA24M_OjQG5faLdcD6EytJ8MhHB5vlyQ94';
-const GEMINI_MODEL = 'gemini-2.0-flash-exp';
-const GEMINI_IMAGE_MODEL = 'gemini-2.0-flash-exp';
+const GEMINI_MODEL = 'gemini-2.5-flash';
+const GEMINI_IMAGE_MODEL = 'gemini-2.5-flash-image';
 const AVATAR_URL = 'https://xingyeai-images-cdn.oss-cn-shanghai.aliyuncs.com/talkie-user-img/241049801728340/272571779465624.jpeg';
 
 // Character profile for generating reactions
