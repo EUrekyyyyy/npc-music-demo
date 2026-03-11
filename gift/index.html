@@ -18,11 +18,6 @@
   --accent-soft: rgba(124,156,255,0.15);
   --npc-color: #7C9CFF;
   --user-color: #F4A0C0;
-  --rare-common: #9CA3AF;
-  --rare-uncommon: #60D394;
-  --rare-rare: #A78BFA;
-  --rare-epic: #F59E0B;
-  --rare-legendary: #EF4444;
 }
 
 body {
@@ -42,10 +37,8 @@ body {
   background: var(--bg);
   position: relative;
   overflow: hidden;
-  border-radius: 0;
 }
 
-/* Status bar */
 .status-bar {
   height: 54px;
   display: flex;
@@ -58,9 +51,7 @@ body {
   z-index: 100;
 }
 
-/* ============================================
-   PAGES
-   ============================================ */
+/* Pages */
 .page {
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
@@ -70,21 +61,15 @@ body {
 }
 .page::-webkit-scrollbar { display: none; }
 .page.hidden { transform: translateX(100%); opacity: 0; pointer-events: none; }
-.page.hidden-left { transform: translateX(-30%); opacity: 0; pointer-events: none; }
 
-/* ============================================
-   HOME PAGE - Main gift interface
-   ============================================ */
+/* HOME */
 .home-header {
   padding: 0 24px 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
-.home-header h1 {
-  font-size: 22px;
-  font-weight: 700;
-}
+.home-header h1 { font-size: 22px; font-weight: 700; }
 .backpack-btn {
   background: var(--bg-elevated);
   border: none;
@@ -109,7 +94,6 @@ body {
   justify-content: center;
 }
 
-/* Character card */
 .char-card {
   margin: 0 24px 20px;
   background: var(--bg-card);
@@ -146,7 +130,6 @@ body {
   50% { opacity: 1; }
 }
 
-/* Today's gift status */
 .gift-status {
   margin: 0 24px 20px;
   padding: 14px 18px;
@@ -159,20 +142,10 @@ body {
   justify-content: space-between;
 }
 .gift-status .left { display: flex; align-items: center; gap: 8px; }
-.gift-quota {
-  color: var(--accent);
-  font-weight: 600;
-}
+.gift-quota { color: var(--accent); font-weight: 600; }
 
-/* Camera area */
-.camera-section {
-  margin: 0 24px 20px;
-}
-.camera-section h2 {
-  font-size: 16px;
-  font-weight: 600;
-  margin-bottom: 12px;
-}
+.camera-section { margin: 0 24px 20px; }
+.camera-section h2 { font-size: 16px; font-weight: 600; margin-bottom: 12px; }
 .camera-area {
   width: 100%;
   height: 280px;
@@ -194,8 +167,7 @@ body {
 .camera-area p { font-size: 14px; color: var(--text-secondary); }
 .camera-area .hint { font-size: 12px; color: var(--text-tertiary); }
 .camera-preview {
-  width: 100%;
-  height: 100%;
+  width: 100%; height: 100%;
   object-fit: cover;
   border-radius: 18px;
   display: none;
@@ -206,9 +178,44 @@ body {
 .camera-area.has-photo .hint { display: none; }
 .camera-area.has-photo .camera-preview { display: block; }
 
-.send-btn-area {
-  margin: 0 24px 20px;
+/* Scanning overlay */
+.scanning-overlay {
+  position: absolute;
+  inset: 0;
+  border-radius: 18px;
+  overflow: hidden;
+  display: none;
+  background: rgba(0,0,0,0.3);
 }
+.scanning-overlay.show { display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 12px; }
+.scanning-line {
+  position: absolute;
+  left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  animation: scanLine 1.5s ease-in-out infinite;
+}
+@keyframes scanLine { 0% { top: 0; } 100% { top: 100%; } }
+.scanning-text {
+  font-size: 14px;
+  color: var(--accent);
+  background: rgba(0,0,0,0.7);
+  padding: 8px 20px;
+  border-radius: 20px;
+  white-space: nowrap;
+  z-index: 2;
+}
+.scanning-spinner {
+  width: 32px; height: 32px;
+  border: 3px solid rgba(124,156,255,0.2);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  z-index: 2;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.send-btn-area { margin: 0 24px 20px; }
 .send-btn {
   width: 100%;
   padding: 16px;
@@ -224,16 +231,11 @@ body {
 }
 .send-btn.show { display: block; }
 .send-btn:active { transform: scale(0.97); }
+.send-btn:disabled { opacity: 0.5; }
 
 /* Recent gifts */
-.recent-section {
-  margin: 0 24px 40px;
-}
-.recent-section h2 {
-  font-size: 16px;
-  font-weight: 600;
-  margin-bottom: 12px;
-}
+.recent-section { margin: 0 24px 40px; }
+.recent-section h2 { font-size: 16px; font-weight: 600; margin-bottom: 12px; }
 .recent-list {
   display: flex;
   gap: 12px;
@@ -242,23 +244,26 @@ body {
   scrollbar-width: none;
 }
 .recent-list::-webkit-scrollbar { display: none; }
-.recent-item {
-  flex-shrink: 0;
-  width: 80px;
-  text-align: center;
-  cursor: pointer;
-}
+.recent-item { flex-shrink: 0; width: 80px; text-align: center; cursor: pointer; }
 .recent-item-img {
   width: 80px; height: 80px;
   border-radius: 14px;
   object-fit: cover;
   border: 1px solid rgba(255,255,255,0.08);
   background: var(--bg-card);
+  margin-bottom: 6px;
+  overflow: hidden;
+}
+.recent-item-img img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+}
+.recent-item-img .emoji-fallback {
+  width: 100%; height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 36px;
-  margin-bottom: 6px;
 }
 .recent-item-name {
   font-size: 11px;
@@ -267,110 +272,93 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.recent-item-rarity {
-  font-size: 10px;
-  font-weight: 600;
-  margin-top: 2px;
-}
+.recent-item-rarity { font-size: 10px; font-weight: 600; margin-top: 2px; }
 
-/* ============================================
-   TRANSFORM PAGE - Item stylization
-   ============================================ */
+/* TRANSFORM PAGE */
 .transform-page {
   background: var(--bg);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  height: 100%;
 }
 .transform-container {
   text-align: center;
-  padding: 0 40px;
+  padding: 0 32px;
+  width: 100%;
 }
-.transform-photo {
-  width: 160px; height: 160px;
-  border-radius: 20px;
-  object-fit: cover;
-  margin-bottom: 20px;
-  transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
-}
-.transform-arrow {
-  font-size: 32px;
-  margin: 16px 0;
-  opacity: 0;
-  animation: fadeInDown 0.5s 0.5s forwards;
-}
-@keyframes fadeInDown {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-.transform-result {
-  width: 140px; height: 140px;
-  margin: 0 auto 20px;
-  position: relative;
-  opacity: 0;
-  transform: scale(0.5);
-  transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-.transform-result.show {
-  opacity: 1;
-  transform: scale(1);
-}
-.transform-result-img {
-  width: 100%; height: 100%;
-  border-radius: 20px;
+.transform-photos {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 72px;
-  background: var(--bg-card);
-  border: 2px solid;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.transform-photo {
+  width: 130px; height: 130px;
+  border-radius: 16px;
+  object-fit: cover;
+  border: 2px solid rgba(255,255,255,0.1);
+}
+.transform-arrow {
+  font-size: 28px;
+  opacity: 0;
+  animation: fadeInScale 0.5s 0.5s forwards;
+}
+@keyframes fadeInScale {
+  from { opacity: 0; transform: scale(0.5); }
+  to { opacity: 1; transform: scale(1); }
+}
+.transform-result {
+  width: 140px; height: 140px;
+  margin: 0 auto;
+  border-radius: 20px;
+  overflow: hidden;
+  opacity: 0;
+  transform: scale(0.5);
+  transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
   position: relative;
+}
+.transform-result.show { opacity: 1; transform: scale(1); }
+.transform-result img {
+  width: 100%; height: 100%;
+  object-fit: cover;
 }
 .transform-result-glow {
   position: absolute;
-  inset: -4px;
-  border-radius: 24px;
-  opacity: 0.4;
-  filter: blur(12px);
+  inset: -6px;
+  border-radius: 26px;
+  opacity: 0.3;
+  filter: blur(14px);
   z-index: -1;
 }
 .transform-item-name {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 600;
-  margin-top: 12px;
+  margin-top: 16px;
   opacity: 0;
   animation: fadeIn 0.5s 1.5s forwards;
 }
 .transform-rarity {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   margin-top: 6px;
   opacity: 0;
   animation: fadeIn 0.5s 1.7s forwards;
 }
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+.transform-desc {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-top: 8px;
+  line-height: 1.5;
+  opacity: 0;
+  animation: fadeIn 0.5s 1.9s forwards;
 }
-.transform-sparkles {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  overflow: hidden;
-}
-.sparkle {
-  position: absolute;
-  font-size: 16px;
-  animation: sparkleFloat 2s ease-out forwards;
-}
-@keyframes sparkleFloat {
-  0% { opacity: 1; transform: translateY(0) scale(1); }
-  100% { opacity: 0; transform: translateY(-80px) scale(0.3); }
-}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
 .transform-send-btn {
-  margin-top: 32px;
+  margin-top: 28px;
   padding: 14px 48px;
   border-radius: 28px;
   border: none;
@@ -380,26 +368,22 @@ body {
   font-weight: 600;
   cursor: pointer;
   opacity: 0;
-  animation: fadeIn 0.5s 2s forwards;
+  animation: fadeIn 0.5s 2.2s forwards;
 }
 .transform-send-btn:active { transform: scale(0.97); }
 
-/* ============================================
-   REACTION PAGE - Character response
-   ============================================ */
+/* REACTION PAGE */
 .reaction-page {
   background: var(--bg);
   display: flex;
   flex-direction: column;
+  height: 100%;
 }
 .reaction-header {
   padding: 54px 24px 16px;
   text-align: center;
 }
-.reaction-header h2 {
-  font-size: 18px;
-  font-weight: 600;
-}
+.reaction-header h2 { font-size: 18px; font-weight: 600; }
 
 .reaction-scene {
   flex: 1;
@@ -409,13 +393,12 @@ body {
   justify-content: center;
   padding: 0 24px;
 }
-
 .reaction-avatar {
   width: 100px; height: 100px;
   border-radius: 50%;
   object-fit: cover;
   border: 3px solid var(--accent);
-  margin-bottom: 20px;
+  margin-bottom: 16px;
   animation: avatarBounce 0.6s ease-out;
 }
 @keyframes avatarBounce {
@@ -423,23 +406,22 @@ body {
   50% { transform: scale(1.05); }
   100% { transform: scale(1); }
 }
-
 .reaction-gift-display {
   width: 80px; height: 80px;
   border-radius: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 44px;
-  background: var(--bg-card);
+  overflow: hidden;
   margin-bottom: 20px;
   animation: giftFloat 3s ease-in-out infinite;
+  border: 2px solid rgba(255,255,255,0.1);
+}
+.reaction-gift-display img {
+  width: 100%; height: 100%;
+  object-fit: cover;
 }
 @keyframes giftFloat {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-6px); }
 }
-
 .reaction-bubble {
   background: var(--bg-card);
   border-radius: 20px;
@@ -481,7 +463,6 @@ body {
   font-style: italic;
   margin-top: 8px;
 }
-
 .reaction-status {
   font-size: 13px;
   color: var(--accent);
@@ -489,11 +470,10 @@ body {
   animation: fadeIn 0.5s 1s forwards;
   margin-bottom: 6px;
 }
-
 .reaction-buttons {
   display: flex;
   gap: 12px;
-  margin-top: 24px;
+  margin-top: 20px;
   opacity: 0;
   animation: fadeIn 0.5s 1.2s forwards;
 }
@@ -505,21 +485,11 @@ body {
   font-weight: 600;
   cursor: pointer;
 }
-.reaction-btn.primary {
-  background: var(--accent);
-  color: white;
-}
-.reaction-btn.secondary {
-  background: var(--bg-elevated);
-  color: var(--text-primary);
-}
+.reaction-btn.primary { background: var(--accent); color: white; }
+.reaction-btn.secondary { background: var(--bg-elevated); color: var(--text-primary); }
 
-/* ============================================
-   BACKPACK PAGE
-   ============================================ */
-.backpack-page {
-  background: var(--bg);
-}
+/* BACKPACK PAGE */
+.backpack-page { background: var(--bg); }
 .backpack-header {
   padding: 54px 24px 16px;
   display: flex;
@@ -527,8 +497,7 @@ body {
   gap: 12px;
 }
 .backpack-back {
-  background: none;
-  border: none;
+  background: none; border: none;
   color: var(--text-primary);
   font-size: 24px;
   cursor: pointer;
@@ -537,17 +506,9 @@ body {
   align-items: center;
   justify-content: center;
 }
-.backpack-header h2 {
-  font-size: 20px;
-  font-weight: 700;
-}
-.backpack-count {
-  font-size: 14px;
-  color: var(--text-secondary);
-  margin-left: auto;
-}
+.backpack-header h2 { font-size: 20px; font-weight: 700; }
+.backpack-count { font-size: 14px; color: var(--text-secondary); margin-left: auto; }
 
-/* Room view */
 .room-view {
   margin: 0 24px 20px;
   height: 180px;
@@ -560,14 +521,12 @@ body {
   justify-content: center;
 }
 .room-bg {
-  position: absolute;
-  inset: 0;
+  position: absolute; inset: 0;
   background: linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
   opacity: 0.6;
 }
 .room-items {
-  position: relative;
-  z-index: 1;
+  position: relative; z-index: 1;
   display: flex;
   gap: 10px;
   padding: 40px 16px 16px;
@@ -576,16 +535,18 @@ body {
   align-items: center;
 }
 .room-item {
-  font-size: 28px;
-  background: rgba(255,255,255,0.05);
   width: 48px; height: 48px;
   border-radius: 10px;
+  overflow: hidden;
+  background: rgba(255,255,255,0.05);
   display: flex;
   align-items: center;
   justify-content: center;
   transition: transform 0.2s;
 }
 .room-item:hover { transform: scale(1.15); }
+.room-item img { width: 100%; height: 100%; object-fit: cover; }
+.room-item .emoji-only { font-size: 24px; }
 .room-label {
   position: absolute;
   top: 12px; left: 16px;
@@ -594,10 +555,7 @@ body {
   z-index: 2;
 }
 .room-char {
-  position: absolute;
-  top: 12px;
-  right: 16px;
-  z-index: 2;
+  position: absolute; top: 12px; right: 16px; z-index: 2;
 }
 .room-char img {
   width: 48px; height: 48px;
@@ -607,14 +565,10 @@ body {
   border: 2px solid rgba(124,156,255,0.3);
 }
 
-/* Filter tabs */
 .filter-tabs {
-  display: flex;
-  gap: 8px;
-  padding: 0 24px;
-  margin-bottom: 16px;
-  overflow-x: auto;
-  scrollbar-width: none;
+  display: flex; gap: 8px;
+  padding: 0 24px; margin-bottom: 16px;
+  overflow-x: auto; scrollbar-width: none;
 }
 .filter-tabs::-webkit-scrollbar { display: none; }
 .filter-tab {
@@ -629,12 +583,8 @@ body {
   white-space: nowrap;
   transition: all 0.2s;
 }
-.filter-tab.active {
-  background: var(--accent);
-  color: white;
-}
+.filter-tab.active { background: var(--accent); color: white; }
 
-/* Item grid */
 .item-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -644,17 +594,25 @@ body {
 .grid-item {
   background: var(--bg-card);
   border-radius: 16px;
-  padding: 16px 12px;
+  padding: 12px;
   text-align: center;
   cursor: pointer;
   transition: all 0.2s;
   position: relative;
 }
 .grid-item:active { transform: scale(0.95); }
-.grid-item-emoji {
-  font-size: 40px;
-  margin-bottom: 8px;
+.grid-item-visual {
+  width: 80px; height: 80px;
+  margin: 0 auto 8px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--bg-elevated);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+.grid-item-visual img { width: 100%; height: 100%; object-fit: cover; }
+.grid-item-visual .emoji-fallback { font-size: 36px; }
 .grid-item-name {
   font-size: 12px;
   color: var(--text-primary);
@@ -663,10 +621,7 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.grid-item-date {
-  font-size: 10px;
-  color: var(--text-tertiary);
-}
+.grid-item-date { font-size: 10px; color: var(--text-tertiary); }
 .grid-item-rarity {
   position: absolute;
   top: 8px; right: 8px;
@@ -676,16 +631,13 @@ body {
 
 /* Item detail modal */
 .item-detail-overlay {
-  position: absolute;
-  inset: 0;
+  position: absolute; inset: 0;
   background: rgba(0,0,0,0.6);
   z-index: 200;
-  opacity: 0;
-  pointer-events: none;
+  opacity: 0; pointer-events: none;
   transition: opacity 0.3s;
 }
 .item-detail-overlay.show { opacity: 1; pointer-events: auto; }
-
 .item-detail-modal {
   position: absolute;
   bottom: 0; left: 0; right: 0;
@@ -697,62 +649,36 @@ body {
   transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .item-detail-modal.show { transform: translateY(0); }
-
 .detail-close {
-  position: absolute;
-  top: 16px; right: 20px;
-  background: none;
-  border: none;
-  color: var(--text-secondary);
-  font-size: 20px;
-  cursor: pointer;
+  position: absolute; top: 16px; right: 20px;
+  background: none; border: none;
+  color: var(--text-secondary); font-size: 20px; cursor: pointer;
 }
-.detail-emoji {
-  text-align: center;
-  font-size: 64px;
-  margin: 8px 0 16px;
+.detail-visual {
+  width: 100px; height: 100px;
+  margin: 8px auto 16px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--bg-elevated);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.detail-name {
-  text-align: center;
-  font-size: 20px;
-  font-weight: 600;
-  margin-bottom: 4px;
-}
-.detail-rarity-tag {
-  text-align: center;
-  font-size: 13px;
-  font-weight: 600;
-  margin-bottom: 16px;
-}
-.detail-section {
-  margin-bottom: 16px;
-}
-.detail-section-title {
-  font-size: 13px;
-  color: var(--text-tertiary);
-  margin-bottom: 6px;
-}
-.detail-section-content {
-  font-size: 14px;
-  line-height: 1.6;
-  color: var(--text-secondary);
-}
+.detail-visual img { width: 100%; height: 100%; object-fit: cover; }
+.detail-visual .emoji-fallback { font-size: 56px; }
+.detail-name { text-align: center; font-size: 20px; font-weight: 600; margin-bottom: 4px; }
+.detail-rarity-tag { text-align: center; font-size: 13px; font-weight: 600; margin-bottom: 16px; }
+.detail-section { margin-bottom: 16px; }
+.detail-section-title { font-size: 13px; color: var(--text-tertiary); margin-bottom: 6px; }
+.detail-section-content { font-size: 14px; line-height: 1.6; color: var(--text-secondary); }
 .detail-memory {
   background: var(--bg-elevated);
   border-radius: 12px;
   padding: 14px 16px;
   margin-top: 12px;
 }
-.detail-memory-name {
-  font-size: 12px;
-  color: var(--accent);
-  margin-bottom: 4px;
-}
-.detail-memory-text {
-  font-size: 13px;
-  color: var(--text-secondary);
-  line-height: 1.5;
-}
+.detail-memory-name { font-size: 12px; color: var(--accent); margin-bottom: 4px; }
+.detail-memory-text { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
 
 /* Toast */
 .toast {
@@ -771,48 +697,27 @@ body {
   transition: opacity 0.3s;
   pointer-events: none;
   z-index: 400;
+  max-width: 80%;
+  text-align: center;
 }
 .toast.show { opacity: 1; }
 
-/* Scanning animation */
-.scanning-overlay {
-  position: absolute;
-  inset: 0;
-  border-radius: 18px;
-  overflow: hidden;
-  display: none;
+/* Error toast */
+.toast.error {
+  background: rgba(239,68,68,0.15);
+  border-color: rgba(239,68,68,0.3);
+  color: #EF4444;
 }
-.scanning-overlay.show { display: block; }
-.scanning-line {
-  position: absolute;
-  left: 0; right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, transparent, var(--accent), transparent);
-  animation: scanLine 1.5s ease-in-out infinite;
-}
-@keyframes scanLine {
-  0% { top: 0; }
-  100% { top: 100%; }
-}
-.scanning-text {
-  position: absolute;
-  bottom: 16px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 13px;
-  color: var(--accent);
-  background: rgba(0,0,0,0.6);
-  padding: 6px 16px;
-  border-radius: 20px;
-  white-space: nowrap;
-}
+
+/* Hidden file input */
+#fileInput { display: none; }
 </style>
 </head>
 <body>
 
 <div class="app-shell" id="app">
 
-<!-- ====== HOME PAGE ====== -->
+<!-- HOME PAGE -->
 <div class="page" id="homePage">
   <div class="status-bar">14:52</div>
   
@@ -825,7 +730,7 @@ body {
   </div>
 
   <div class="char-card">
-    <img class="char-avatar" src="https://xingyeai-images-cdn.oss-cn-shanghai.aliyuncs.com/talkie-user-img/241049801728340/272571779465624.jpeg" alt="江晦" id="charAvatar">
+    <img class="char-avatar" src="https://xingyeai-images-cdn.oss-cn-shanghai.aliyuncs.com/talkie-user-img/241049801728340/272571779465624.jpeg" alt="江晦">
     <div class="char-info">
       <h3>江晦</h3>
       <p>爱搭不理但偷偷在意的大型犬</p>
@@ -846,16 +751,18 @@ body {
 
   <div class="camera-section">
     <h2>拍一件礼物送给TA</h2>
-    <div class="camera-area" id="cameraArea" onclick="selectPhoto()">
+    <div class="camera-area" id="cameraArea" onclick="document.getElementById('fileInput').click()">
       <img class="camera-preview" id="cameraPreview">
       <div class="scanning-overlay" id="scanOverlay">
         <div class="scanning-line"></div>
-        <div class="scanning-text">识别物品中…</div>
+        <div class="scanning-spinner"></div>
+        <div class="scanning-text" id="scanText">识别物品中…</div>
       </div>
       <span class="camera-icon">📷</span>
       <p>点击拍照或选择图片</p>
       <span class="hint">拍下你想送给江晦的东西</span>
     </div>
+    <input type="file" id="fileInput" accept="image/*" capture="environment" onchange="handlePhoto(this)">
   </div>
 
   <div class="send-btn-area">
@@ -868,25 +775,27 @@ body {
   </div>
 </div>
 
-<!-- ====== TRANSFORM PAGE ====== -->
+<!-- TRANSFORM PAGE -->
 <div class="page hidden" id="transformPage">
   <div class="transform-page">
     <div class="transform-container">
-      <img class="transform-photo" id="transformPhoto" src="">
-      <div class="transform-arrow">⬇️</div>
-      <div class="transform-result" id="transformResult">
-        <div class="transform-result-glow" id="transformGlow"></div>
-        <div class="transform-result-img" id="transformResultImg"></div>
-        <div class="transform-sparkles" id="transformSparkles"></div>
+      <div class="transform-photos">
+        <img class="transform-photo" id="transformPhotoOrig" src="">
+        <div class="transform-arrow">✨</div>
+        <div class="transform-result" id="transformResult">
+          <div class="transform-result-glow" id="transformGlow"></div>
+          <img id="transformResultImg" src="">
+        </div>
       </div>
       <div class="transform-item-name" id="transformName"></div>
       <div class="transform-rarity" id="transformRarity"></div>
-      <button class="transform-send-btn" onclick="showReaction()">送出礼物 🎁</button>
+      <div class="transform-desc" id="transformDesc"></div>
+      <button class="transform-send-btn" onclick="showReaction()">送给江晦 🎁</button>
     </div>
   </div>
 </div>
 
-<!-- ====== REACTION PAGE ====== -->
+<!-- REACTION PAGE -->
 <div class="page hidden" id="reactionPage">
   <div class="reaction-page">
     <div class="reaction-header">
@@ -900,7 +809,7 @@ body {
         <div class="reaction-text" id="reactionText"></div>
         <div class="reaction-action" id="reactionAction"></div>
       </div>
-      <div class="reaction-status" id="reactionStatus"></div>
+      <div class="reaction-status" id="reactionStatus">✨ 已放入江晦的背包</div>
       <div class="reaction-buttons">
         <button class="reaction-btn secondary" onclick="goHome()">返回</button>
         <button class="reaction-btn primary" onclick="showBackpack()">查看背包</button>
@@ -909,7 +818,7 @@ body {
   </div>
 </div>
 
-<!-- ====== BACKPACK PAGE ====== -->
+<!-- BACKPACK PAGE -->
 <div class="page hidden" id="backpackPage">
   <div class="backpack-page">
     <div class="backpack-header">
@@ -917,7 +826,6 @@ body {
       <h2>江晦的背包</h2>
       <span class="backpack-count" id="bpCount">7 件物品</span>
     </div>
-
     <div class="room-view">
       <div class="room-bg"></div>
       <div class="room-label">🎒 江晦的背包</div>
@@ -926,7 +834,6 @@ body {
         <img src="https://xingyeai-images-cdn.oss-cn-shanghai.aliyuncs.com/talkie-user-img/241049801728340/272571779465624.jpeg" alt="江晦">
       </div>
     </div>
-
     <div class="filter-tabs">
       <button class="filter-tab active" onclick="filterItems('all', this)">全部</button>
       <button class="filter-tab" onclick="filterItems('food', this)">食物</button>
@@ -935,7 +842,6 @@ body {
       <button class="filter-tab" onclick="filterItems('daily', this)">日用</button>
       <button class="filter-tab" onclick="filterItems('special', this)">特别</button>
     </div>
-
     <div class="item-grid" id="itemGrid"></div>
   </div>
 </div>
@@ -944,7 +850,7 @@ body {
 <div class="item-detail-overlay" id="detailOverlay" onclick="closeDetail()"></div>
 <div class="item-detail-modal" id="detailModal">
   <button class="detail-close" onclick="closeDetail()">✕</button>
-  <div class="detail-emoji" id="detailEmoji"></div>
+  <div class="detail-visual" id="detailVisual"></div>
   <div class="detail-name" id="detailName"></div>
   <div class="detail-rarity-tag" id="detailRarity"></div>
   <div class="detail-section">
@@ -967,14 +873,25 @@ body {
 
 <script>
 // ============================================
-// DATA
+// CONFIG
 // ============================================
+const GEMINI_API_KEY = 'AIzaSyA24M_OjQG5faLdcD6EytJ8MhHB5vlyQ94';
+const GEMINI_MODEL = 'gemini-2.0-flash-exp';
+const GEMINI_IMAGE_MODEL = 'gemini-2.0-flash-exp';
 const AVATAR_URL = 'https://xingyeai-images-cdn.oss-cn-shanghai.aliyuncs.com/talkie-user-img/241049801728340/272571779465624.jpeg';
 
-// Mock gift items that user has previously sent
+// Character profile for generating reactions
+const CHARACTER_PROFILE = `你是江晦，一个表面爱搭不理、嘴硬心软的男生。性格像一只大型犬——嘴上说不在乎，行动上却很诚实。
+说话特点：简短、有点冷、但偶尔会流露温柔。经常用"……"和"嗯"。会用行动表达在意，而不是语言。
+你的女朋友叫栗川，她给你送了一件礼物。`;
+
+let currentPhotoBase64 = null;
+let currentItem = null;
+
+// Pre-existing gifts (mock data with emoji fallbacks)
 const existingGifts = [
   {
-    id: 1, emoji: '🏀', name: '旧篮球',
+    id: 1, emoji: '🏀', image: null, name: '旧篮球',
     category: 'toy', rarity: 'uncommon', rarityName: '稀有',
     desc: '一个用过的篮球，表面有些磨损但气很足。',
     date: '3月8日 16:23',
@@ -982,7 +899,7 @@ const existingGifts = [
     action: '（把篮球放在了床角最顺手的位置）'
   },
   {
-    id: 2, emoji: '🧣', name: '灰色围巾',
+    id: 2, emoji: '🧣', image: null, name: '灰色围巾',
     category: 'accessory', rarity: 'rare', rarityName: '精良',
     desc: '柔软的灰色羊毛围巾，带着淡淡的洗衣液味道。',
     date: '3月7日 19:45',
@@ -990,7 +907,7 @@ const existingGifts = [
     action: '（之后每次降温都会戴上）'
   },
   {
-    id: 3, emoji: '☕', name: '美式咖啡',
+    id: 3, emoji: '☕', image: null, name: '美式咖啡',
     category: 'food', rarity: 'common', rarityName: '普通',
     desc: '一杯冰美式，杯壁上有水珠。',
     date: '3月7日 09:12',
@@ -998,7 +915,7 @@ const existingGifts = [
     action: '（一口气喝完了）'
   },
   {
-    id: 4, emoji: '🐱', name: '猫咪玩偶',
+    id: 4, emoji: '🐱', image: null, name: '猫咪玩偶',
     category: 'toy', rarity: 'rare', rarityName: '精良',
     desc: '橘色的小猫咪毛绒玩偶，眼睛圆圆的。',
     date: '3月6日 22:31',
@@ -1006,7 +923,7 @@ const existingGifts = [
     action: '（晚上被发现抱着猫咪玩偶睡着了）'
   },
   {
-    id: 5, emoji: '🌸', name: '路边的花',
+    id: 5, emoji: '🌸', image: null, name: '路边的花',
     category: 'special', rarity: 'epic', rarityName: '史诗',
     desc: '路边摘的一朵粉色小花，花瓣有点皱但很努力地开着。',
     date: '3月5日 15:08',
@@ -1014,7 +931,7 @@ const existingGifts = [
     action: '（找了个杯子装水把花养起来了，放在窗台上）'
   },
   {
-    id: 6, emoji: '🎧', name: '白色耳机',
+    id: 6, emoji: '🎧', image: null, name: '白色耳机',
     category: 'accessory', rarity: 'uncommon', rarityName: '稀有',
     desc: '一副白色有线耳机，线缠在一起。',
     date: '3月4日 20:15',
@@ -1022,7 +939,7 @@ const existingGifts = [
     action: '（把自己的旧耳机收起来了）'
   },
   {
-    id: 7, emoji: '🍜', name: '一碗面',
+    id: 7, emoji: '🍜', image: null, name: '一碗面',
     category: 'food', rarity: 'common', rarityName: '普通',
     desc: '热气腾腾的牛肉面，汤头浓郁，上面飘着葱花。',
     date: '3月3日 12:30',
@@ -1031,136 +948,217 @@ const existingGifts = [
   }
 ];
 
-// Items that can be "detected" from photos
-const detectableItems = [
-  {
-    emoji: '🧸', name: '小熊软糖',
-    category: 'toy', rarity: 'uncommon', rarityName: '稀有',
-    desc: '一颗QQ弹弹的小熊软糖，透明的橘色。',
-    reaction: '……这也能送？（江晦把软糖拿起来对着光看了看）算了，吃掉好了。（一口吞了）再来一颗。',
-    action: '（嘴上嫌弃但吃了三颗）'
-  },
-  {
-    emoji: '📱', name: '手机壳',
-    category: 'accessory', rarity: 'common', rarityName: '普通',
-    desc: '一个透明手机壳，角落有点发黄。',
-    reaction: '我不用手机壳的。（但还是拿过来比了一下自己的手机）……尺寸不对。那我留着好了。',
-    action: '（放进了抽屉最里面）'
-  },
-  {
-    emoji: '🎸', name: '吉他拨片',
-    category: 'special', rarity: 'epic', rarityName: '史诗',
-    desc: '一枚磨旧的吉他拨片，边缘光滑，用过很久的样子。',
-    reaction: '（江晦突然安静了）……你弹吉他？（声音里带着一点意外和认真）这个我收了。',
-    action: '（放在了衣服口袋里，之后一直带着）'
-  },
-  {
-    emoji: '🧊', name: '冰可乐',
-    category: 'food', rarity: 'common', rarityName: '普通',
-    desc: '一罐冒着水珠的冰可乐，拉环还没开。',
-    reaction: '还行，冰的。（接过来一口气打开）你要喝吗？我喝过的你不嫌弃吧。',
-    action: '（两个人分着喝了一罐）'
-  },
-  {
-    emoji: '🌙', name: '月亮吊坠',
-    category: 'accessory', rarity: 'legendary', rarityName: '传说',
-    desc: '一枚银色的月牙形吊坠，在灯光下微微发光。',
-    reaction: '（江晦盯着吊坠看了很久，没说话）……（轻轻攥在手心里）我不戴首饰的。但这个……我放着。',
-    action: '（后来被发现戴在了衣服里面，贴着皮肤的位置）'
-  },
-  {
-    emoji: '📓', name: '手写信',
-    category: 'special', rarity: 'legendary', rarityName: '传说',
-    desc: '一封手写的信，字不算好看但写得很认真，纸上有淡淡的折痕。',
-    reaction: '（打开信读了一遍。又读了一遍。把信折好放进口袋）你字好丑。（但声音在抖）……谢了。',
-    action: '（之后很长一段时间，江晦话变多了一点点）'
+// ============================================
+// PHOTO HANDLING
+// ============================================
+function handlePhoto(input) {
+  const file = input.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const dataUrl = e.target.result;
+    currentPhotoBase64 = dataUrl.split(',')[1];
+    
+    const preview = document.getElementById('cameraPreview');
+    preview.src = dataUrl;
+    preview.style.display = 'block';
+    
+    const area = document.getElementById('cameraArea');
+    area.classList.add('has-photo');
+    
+    document.getElementById('sendBtn').classList.add('show');
+  };
+  reader.readAsDataURL(file);
+  
+  // Reset file input so same file can be selected again
+  input.value = '';
+}
+
+// ============================================
+// GEMINI API CALLS
+// ============================================
+async function callGeminiText(prompt, imageBase64) {
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`;
+  
+  const parts = [];
+  if (imageBase64) {
+    parts.push({
+      inlineData: {
+        mimeType: 'image/jpeg',
+        data: imageBase64
+      }
+    });
   }
-];
+  parts.push({ text: prompt });
 
-let currentDetectedItem = null;
+  const resp = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      contents: [{ parts }],
+      generationConfig: {
+        temperature: 0.9,
+        maxOutputTokens: 1024
+      }
+    })
+  });
+
+  const data = await resp.json();
+  if (data.candidates && data.candidates[0]) {
+    return data.candidates[0].content.parts[0].text;
+  }
+  throw new Error('Gemini API error: ' + JSON.stringify(data));
+}
+
+async function callGeminiImage(prompt, imageBase64) {
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_IMAGE_MODEL}:generateContent?key=${GEMINI_API_KEY}`;
+  
+  const parts = [];
+  if (imageBase64) {
+    parts.push({
+      inlineData: {
+        mimeType: 'image/jpeg',
+        data: imageBase64
+      }
+    });
+  }
+  parts.push({ text: prompt });
+
+  const resp = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      contents: [{ parts }],
+      generationConfig: {
+        responseModalities: ['TEXT', 'IMAGE'],
+        temperature: 0.8
+      }
+    })
+  });
+
+  const data = await resp.json();
+  if (data.candidates && data.candidates[0]) {
+    const resultParts = data.candidates[0].content.parts;
+    let image = null;
+    let text = '';
+    for (const part of resultParts) {
+      if (part.inlineData) {
+        image = 'data:' + part.inlineData.mimeType + ';base64,' + part.inlineData.data;
+      }
+      if (part.text) {
+        text += part.text;
+      }
+    }
+    return { image, text };
+  }
+  throw new Error('Gemini image API error: ' + JSON.stringify(data));
+}
 
 // ============================================
-// MOCK PHOTO SELECTION
+// TRANSFORM FLOW
 // ============================================
-function selectPhoto() {
-  // Simulate picking a random item
-  const area = document.getElementById('cameraArea');
+async function startTransform() {
+  if (!currentPhotoBase64) return;
   
-  // Mock: show a gradient as "photo"
-  const colors = [
-    'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-    'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
-    'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
-    'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
-    'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
-    'linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%)'
-  ];
-  const randomColor = colors[Math.floor(Math.random() * colors.length)];
-  
-  const preview = document.getElementById('cameraPreview');
-  preview.style.background = randomColor;
-  preview.style.display = 'block';
-  area.classList.add('has-photo');
+  const btn = document.getElementById('sendBtn');
+  btn.disabled = true;
+  btn.textContent = '处理中…';
   
   // Show scanning animation
   document.getElementById('scanOverlay').classList.add('show');
-  
-  // After scanning, show send button
-  setTimeout(() => {
+  document.getElementById('scanText').textContent = '正在识别物品…';
+
+  try {
+    // Step 1: Identify item + generate metadata + character reaction
+    document.getElementById('scanText').textContent = '正在识别物品…';
+    
+    const identifyPrompt = `看这张照片，识别出照片中最主要的物品。然后按以下JSON格式返回（不要加markdown代码块标记，直接返回JSON）：
+
+{
+  "name": "物品的中文名称（2-4个字，简洁有趣）",
+  "category": "分类，只能是以下之一：food/accessory/toy/daily/special",
+  "rarity": "稀有度，基于物品的情感价值而非物质价值判断：common（普通日用品）/uncommon（有点特别）/rare（用心准备的）/epic（很有心意的）/legendary（极其珍贵或独特的）",
+  "rarityName": "稀有度中文名：普通/稀有/精良/史诗/传说",
+  "desc": "物品描述，一句话，要有画面感（20字以内）",
+  "reaction": "江晦收到这个礼物的反应。${CHARACTER_PROFILE} 要求：1.对话+动作混合 2.嘴硬心软 3.用括号写动作描写 4.总共50-80字",
+  "action": "（一个括号内的后续小动作描写，展示江晦其实很在意，15-25字）"
+}`;
+
+    const metaText = await callGeminiText(identifyPrompt, currentPhotoBase64);
+    
+    // Parse JSON from response
+    let meta;
+    try {
+      // Try to extract JSON from response
+      const jsonMatch = metaText.match(/\{[\s\S]*\}/);
+      meta = JSON.parse(jsonMatch ? jsonMatch[0] : metaText);
+    } catch(e) {
+      console.error('Parse error:', metaText);
+      throw new Error('无法解析物品信息');
+    }
+
+    // Step 2: Generate stylized item image
+    document.getElementById('scanText').textContent = '正在生成物品…';
+    
+    const stylePrompt = `Transform the main object in this photo into a cute stylized game item icon. Style requirements:
+- Isometric view, slightly tilted
+- Soft pastel colors with warm lighting
+- Clean flat illustration with subtle shadows
+- Cozy mobile game aesthetic (like Animal Crossing items)
+- The item should be recognizable but stylized
+- Dark navy background (#161620)
+- No text, no labels
+- Single item, centered
+- Slight glow/sparkle effect around the item`;
+
+    const imageResult = await callGeminiImage(stylePrompt, currentPhotoBase64);
+    
     document.getElementById('scanOverlay').classList.remove('show');
-    document.getElementById('sendBtn').classList.add('show');
-    showToast('📦 物品识别完成！');
-  }, 1500);
-  
-  // Pick a random detectable item
-  currentDetectedItem = detectableItems[Math.floor(Math.random() * detectableItems.length)];
-}
+    
+    // Store current item
+    currentItem = {
+      id: Date.now(),
+      emoji: null,
+      image: imageResult.image,
+      name: meta.name,
+      category: meta.category || 'daily',
+      rarity: meta.rarity || 'common',
+      rarityName: meta.rarityName || '普通',
+      desc: meta.desc,
+      date: formatNow(),
+      reaction: meta.reaction,
+      action: meta.action || ''
+    };
 
-// ============================================
-// TRANSFORM ANIMATION
-// ============================================
-function startTransform() {
-  const item = currentDetectedItem;
-  if (!item) return;
-  
-  // Set up transform page
-  const transformPhoto = document.getElementById('transformPhoto');
-  const preview = document.getElementById('cameraPreview');
-  transformPhoto.style.background = preview.style.background;
-  transformPhoto.style.borderRadius = '20px';
-  
-  document.getElementById('transformResultImg').textContent = item.emoji;
-  document.getElementById('transformName').textContent = item.name;
-  
-  const rarityColor = getRarityColor(item.rarity);
-  document.getElementById('transformRarity').textContent = item.rarityName;
-  document.getElementById('transformRarity').style.color = rarityColor;
-  document.getElementById('transformResultImg').style.borderColor = rarityColor;
-  document.getElementById('transformGlow').style.background = rarityColor;
-  
-  // Navigate to transform page
-  showPage('transformPage');
-  
-  // Animate result appearing
-  setTimeout(() => {
-    document.getElementById('transformResult').classList.add('show');
-    createSparkles(rarityColor);
-  }, 1200);
-}
+    // Navigate to transform page
+    document.getElementById('transformPhotoOrig').src = 'data:image/jpeg;base64,' + currentPhotoBase64;
+    
+    if (imageResult.image) {
+      document.getElementById('transformResultImg').src = imageResult.image;
+    }
+    
+    document.getElementById('transformName').textContent = meta.name;
+    
+    const rarityColor = getRarityColor(meta.rarity);
+    document.getElementById('transformRarity').textContent = meta.rarityName;
+    document.getElementById('transformRarity').style.color = rarityColor;
+    document.getElementById('transformGlow').style.background = rarityColor;
+    document.getElementById('transformDesc').textContent = meta.desc;
+    
+    showPage('transformPage');
+    
+    setTimeout(() => {
+      document.getElementById('transformResult').classList.add('show');
+    }, 800);
 
-function createSparkles(color) {
-  const container = document.getElementById('transformSparkles');
-  container.innerHTML = '';
-  const sparkles = ['✦', '✧', '·', '★', '✦'];
-  for (let i = 0; i < 12; i++) {
-    const s = document.createElement('span');
-    s.className = 'sparkle';
-    s.textContent = sparkles[i % sparkles.length];
-    s.style.left = (20 + Math.random() * 60) + '%';
-    s.style.top = (20 + Math.random() * 60) + '%';
-    s.style.animationDelay = (Math.random() * 0.5) + 's';
-    s.style.color = color;
-    container.appendChild(s);
+  } catch (err) {
+    console.error('Transform error:', err);
+    document.getElementById('scanOverlay').classList.remove('show');
+    showToast('生成失败：' + err.message, true);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '送给江晦 ✨';
   }
 }
 
@@ -1168,32 +1166,22 @@ function createSparkles(color) {
 // REACTION
 // ============================================
 function showReaction() {
-  const item = currentDetectedItem;
-  if (!item) return;
+  if (!currentItem) return;
   
-  document.getElementById('reactionGift').textContent = item.emoji;
-  document.getElementById('reactionGift').style.borderColor = getRarityColor(item.rarity);
-  document.getElementById('reactionText').textContent = item.reaction.replace(/（[^）]*）/g, '');
+  const giftDisplay = document.getElementById('reactionGift');
+  if (currentItem.image) {
+    giftDisplay.innerHTML = `<img src="${currentItem.image}" alt="${currentItem.name}">`;
+  } else {
+    giftDisplay.innerHTML = `<div style="font-size:44px;display:flex;align-items:center;justify-content:center;height:100%">${currentItem.emoji}</div>`;
+  }
   
-  // Extract action text
-  const actionMatch = item.action || item.reaction.match(/（[^）]*）/g);
-  document.getElementById('reactionAction').textContent = item.action || '';
+  // Extract dialogue (remove actions in parentheses for main text)
+  const dialogueOnly = currentItem.reaction.replace(/（[^）]*）/g, '').trim();
+  document.getElementById('reactionText').textContent = dialogueOnly;
+  document.getElementById('reactionAction').textContent = currentItem.action;
   
-  document.getElementById('reactionStatus').textContent = '✨ 已放入江晦的背包';
-  
-  // Add to existing gifts
-  existingGifts.unshift({
-    id: Date.now(),
-    emoji: item.emoji,
-    name: item.name,
-    category: item.category,
-    rarity: item.rarity,
-    rarityName: item.rarityName,
-    desc: item.desc,
-    date: '刚刚',
-    reaction: item.reaction,
-    action: item.action
-  });
+  // Add to gifts
+  existingGifts.unshift({ ...currentItem });
   
   showPage('reactionPage');
 }
@@ -1210,13 +1198,14 @@ function renderBackpack() {
   document.getElementById('bpCount').textContent = existingGifts.length + ' 件物品';
   document.getElementById('backpackBadge').textContent = existingGifts.length;
   
-  // Room items
   const roomItems = document.getElementById('roomItems');
-  roomItems.innerHTML = existingGifts.slice(0, 8).map(g => 
-    `<div class="room-item">${g.emoji}</div>`
-  ).join('');
+  roomItems.innerHTML = existingGifts.slice(0, 8).map(g => {
+    if (g.image) {
+      return `<div class="room-item"><img src="${g.image}" alt="${g.name}"></div>`;
+    }
+    return `<div class="room-item"><span class="emoji-only">${g.emoji}</span></div>`;
+  }).join('');
   
-  // Grid
   renderGrid(existingGifts);
 }
 
@@ -1224,7 +1213,11 @@ function renderGrid(items) {
   document.getElementById('itemGrid').innerHTML = items.map(g => `
     <div class="grid-item" onclick="showItemDetail(${g.id})">
       <div class="grid-item-rarity" style="background:${getRarityColor(g.rarity)}"></div>
-      <div class="grid-item-emoji">${g.emoji}</div>
+      <div class="grid-item-visual">
+        ${g.image 
+          ? `<img src="${g.image}" alt="${g.name}">` 
+          : `<div class="emoji-fallback">${g.emoji}</div>`}
+      </div>
       <div class="grid-item-name">${g.name}</div>
       <div class="grid-item-date">${g.date}</div>
     </div>
@@ -1234,7 +1227,6 @@ function renderGrid(items) {
 function filterItems(category, btn) {
   document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
   btn.classList.add('active');
-  
   if (category === 'all') {
     renderGrid(existingGifts);
   } else {
@@ -1246,7 +1238,13 @@ function showItemDetail(id) {
   const item = existingGifts.find(g => g.id === id);
   if (!item) return;
   
-  document.getElementById('detailEmoji').textContent = item.emoji;
+  const visual = document.getElementById('detailVisual');
+  if (item.image) {
+    visual.innerHTML = `<img src="${item.image}" alt="${item.name}">`;
+  } else {
+    visual.innerHTML = `<div class="emoji-fallback">${item.emoji}</div>`;
+  }
+  
   document.getElementById('detailName').textContent = item.name;
   document.getElementById('detailRarity').textContent = item.rarityName;
   document.getElementById('detailRarity').style.color = getRarityColor(item.rarity);
@@ -1269,7 +1267,7 @@ function closeDetail() {
 function showPage(pageId) {
   document.querySelectorAll('.page').forEach(p => {
     if (p.id === pageId) {
-      p.classList.remove('hidden', 'hidden-left');
+      p.classList.remove('hidden');
     } else {
       p.classList.add('hidden');
     }
@@ -1277,16 +1275,16 @@ function showPage(pageId) {
 }
 
 function goHome() {
-  // Reset camera
   const area = document.getElementById('cameraArea');
   area.classList.remove('has-photo');
   document.getElementById('cameraPreview').style.display = 'none';
+  document.getElementById('cameraPreview').src = '';
   document.getElementById('sendBtn').classList.remove('show');
   document.getElementById('transformResult').classList.remove('show');
+  currentPhotoBase64 = null;
+  currentItem = null;
   
-  // Update recent list
   renderRecentList();
-  
   showPage('homePage');
 }
 
@@ -1294,7 +1292,11 @@ function renderRecentList() {
   const list = document.getElementById('recentList');
   list.innerHTML = existingGifts.slice(0, 5).map(g => `
     <div class="recent-item" onclick="showBackpack()">
-      <div class="recent-item-img">${g.emoji}</div>
+      <div class="recent-item-img">
+        ${g.image 
+          ? `<img src="${g.image}" alt="${g.name}">` 
+          : `<div class="emoji-fallback">${g.emoji}</div>`}
+      </div>
       <div class="recent-item-name">${g.name}</div>
       <div class="recent-item-rarity" style="color:${getRarityColor(g.rarity)}">${g.rarityName}</div>
     </div>
@@ -1305,21 +1307,25 @@ function renderRecentList() {
 // UTILS
 // ============================================
 function getRarityColor(rarity) {
-  const colors = {
+  return {
     common: '#9CA3AF',
     uncommon: '#60D394',
     rare: '#A78BFA',
     epic: '#F59E0B',
     legendary: '#EF4444'
-  };
-  return colors[rarity] || colors.common;
+  }[rarity] || '#9CA3AF';
 }
 
-function showToast(msg) {
+function formatNow() {
+  const d = new Date();
+  return `${d.getMonth()+1}月${d.getDate()}日 ${d.getHours().toString().padStart(2,'0')}:${d.getMinutes().toString().padStart(2,'0')}`;
+}
+
+function showToast(msg, isError) {
   const toast = document.getElementById('toast');
   toast.textContent = msg;
-  toast.classList.add('show');
-  setTimeout(() => toast.classList.remove('show'), 1500);
+  toast.className = 'toast show' + (isError ? ' error' : '');
+  setTimeout(() => toast.className = 'toast', 2500);
 }
 
 // ============================================
@@ -1327,6 +1333,5 @@ function showToast(msg) {
 // ============================================
 renderRecentList();
 </script>
-
 </body>
 </html>
