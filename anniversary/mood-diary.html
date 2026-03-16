@@ -491,6 +491,20 @@ body {
   background: rgba(255,255,255,0.06); min-width: 4px; width: 4px;
 }
 
+/* ===== Simple Trend Line Chart ===== */
+.trend-simple {
+  background: rgba(255,255,255,0.04); border-radius: 12px;
+  padding: 14px 12px; margin-top: 12px;
+}
+.trend-simple-legend {
+  display: flex; gap: 14px; margin-bottom: 10px; font-size: 11px; justify-content: center;
+}
+.trend-simple-legend span { display: flex; align-items: center; gap: 4px; color: var(--text-secondary); }
+.trend-simple-legend .leg-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.trend-simple-legend .leg-dot.user { background: var(--pink); }
+.trend-simple-legend .leg-dot.npc { background: var(--blue); }
+.trend-simple canvas { width: 100%; height: 140px; }
+
 ::-webkit-scrollbar { display: none; }
 
 @keyframes slideUp {
@@ -988,14 +1002,14 @@ function showSummary() {
   document.getElementById('summaryTitle').textContent = `${currentYear}年${currentMonth+1}月`;
   const content = document.getElementById('summaryContent');
   const daysInMonth = new Date(currentYear, currentMonth+1, 0).getDate();
-  const userMoods=[], npcMoods=[], userCount={}, npcCount={};
+  const userMoods=[], npcMoods=[], userCount={}, npcCount={}, userDay=[], npcDay=[];
 
   for (let d=1; d<=daysInMonth; d++) {
     const key = `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
     const entry = diaryData[key];
     if (entry) {
-      if (entry.user) { userMoods.push(entry.user.mood); userCount[entry.user.mood]=(userCount[entry.user.mood]||0)+1; }
-      if (entry.npc) { npcMoods.push(entry.npc.mood); npcCount[entry.npc.mood]=(npcCount[entry.npc.mood]||0)+1; }
+      if (entry.user) { userMoods.push(entry.user.mood); userCount[entry.user.mood]=(userCount[entry.user.mood]||0)+1; userDay.push({day:d,mood:entry.user.mood}); }
+      if (entry.npc) { npcMoods.push(entry.npc.mood); npcCount[entry.npc.mood]=(npcCount[entry.npc.mood]||0)+1; npcDay.push({day:d,mood:entry.npc.mood}); }
     }
   }
 
@@ -1053,10 +1067,67 @@ function showSummary() {
   });
   html += `</div>`;
 
+  // Simple trend line chart
+  html += `<div class="trend-simple">
+    <div class="trend-simple-legend">
+      <span><span class="leg-dot user"></span>${USER_NAME}</span>
+      <span><span class="leg-dot npc"></span>${NPC_NAME}</span>
+    </div>
+    <canvas id="trendCanvas"></canvas>
+  </div>`;
+
   content.innerHTML = html;
   document.getElementById('summaryPage').classList.add('active','slide-up');
+  setTimeout(() => drawTrend(userDay, npcDay, daysInMonth), 80);
 }
 function closeSummary() { document.getElementById('summaryPage').classList.remove('active','slide-up'); }
+
+function moodVal(id) { return {excited:7,heartbeat:6,happy:5,calm:4,tired:3,irritated:2,angry:1,sad:0}[id]??3; }
+
+function drawTrend(uDay, nDay, days) {
+  const canvas = document.getElementById('trendCanvas'); if(!canvas) return;
+  const dpr = window.devicePixelRatio||1;
+  const rect = canvas.getBoundingClientRect();
+  canvas.width = rect.width*dpr; canvas.height = rect.height*dpr;
+  const ctx = canvas.getContext('2d'); ctx.scale(dpr,dpr);
+  const W=rect.width, H=rect.height, pL=4, pR=4, pT=6, pB=20;
+  const cW=W-pL-pR, cH=H-pT-pB;
+
+  // Light grid lines
+  ctx.strokeStyle='rgba(255,255,255,0.04)'; ctx.lineWidth=1;
+  for(let i=0;i<=7;i++){
+    const y=pT+(cH/7)*i;
+    ctx.beginPath();ctx.moveTo(pL,y);ctx.lineTo(W-pR,y);ctx.stroke();
+  }
+
+  // X-axis dates
+  const xDates = [1, 5, 10, 15, 20, 25, 30].filter(d => d <= days);
+  ctx.fillStyle = 'rgba(255,255,255,0.25)';
+  ctx.font = '10px -apple-system, PingFang SC, sans-serif';
+  ctx.textAlign = 'center';
+  xDates.forEach(d => {
+    const x = pL + ((d - 1) / (days - 1)) * cW;
+    ctx.fillText(d, x, H - 4);
+  });
+
+  function drawLine(dms, color) {
+    if(dms.length<2) return;
+    // Glow
+    ctx.beginPath(); ctx.strokeStyle=color+'25'; ctx.lineWidth=5; ctx.lineJoin='round'; ctx.lineCap='round';
+    dms.forEach((dm,i) => {
+      const x=pL+((dm.day-1)/(days-1))*cW, y=pT+cH-(moodVal(dm.mood)/7)*cH;
+      i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+    }); ctx.stroke();
+    // Main line
+    ctx.beginPath(); ctx.strokeStyle=color; ctx.lineWidth=2;
+    dms.forEach((dm,i) => {
+      const x=pL+((dm.day-1)/(days-1))*cW, y=pT+cH-(moodVal(dm.mood)/7)*cH;
+      i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+    }); ctx.stroke();
+  }
+  drawLine(uDay, '#E89AAF');
+  drawLine(nDay, '#7BA3C9');
+}
 
 // ===== Init =====
 const now = new Date();
