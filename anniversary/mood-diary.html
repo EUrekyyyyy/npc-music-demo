@@ -418,19 +418,49 @@ body {
   font-size: 14px; cursor: pointer; padding: 6px 14px; border-radius: 16px;
 }
 .summary-title {
-  font-size: 18px; font-weight: 600; color: var(--text-primary); flex: 1;
+  font-size: 18px; font-weight: 600; color: var(--text-primary); cursor: pointer;
 }
-.summary-month-nav {
-  display: flex; align-items: center; gap: 4px;
+.summary-title-arrow {
+  font-size: 14px; color: var(--text-tertiary); cursor: pointer;
+  margin-left: 2px;
 }
-.summary-month-nav button {
+/* Month Picker Modal */
+.month-picker-overlay {
+  position: fixed; inset: 0; z-index: 500;
+  background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);
+  display: none; align-items: center; justify-content: center;
+}
+.month-picker-overlay.active { display: flex; }
+.month-picker-modal {
+  background: #1C1C1E; border-radius: 16px; padding: 20px;
+  width: 280px; box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+}
+.month-picker-year {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 14px;
+}
+.month-picker-year span { font-size: 16px; font-weight: 600; color: var(--text-primary); }
+.month-picker-year button {
   background: #2C2C2E; border: none; color: rgba(255,255,255,0.7);
   width: 28px; height: 28px; border-radius: 50%; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
   font-size: 14px;
 }
-.summary-month-nav button:disabled { opacity: 0.3; cursor: default; }
-.summary-month-nav button:active:not(:disabled) { background: #3C3C3E; }
+.month-picker-year button:active { background: #3C3C3E; }
+.month-picker-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
+}
+.month-picker-grid button {
+  background: rgba(255,255,255,0.05); border: none;
+  color: var(--text-secondary); font-size: 14px;
+  padding: 10px 0; border-radius: 10px; cursor: pointer;
+}
+.month-picker-grid button:active { background: rgba(255,255,255,0.1); }
+.month-picker-grid button.selected {
+  background: var(--pink); color: #fff; font-weight: 600;
+}
+.month-picker-grid button:disabled {
+  opacity: 0.25; cursor: default;
+}
 .summary-content {
   flex: 1; overflow-y: auto; padding: 0 16px 40px;
   -webkit-overflow-scrolling: touch;
@@ -550,24 +580,26 @@ body {
 /* ===== Simple Trend Line Chart ===== */
 .trend-simple {
   background: rgba(255,255,255,0.04); border-radius: 12px;
-  padding: 14px 12px; margin-top: 12px;
+  padding: 16px 10px 12px; margin-top: 12px;
 }
+.trend-simple-wrap { display: flex; gap: 0; align-items: stretch; }
+.trend-y-axis {
+  display: flex; flex-direction: column; justify-content: space-between;
+  padding: 0 6px 24px 0; width: 30px; flex-shrink: 0;
+}
+.trend-y-axis .y-icon { width: 22px; height: 22px; }
+.trend-y-axis .y-icon img { width: 100%; height: 100%; object-fit: contain; }
+.trend-canvas-wrap { flex: 1; min-width: 0; }
+.trend-simple canvas { width: 100%; height: 160px; }
 .trend-simple-legend {
-  display: flex; gap: 14px; margin-bottom: 10px; font-size: 11px; justify-content: center;
+  display: flex; gap: 16px; font-size: 11px; justify-content: center;
+  margin-top: 10px; padding-top: 8px;
+  border-top: 1px solid rgba(255,255,255,0.04);
 }
 .trend-simple-legend span { display: flex; align-items: center; gap: 4px; color: var(--text-secondary); }
 .trend-simple-legend .leg-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
 .trend-simple-legend .leg-dot.user { background: var(--pink); }
 .trend-simple-legend .leg-dot.npc { background: var(--blue); }
-.trend-simple canvas { width: 100%; height: 140px; }
-.trend-simple-wrap { display: flex; gap: 0; align-items: stretch; }
-.trend-y-axis {
-  display: flex; flex-direction: column; justify-content: space-between;
-  padding: 2px 4px 20px 0; width: 26px; flex-shrink: 0;
-}
-.trend-y-axis .y-icon { width: 20px; height: 20px; }
-.trend-y-axis .y-icon img { width: 100%; height: 100%; object-fit: contain; }
-.trend-canvas-wrap { flex: 1; min-width: 0; }
 
 ::-webkit-scrollbar { display: none; }
 
@@ -674,13 +706,18 @@ body {
 <div class="summary-page" id="summaryPage">
   <div class="summary-header">
     <button class="back-btn" onclick="closeSummary()">‹</button>
-    <span class="summary-title" id="summaryTitle"></span>
-    <div class="summary-month-nav">
-      <button id="sumPrev" onclick="sumChangeMonth(-1)">‹</button>
-      <button id="sumNext" onclick="sumChangeMonth(1)">›</button>
-    </div>
+    <span class="summary-title" id="summaryTitle" onclick="openMonthPicker()"></span>
+    <span class="summary-title-arrow" onclick="openMonthPicker()">▾</span>
   </div>
   <div class="summary-content" id="summaryContent"></div>
+</div>
+
+<!-- Month Picker Modal -->
+<div class="month-picker-overlay" id="monthPickerOverlay" onclick="closeMonthPicker()">
+  <div class="month-picker-modal" onclick="event.stopPropagation()">
+    <div class="month-picker-year" id="monthPickerYear"></div>
+    <div class="month-picker-grid" id="monthPickerGrid"></div>
+  </div>
 </div>
 
 <script>
@@ -1088,12 +1125,6 @@ function showSummary() {
 }
 function showSummaryForMonth(year, month) {
   document.getElementById('summaryTitle').textContent = `${year}年${month+1}月`;
-  // Update nav button states
-  const prevBtn = document.getElementById('sumPrev');
-  const nextBtn = document.getElementById('sumNext');
-  if (prevBtn) prevBtn.disabled = (year === 2026 && month <= 2);
-  const now = new Date();
-  if (nextBtn) nextBtn.disabled = (year >= now.getFullYear() && month >= now.getMonth());
   const content = document.getElementById('summaryContent');
   const daysInMonth = new Date(year, month+1, 0).getDate();
   const userMoods=[], npcMoods=[], userCount={}, npcCount={}, userDay=[], npcDay=[];
@@ -1151,17 +1182,17 @@ function showSummaryForMonth(year, month) {
 
   // Simple trend line chart
   html += `<div class="summary-section-title">心情趋势</div><div class="trend-simple">
+    <div class="trend-simple-wrap">
+      <div class="trend-y-axis">
+        <div class="y-icon">${moonSVG('heartbeat',22)}</div>
+        <div class="y-icon">${moonSVG('calm',22)}</div>
+        <div class="y-icon">${moonSVG('sad',22)}</div>
+      </div>
+      <div class="trend-canvas-wrap"><canvas id="trendCanvas"></canvas></div>
+    </div>
     <div class="trend-simple-legend">
       <span><span class="leg-dot user"></span>${USER_NAME}</span>
       <span><span class="leg-dot npc"></span>${NPC_NAME}</span>
-    </div>
-    <div class="trend-simple-wrap">
-      <div class="trend-y-axis">
-        <div class="y-icon">${moonSVG('heartbeat',20)}</div>
-        <div class="y-icon">${moonSVG('calm',20)}</div>
-        <div class="y-icon">${moonSVG('sad',20)}</div>
-      </div>
-      <div class="trend-canvas-wrap"><canvas id="trendCanvas"></canvas></div>
     </div>
   </div>`;
 
@@ -1172,18 +1203,40 @@ function showSummaryForMonth(year, month) {
 function closeSummary() { document.getElementById('summaryPage').classList.remove('active','slide-up'); }
 
 // Summary month navigation
-let sumYear, sumMonth;
-function sumChangeMonth(delta) {
-  let newMonth = sumMonth + delta;
-  let newYear = sumYear;
-  if (newMonth > 11) { newMonth = 0; newYear++; }
-  if (newMonth < 0) { newMonth = 11; newYear--; }
-  // Don't go before 2026-03
-  if (newYear < 2026 || (newYear === 2026 && newMonth < 2)) return;
-  // Don't go past current month
+let sumYear, sumMonth, pickerYear;
+
+function openMonthPicker() {
+  pickerYear = sumYear;
+  renderMonthPicker();
+  document.getElementById('monthPickerOverlay').classList.add('active');
+}
+function closeMonthPicker() {
+  document.getElementById('monthPickerOverlay').classList.remove('active');
+}
+function changePickerYear(delta) {
+  const newY = pickerYear + delta;
+  if (newY < 2026) return;
   const now = new Date();
-  if (newYear > now.getFullYear() || (newYear === now.getFullYear() && newMonth > now.getMonth())) return;
-  sumYear = newYear; sumMonth = newMonth;
+  if (newY > now.getFullYear()) return;
+  pickerYear = newY;
+  renderMonthPicker();
+}
+function renderMonthPicker() {
+  const now = new Date();
+  const yearEl = document.getElementById('monthPickerYear');
+  yearEl.innerHTML = `<button onclick="changePickerYear(-1)">‹</button><span>${pickerYear}年</span><button onclick="changePickerYear(1)">›</button>`;
+  const grid = document.getElementById('monthPickerGrid');
+  let html = '';
+  for (let m = 0; m < 12; m++) {
+    const disabled = (pickerYear === 2026 && m < 2) || (pickerYear > now.getFullYear()) || (pickerYear === now.getFullYear() && m > now.getMonth());
+    const selected = (pickerYear === sumYear && m === sumMonth);
+    html += `<button${disabled?' disabled':''} class="${selected?'selected':''}" onclick="pickMonth(${m})">${m+1}月</button>`;
+  }
+  grid.innerHTML = html;
+}
+function pickMonth(m) {
+  sumYear = pickerYear; sumMonth = m;
+  closeMonthPicker();
   showSummaryForMonth(sumYear, sumMonth);
 }
 
