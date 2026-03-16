@@ -400,8 +400,11 @@ body {
 /* ===== Dual Jars ===== */
 .dual-jars { display: flex; gap: 10px; padding: 10px 0 8px; justify-content: center; }
 .jar-col { display: flex; flex-direction: column; align-items: center; flex: 1; }
-.jar-label { display: flex; align-items: center; gap: 6px; margin-top: 8px; font-size: 12px; color: var(--text-secondary); }
-.jar-label img { width: 22px; height: 22px; border-radius: 50%; object-fit: cover; border: 1px solid rgba(255,255,255,0.1); }
+.jar-avatar {
+  width: 36px; height: 36px; border-radius: 50%; object-fit: cover;
+  border: 2px solid rgba(255,255,255,0.1); margin-bottom: 6px;
+}
+.jar-label { font-size: 12px; color: var(--text-secondary); margin-top: 6px; }
 .mood-jar { width: 100%; max-width: 160px; height: 220px; position: relative; }
 .mood-jar .jar-outline {
   position: absolute; top: 22px; left: 6px; right: 6px; bottom: 0;
@@ -490,6 +493,21 @@ body {
 .mood-dist-bar.empty {
   background: rgba(255,255,255,0.06); min-width: 4px; width: 4px;
 }
+
+/* ===== Top Mood Stats ===== */
+.summary-stats { display: flex; gap: 8px; }
+.summary-stat-card {
+  flex: 1; background: rgba(255,255,255,0.05);
+  border-radius: 10px;
+  padding: 10px 12px; display: flex; align-items: center; gap: 8px;
+}
+.summary-stat-card .stat-avatar {
+  width: 28px; height: 28px; border-radius: 50%; object-fit: cover;
+  border: 1.5px solid rgba(255,255,255,0.1); flex-shrink: 0;
+}
+.summary-stat-card .stat-mood { width: 32px; height: 32px; flex-shrink: 0; }
+.summary-stat-card .stat-mood img { width: 100%; height: 100%; object-fit: contain; }
+.summary-stat-card .stat-count { font-size: 16px; font-weight: 600; color: var(--text-primary); margin-left: auto; }
 
 /* ===== Simple Trend Line Chart ===== */
 .trend-simple {
@@ -1020,51 +1038,39 @@ function showSummary() {
 
   let html = `<div class="dual-jars">
     <div class="jar-col">
+      <img class="jar-avatar" src="${USER_AVATAR}" alt="${USER_NAME}">
       <div class="mood-jar">
         <div class="jar-outline"></div><div class="jar-neck"></div><div class="jar-lid"></div><div class="jar-shine"></div>
         <div class="jar-balls">${userJar}</div>
       </div>
-      <div class="jar-label"><img src="${USER_AVATAR}" alt="${USER_NAME}"> 我的心情</div>
+      <div class="jar-label">我的心情</div>
     </div>
     <div class="jar-col">
+      <img class="jar-avatar" src="${NPC_AVATAR}" alt="${NPC_NAME}">
       <div class="mood-jar">
         <div class="jar-outline"></div><div class="jar-neck"></div><div class="jar-lid"></div><div class="jar-shine"></div>
         <div class="jar-balls">${npcJar}</div>
       </div>
-      <div class="jar-label">Ta的心情 <img src="${NPC_AVATAR}" alt="${NPC_NAME}"></div>
+      <div class="jar-label">Ta的心情</div>
     </div>
   </div>`;
 
-  // Mood distribution — mirrored bars (user left, npc right)
-  const allMoodIds = ['happy','heartbeat','excited','calm','tired','angry','irritated','sad'];
-  const maxCount = Math.max(
-    ...allMoodIds.map(m => userCount[m]||0),
-    ...allMoodIds.map(m => npcCount[m]||0),
-    1
-  );
-
-  html += `<div class="mood-dist">`;
-  allMoodIds.forEach(mid => {
-    const uC = userCount[mid]||0;
-    const nC = npcCount[mid]||0;
-    const uW = uC > 0 ? Math.max(8, Math.round((uC / maxCount) * 100)) : 0;
-    const nW = nC > 0 ? Math.max(8, Math.round((nC / maxCount) * 100)) : 0;
-    html += `<div class="mood-dist-row">
-      <div class="mood-dist-left">
-        <div class="mood-dist-icon">${moonSVG(mid, 26)}</div>
-        <div class="mood-dist-bar-wrap">
-          <div class="mood-dist-bar ${uC===0?'empty':''}" style="width:${uC>0?uW:4}%;"></div>
-        </div>
-      </div>
-      <div class="mood-dist-divider"></div>
-      <div class="mood-dist-right">
-        <div class="mood-dist-icon">${starSVG(mid, 26)}</div>
-        <div class="mood-dist-bar-wrap">
-          <div class="mood-dist-bar ${nC===0?'empty':''}" style="width:${nC>0?nW:4}%;"></div>
-        </div>
-      </div>
-    </div>`;
-  });
+  // 本月最多心情
+  const userTop = Object.entries(userCount).sort((a,b)=>b[1]-a[1])[0];
+  const npcTop = Object.entries(npcCount).sort((a,b)=>b[1]-a[1])[0];
+  html += `<div class="summary-section-title">本月最多心情</div><div class="summary-stats">`;
+  if (userTop) {
+    html += `<div class="summary-stat-card">
+      <img class="stat-avatar" src="${USER_AVATAR}" alt="${USER_NAME}">
+      <div class="stat-mood">${moonSVG(userTop[0],32)}</div>
+      <span class="stat-count">${userTop[1]}</span></div>`;
+  }
+  if (npcTop) {
+    html += `<div class="summary-stat-card">
+      <img class="stat-avatar" src="${NPC_AVATAR}" alt="${NPC_NAME}">
+      <div class="stat-mood">${starSVG(npcTop[0],32)}</div>
+      <span class="stat-count">${npcTop[1]}</span></div>`;
+  }
   html += `</div>`;
 
   // Simple trend line chart
