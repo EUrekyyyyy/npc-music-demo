@@ -353,8 +353,14 @@ body {
   position: relative; overflow: hidden;
 }
 .detail-entry.selected {
-  border: 1.5px solid rgba(255,255,255,0.12);
-  background: rgba(255,255,255,0.07);
+  border: 1.5px solid rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.08);
+  animation: anchorPulse 1.2s ease-out;
+}
+@keyframes anchorPulse {
+  0% { box-shadow: 0 0 0 0 rgba(232,154,175,0.3); }
+  50% { box-shadow: 0 0 0 6px rgba(232,154,175,0.1); }
+  100% { box-shadow: 0 0 0 0 rgba(232,154,175,0); }
 }
 .detail-entry-top {
   display: flex; align-items: center; gap: 10px; margin-bottom: 10px;
@@ -1024,14 +1030,14 @@ function showDayDetail(key, date) {
     }
   }
   content.innerHTML = html;
-  document.getElementById('dayDetail').classList.add('active','slide-up');
-  // Auto-scroll to selected date
-  setTimeout(() => {
+  document.getElementById('dayDetail').classList.add('active');
+  // Instant anchor to selected date
+  requestAnimationFrame(() => {
     const target = document.getElementById('date-' + key);
-    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }, 100);
+    if (target) target.scrollIntoView({ behavior: 'instant', block: 'start' });
+  });
 }
-function closeDayDetail() { document.getElementById('dayDetail').classList.remove('active','slide-up'); }
+function closeDayDetail() { document.getElementById('dayDetail').classList.remove('active'); }
 function unlockEntry(key) {
   if (diaryData[key]?.npc) {
     diaryData[key].npc.locked = false;
