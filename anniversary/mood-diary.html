@@ -161,16 +161,16 @@ body {
 }
 
 .cal-grid {
-  flex: 1; overflow-y: auto; padding: 0 8px 20px;
+  flex: 1; overflow-y: auto; padding: 0 4px 20px;
   display: grid; grid-template-columns: repeat(7, 1fr);
-  gap: 1px; align-content: start;
+  gap: 0; align-content: start;
   -webkit-overflow-scrolling: touch;
 }
 
 .cal-day {
   display: flex; flex-direction: column; align-items: center;
-  padding: 5px 0; cursor: pointer; border-radius: 10px;
-  transition: background 0.15s; min-height: 72px;
+  padding: 4px 0; cursor: pointer; border-radius: 10px;
+  transition: background 0.15s; min-height: 82px;
 }
 .cal-day:active { background: var(--glass); }
 .cal-day.empty { cursor: default; }
@@ -187,7 +187,7 @@ body {
   display: flex; flex-direction: column; gap: 2px; align-items: center;
 }
 .day-mood-icon {
-  width: 22px; height: 22px; display: flex;
+  width: 26px; height: 26px; display: flex;
   align-items: center; justify-content: center;
 }
 .day-mood-icon svg { width: 100%; height: 100%; }
@@ -426,6 +426,9 @@ body {
   display: flex; gap: 16px; margin-bottom: 10px; font-size: 10px;
 }
 .trend-legend span { display: flex; align-items: center; gap: 5px; color: var(--text-secondary); }
+.trend-legend .leg-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.trend-legend .leg-dot.user { background: #FF7EB3; }
+.trend-legend .leg-dot.npc { background: #67B2FF; }
 .trend-legend .leg-icon { width: 12px; height: 12px; }
 .trend-canvas { width: 100%; height: 220px; }
 .trend-chart-wrap { display: flex; gap: 0; align-items: stretch; }
@@ -814,22 +817,16 @@ function renderCalendar() {
 
       const userIcon = document.createElement('div');
       userIcon.className = 'day-mood-icon';
-      userIcon.innerHTML = moonSVG(entry.user.mood, 22);
+      userIcon.innerHTML = moonSVG(entry.user.mood, 26);
       moodsWrap.appendChild(userIcon);
 
       const npcIcon = document.createElement('div');
       npcIcon.className = 'day-mood-icon';
-      npcIcon.innerHTML = starSVG(entry.npc.mood, 22);
+      npcIcon.innerHTML = starSVG(entry.npc.mood, 26);
       moodsWrap.appendChild(npcIcon);
 
       cell.appendChild(moodsWrap);
       cell.onclick = () => showDayDetail(key, date);
-    } else if (isToday) {
-      const btn = document.createElement('button');
-      btn.className = 'write-btn';
-      btn.textContent = '✏';
-      btn.onclick = (e) => { e.stopPropagation(); openMoodPicker(key, date); };
-      cell.appendChild(btn);
     }
     grid.appendChild(cell);
   }
@@ -966,78 +963,64 @@ function showSummary() {
   const jarW = 200, jarH = 270, bs = 18;
   const balls = []; // {cx, cy}
   
-  // Simple 2D circle packing with gravity (with safety limit)
-  function dropBall() {
-    const r1 = Math.random(), r2 = Math.random();
-    const gaussian = (r1 + r2) / 2;
-    const cx = bs + gaussian * (jarW - bs * 2);
-    let cy = jarH - bs/2 - 8;
-    const minDist = bs * 0.85;
-    
-    // Max 50 iterations to prevent freeze
-    for (let iter = 0; iter < 50; iter++) {
-      let hit = false;
-      for (const b of balls) {
-        const dx = cx - b.cx, dy = cy - b.cy;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < minDist) {
-          cy = b.cy - minDist * 0.9;
-          hit = true;
-          break;
-        }
-      }
-      if (!hit) break;
-    }
-    return { cx, cy };
-  }
+  // Grid-based jar layout with jitter — 62 icons, no overlap, natural feel
+  const jarMoods = allMoods.slice(0, 62);
+  const totalBalls = jarMoods.length;
+  // Jar inner: ~200w x ~270h, icon size 22px
+  const iconSize = 22;
+  const cols = 8; // icons per row
+  const cellW = (jarW - 16) / cols; // ~23px per cell
+  const cellH = iconSize + 3;
+  const rows = Math.ceil(totalBalls / cols);
+  const startBottom = 12; // from jar bottom
   
   let jarHtml = '';
-  // Limit jar to 60 balls max for performance
-  const jarMoods = allMoods.slice(0, 60);
   jarMoods.forEach((item, i) => {
-    let best = null;
-    for (let t = 0; t < 6; t++) {
-      const pos = dropBall();
-      if (!best || pos.cy > best.cy) best = pos;
-    }
-    // Organic jitter
-    best.cx += (Math.random() - 0.5) * 4;
-    best.cy += (Math.random() - 0.5) * 2;
-    balls.push({ cx: best.cx, cy: best.cy });
+    const row = Math.floor(i / cols);
+    const col = i % cols;
+    // Offset odd rows for honeycomb-like stacking
+    const oddOffset = (row % 2 === 1) ? cellW * 0.4 : 0;
+    // Base position
+    let x = 8 + col * cellW + oddOffset;
+    let y = startBottom + row * cellH;
+    // Add natural jitter
+    x += (Math.random() - 0.5) * 6;
+    y += (Math.random() - 0.5) * 4;
+    // Keep within jar bounds
+    x = Math.max(4, Math.min(jarW - iconSize - 4, x));
     
-    const rot = (Math.random() - 0.5) * 36;
-    const scale = 0.85 + Math.random() * 0.25;
-    const svg = item.type === 'moon' ? moonSVG(item.m, bs) : starSVG(item.m, bs);
-    const left = best.cx - bs/2;
-    const bottom = jarH - best.cy - bs/2;
-    // Drop distance: from jar mouth (top) to final position
-    const dropY = -(jarH - bottom + 20);
-    jarHtml += `<div class="jar-ball" style="left:${left}px;bottom:${bottom}px;--rot:${rot}deg;--drop-y:${dropY}px;animation-delay:${(i*0.06)}s;animation-duration:0.5s;">${svg}</div>`;
+    const rot = (Math.random() - 0.5) * 30;
+    const scale = 0.88 + Math.random() * 0.18;
+    const svg = item.type === 'moon' ? moonSVG(item.m, iconSize) : starSVG(item.m, iconSize);
+    const dropDist = -(jarH - y + 30);
+    jarHtml += `<div class="jar-ball" style="left:${x.toFixed(1)}px;bottom:${y.toFixed(1)}px;--rot:${rot.toFixed(0)}deg;--drop-y:${dropDist}px;animation-delay:${(i*0.04).toFixed(2)}s;animation-duration:0.45s;">${svg}</div>`;
   });
 
   let html = `<div class="mood-jar-wrap"><div class="mood-jar">
     <div class="jar-lid"></div><div class="jar-outline"></div><div class="jar-shine"></div>
     <div class="jar-balls">${jarHtml}</div></div></div>`;
 
-  // Stats
+  // 本月最多心情 — user name + icon + count, NPC name + icon + count
   html += `<div class="summary-section-title">本月最多心情</div><div class="summary-stats">`;
   if (userTop) {
     const m = getMood(userTop[0]); const c = MOOD_COLORS[userTop[0]];
-    html += `<div class="summary-stat-card"><span class="stat-who" style="color:var(--user-accent);">${USER_NAME}</span>
+    html += `<div class="summary-stat-card">
+      <span class="stat-who" style="color:#FF7EB3;">${USER_NAME}</span>
       <div class="stat-mood">${moonSVG(userTop[0],36)}</div>
       <span class="stat-label" style="color:${c};">${m.label}</span>
       <span class="stat-count">× ${userTop[1]}</span></div>`;
   }
   if (npcTop) {
     const m = getMood(npcTop[0]); const c = MOOD_COLORS[npcTop[0]];
-    html += `<div class="summary-stat-card"><span class="stat-who" style="color:var(--npc-accent);">${NPC_NAME}</span>
+    html += `<div class="summary-stat-card">
+      <span class="stat-who" style="color:#67B2FF;">${NPC_NAME}</span>
       <div class="stat-mood">${starSVG(npcTop[0],36)}</div>
       <span class="stat-label" style="color:${c};">${m.label}</span>
       <span class="stat-count">× ${npcTop[1]}</span></div>`;
   }
   html += `</div>`;
 
-  // Trend — Y-axis mood icons from top(happy) to bottom(sad)
+  // 心情趋势 — Y-axis mood icons, pink/blue dot legend
   const yAxisMoods = ['excited','heartbeat','happy','calm','tired','irritated','angry','sad'];
   let yAxisHtml = '';
   yAxisMoods.forEach(mid => {
@@ -1046,27 +1029,14 @@ function showSummary() {
   html += `<div class="summary-section-title">心情趋势</div>
     <div class="trend-chart">
       <div class="trend-legend">
-        <span><span class="leg-icon">${moonSVG('calm',12)}</span>${USER_NAME}</span>
-        <span><span class="leg-icon">${starSVG('calm',12)}</span>${NPC_NAME}</span>
+        <span><span class="leg-dot user"></span>${USER_NAME}</span>
+        <span><span class="leg-dot npc"></span>${NPC_NAME}</span>
       </div>
       <div class="trend-chart-wrap">
         <div class="trend-y-axis">${yAxisHtml}</div>
         <div class="trend-canvas-wrap"><canvas class="trend-canvas" id="trendCanvas"></canvas></div>
       </div>
     </div>`;
-
-  // Distribution
-  html += `<div class="summary-section-title">心情分布</div><div class="mood-dist">`;
-  MOODS.forEach(m => {
-    const cnt = (userCount[m.id]||0) + (npcCount[m.id]||0);
-    if (cnt > 0) {
-      const c = MOOD_COLORS[m.id];
-      html += `<div class="mood-dist-tag"><span class="tag-icon">${moonSVG(m.id,18)}</span>
-        <span class="tag-label" style="color:${c};">${m.label}</span>
-        <span class="tag-count">×${cnt}</span></div>`;
-    }
-  });
-  html += `</div>`;
 
   content.innerHTML = html;
   document.getElementById('summaryPage').classList.add('active','slide-up');
@@ -1124,7 +1094,7 @@ function drawTrend(uDay, nDay, days) {
     });
     ctx.stroke();
   }
-  drawLine(uDay, '#C4B5FD');
+  drawLine(uDay, '#FF7EB3');
   drawLine(nDay, '#67B2FF');
 }
 
