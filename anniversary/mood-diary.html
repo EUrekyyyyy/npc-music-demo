@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>心情日记</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+:root {
+  --bg: #0C0C14;
+  --bg-card: #161624;
+  --bg-elevated: #1E1E32;
+  --bg-modal: #12121F;
+  --text-primary: #EEEEF2;
+  --text-secondary: rgba(238,238,242,0.55);
+  --text-tertiary: rgba(238,238,242,0.28);
+  --accent: #A78BFA;
+  --accent-soft: rgba(167,139,250,0.12);
+  --user-accent: #60A5FA;
+  --npc-accent: #F472B6;
+  --border: rgba(255,255,255,0.06);
+  --glass: rgba(255,255,255,0.04);
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'PingFang SC', sans-serif;
+  background: var(--bg);
+  color: var(--text-primary);
+  width: 390px; height: 844px;
+  overflow: hidden; position: relative; margin: 0 auto;
+}
+
+/* ===== Mood Colors ===== */
+.mood-happy { --mc: #FF9F43; --mc-soft: rgba(255,159,67,0.15); }
+.mood-heartbeat { --mc: #FF6B8A; --mc-soft: rgba(255,107,138,0.15); }
+.mood-excited { --mc: #FECA57; --mc-soft: rgba(254,202,87,0.15); }
+.mood-calm { --mc: #54D2A0; --mc-soft: rgba(84,210,160,0.15); }
+.mood-tired { --mc: #A0A0B0; --mc-soft: rgba(160,160,176,0.15); }
+.mood-angry { --mc: #FF5252; --mc-soft: rgba(255,82,82,0.15); }
+.mood-irritated { --mc: #9B8FFF; --mc-soft: rgba(155,143,255,0.15); }
+.mood-sad { --mc: #5EAFFF; --mc-soft: rgba(94,175,255,0.15); }
+
+/* ===== Status Bar ===== */
+.status-bar {
+  height: 54px; display: flex; align-items: flex-end;
+  justify-content: center; padding-bottom: 8px;
+  font-size: 15px; font-weight: 600; z-index: 100;
+}
+
+/* ===== Pages ===== */
+.page { position: absolute; inset: 0; display: none; flex-direction: column; }
+.page.active { display: flex; }
+
+/* ===== Calendar Page ===== */
+.cal-header {
+  padding: 12px 20px 16px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.cal-header .month-nav {
+  display: flex; align-items: center; gap: 16px;
+}
+.cal-header .month-nav button {
+  background: none; border: none; color: var(--text-secondary);
+  font-size: 20px; padding: 4px 8px; cursor: pointer;
+}
+.cal-header .month-title {
+  font-size: 20px; font-weight: 700;
+  background: linear-gradient(135deg, #A78BFA, #60A5FA);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.cal-header .summary-btn {
+  background: var(--accent-soft); border: 1px solid rgba(167,139,250,0.2);
+  color: var(--accent); font-size: 12px; padding: 6px 12px;
+  border-radius: 16px; cursor: pointer;
+}
+
+.cal-weekdays {
+  display: grid; grid-template-columns: repeat(7, 1fr);
+  padding: 0 12px; margin-bottom: 6px;
+}
+.cal-weekdays span {
+  text-align: center; font-size: 11px; color: var(--text-tertiary);
+  font-weight: 500;
+}
+
+.cal-grid {
+  flex: 1; overflow-y: auto; padding: 0 12px 20px;
+  display: grid; grid-template-columns: repeat(7, 1fr);
+  gap: 2px; align-content: start;
+  -webkit-overflow-scrolling: touch;
+}
+
+.cal-day {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 4px 0; cursor: pointer; border-radius: 8px;
+  transition: background 0.15s;
+  min-height: 70px;
+}
+.cal-day:active { background: var(--glass); }
+.cal-day.empty { cursor: default; }
+.cal-day.today .day-num {
+  background: var(--accent); color: #fff; border-radius: 50%;
+  width: 22px; height: 22px; display: flex; align-items: center;
+  justify-content: center;
+}
+.day-num {
+  font-size: 11px; color: var(--text-secondary); margin-bottom: 3px;
+  font-weight: 500;
+}
+.day-moods {
+  display: flex; flex-direction: column; gap: 2px; align-items: center;
+}
+.day-mood-icon {
+  width: 20px; height: 20px; border-radius: 5px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; position: relative;
+}
+.day-mood-icon.user { border: 1px solid rgba(96,165,250,0.3); }
+.day-mood-icon.npc { border: 1px solid rgba(244,114,182,0.3); }
+
+.cal-day .write-btn {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: linear-gradient(135deg, #A78BFA, #7C5CE0);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; margin-top: 2px; border: none; cursor: pointer;
+  box-shadow: 0 2px 12px rgba(167,139,250,0.4);
+}
+
+/* NPC label */
+.cal-legend {
+  display: flex; justify-content: center; gap: 20px;
+  padding: 10px 20px 6px; font-size: 11px;
+}
+.cal-legend span { display: flex; align-items: center; gap: 4px; color: var(--text-secondary); }
+.cal-legend .dot {
+  width: 8px; height: 8px; border-radius: 3px;
+}
+.cal-legend .dot.user-dot { background: var(--user-accent); }
+.cal-legend .dot.npc-dot { background: var(--npc-accent); }
+
+/* ===== Mood Picker ===== */
+.mood-picker {
+  position: absolute; inset: 0; z-index: 200;
+  background: var(--bg-modal); display: none; flex-direction: column;
+}
+.mood-picker.active { display: flex; }
+.mood-picker-header {
+  padding: 60px 24px 12px; display: flex;
+  justify-content: space-between; align-items: flex-start;
+}
+.mood-picker-date { font-size: 28px; font-weight: 700; }
+.mood-picker-weekday { font-size: 14px; color: var(--text-secondary); margin-top: 4px; }
+.mood-picker-close {
+  background: none; border: none; color: var(--text-secondary);
+  font-size: 24px; cursor: pointer; padding: 4px;
+}
+.mood-picker-prompt {
+  text-align: center; font-size: 18px; font-weight: 600;
+  padding: 24px 0 36px; color: var(--text-primary);
+}
+.mood-picker-grid {
+  flex: 1; display: flex; flex-wrap: wrap;
+  justify-content: center; align-content: center;
+  gap: 20px; padding: 0 30px;
+}
+.mood-option {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 8px; cursor: pointer; transition: transform 0.2s;
+  width: 80px;
+}
+.mood-option:active { transform: scale(0.9); }
+.mood-option .mood-circle {
+  width: 64px; height: 64px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 32px; position: relative;
+  transition: box-shadow 0.2s;
+}
+.mood-option .mood-circle::after {
+  content: ''; position: absolute; inset: -3px;
+  border-radius: 50%; border: 2px solid transparent;
+  transition: border-color 0.2s;
+}
+.mood-option:hover .mood-circle::after {
+  border-color: var(--mc);
+}
+.mood-option .mood-label {
+  font-size: 13px; color: var(--text-secondary); font-weight: 500;
+}
+
+/* ===== Entry Input ===== */
+.entry-input {
+  position: absolute; inset: 0; z-index: 200;
+  background: var(--bg-modal); display: none; flex-direction: column;
+}
+.entry-input.active { display: flex; }
+.entry-input-header {
+  padding: 60px 20px 16px; display: flex;
+  justify-content: space-between; align-items: center;
+}
+.entry-input-header .back-btn {
+  background: none; border: none; color: var(--text-secondary);
+  font-size: 16px; cursor: pointer; display: flex; align-items: center; gap: 4px;
+}
+.entry-input-header .save-btn {
+  background: linear-gradient(135deg, #A78BFA, #7C5CE0);
+  border: none; color: #fff; font-size: 14px; font-weight: 600;
+  padding: 8px 20px; border-radius: 18px; cursor: pointer;
+}
+.entry-input-card {
+  margin: 20px; border-radius: 16px;
+  background: var(--bg-card); border: 1px solid var(--border);
+  padding: 24px; flex: 1; display: flex; flex-direction: column;
+}
+.entry-input-date {
+  font-size: 13px; color: var(--text-tertiary); margin-bottom: 20px;
+}
+.entry-input-mood {
+  display: flex; flex-direction: column; align-items: center;
+  margin-bottom: 24px;
+}
+.entry-input-mood .mood-big {
+  font-size: 48px; margin-bottom: 8px;
+}
+.entry-input-mood .mood-tag {
+  font-size: 13px; padding: 4px 14px; border-radius: 12px;
+  font-weight: 500;
+}
+.entry-input textarea {
+  flex: 1; background: none; border: none; color: var(--text-primary);
+  font-size: 15px; line-height: 1.6; resize: none; outline: none;
+  font-family: inherit;
+}
+.entry-input textarea::placeholder { color: var(--text-tertiary); }
+
+/* ===== Day Detail ===== */
+.day-detail {
+  position: absolute; inset: 0; z-index: 200;
+  background: var(--bg-modal); display: none; flex-direction: column;
+}
+.day-detail.active { display: flex; }
+.day-detail-header {
+  padding: 60px 20px 16px; display: flex;
+  justify-content: space-between; align-items: center;
+}
+.day-detail-header .back-btn {
+  background: none; border: none; color: var(--text-secondary);
+  font-size: 16px; cursor: pointer; display: flex; align-items: center; gap: 4px;
+}
+.day-detail-content {
+  flex: 1; overflow-y: auto; padding: 0 20px 40px;
+  -webkit-overflow-scrolling: touch;
+}
+.detail-date-big {
+  font-size: 32px; font-weight: 700; margin-bottom: 4px;
+}
+.detail-weekday { font-size: 14px; color: var(--text-secondary); margin-bottom: 28px; }
+.detail-entry {
+  background: var(--bg-card); border-radius: 16px;
+  border: 1px solid var(--border); padding: 20px;
+  margin-bottom: 16px;
+}
+.detail-entry-header {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 14px;
+}
+.detail-entry-avatar {
+  font-size: 28px;
+}
+.detail-entry-name {
+  font-size: 14px; font-weight: 600;
+}
+.detail-entry-name.user { color: var(--user-accent); }
+.detail-entry-name.npc { color: var(--npc-accent); }
+.detail-entry-mood-tag {
+  font-size: 12px; padding: 3px 10px; border-radius: 10px;
+  font-weight: 500; margin-left: auto;
+}
+.detail-entry-text {
+  font-size: 14px; line-height: 1.7; color: var(--text-secondary);
+}
+.detail-entry.locked {
+  position: relative; overflow: hidden;
+}
+.detail-entry.locked .detail-entry-text {
+  filter: blur(6px); user-select: none;
+}
+.detail-lock-overlay {
+  position: absolute; inset: 0; display: flex;
+  flex-direction: column; align-items: center; justify-content: center;
+  background: rgba(12,12,20,0.6); border-radius: 16px;
+}
+.detail-lock-icon { font-size: 28px; margin-bottom: 8px; }
+.detail-lock-text { font-size: 13px; color: var(--text-secondary); margin-bottom: 12px; }
+.detail-unlock-btn {
+  background: linear-gradient(135deg, #A78BFA, #7C5CE0);
+  border: none; color: #fff; font-size: 13px; font-weight: 600;
+  padding: 8px 20px; border-radius: 18px; cursor: pointer;
+  display: flex; align-items: center; gap: 4px;
+}
+
+/* ===== Summary Page ===== */
+.summary-page {
+  position: absolute; inset: 0; z-index: 200;
+  background: var(--bg-modal); display: none; flex-direction: column;
+}
+.summary-page.active { display: flex; }
+.summary-header {
+  padding: 60px 20px 16px; display: flex;
+  justify-content: space-between; align-items: center;
+}
+.summary-header .back-btn {
+  background: none; border: none; color: var(--text-secondary);
+  font-size: 16px; cursor: pointer; display: flex; align-items: center; gap: 4px;
+}
+.summary-title {
+  font-size: 18px; font-weight: 700;
+  background: linear-gradient(135deg, #A78BFA, #60A5FA);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.summary-content {
+  flex: 1; overflow-y: auto; padding: 0 20px 40px;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Mood Jar */
+.mood-jar-wrap {
+  display: flex; justify-content: center; padding: 20px 0 30px;
+}
+.mood-jar {
+  width: 220px; height: 280px; position: relative;
+}
+.mood-jar .jar-outline {
+  position: absolute; inset: 0;
+  border: 2px solid rgba(167,139,250,0.25);
+  border-radius: 12px 12px 40px 40px;
+  background: rgba(167,139,250,0.03);
+}
+.mood-jar .jar-lid {
+  position: absolute; top: -12px; left: 30px; right: 30px;
+  height: 16px; border-radius: 6px 6px 0 0;
+  background: rgba(167,139,250,0.15);
+  border: 2px solid rgba(167,139,250,0.25);
+  border-bottom: none;
+}
+.mood-jar .jar-balls {
+  position: absolute; bottom: 10px; left: 10px; right: 10px;
+  top: 20px; display: flex; flex-wrap: wrap-reverse;
+  align-content: flex-start; justify-content: center;
+  gap: 3px; overflow: hidden;
+}
+.mood-jar .jar-ball {
+  width: 22px; height: 22px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px;
+  animation: jarDrop 0.4s ease-out forwards;
+  opacity: 0;
+}
+@keyframes jarDrop {
+  0% { opacity: 0; transform: translateY(-20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* Stats */
+.summary-section-title {
+  font-size: 15px; font-weight: 600; margin: 24px 0 12px;
+  color: var(--text-primary);
+}
+.summary-stats {
+  display: flex; gap: 12px;
+}
+.summary-stat-card {
+  flex: 1; background: var(--bg-card);
+  border: 1px solid var(--border); border-radius: 14px;
+  padding: 14px; display: flex; flex-direction: column;
+  align-items: center; gap: 6px;
+}
+.summary-stat-card .stat-who {
+  font-size: 11px; color: var(--text-tertiary); font-weight: 500;
+}
+.summary-stat-card .stat-mood { font-size: 28px; }
+.summary-stat-card .stat-label { font-size: 12px; font-weight: 500; }
+.summary-stat-card .stat-count { font-size: 11px; color: var(--text-tertiary); }
+
+/* Trend Chart */
+.trend-chart {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 14px; padding: 16px; margin-top: 12px;
+}
+.trend-legend {
+  display: flex; gap: 16px; margin-bottom: 12px; font-size: 11px;
+}
+.trend-legend span { display: flex; align-items: center; gap: 4px; color: var(--text-secondary); }
+.trend-legend .leg-dot { width: 8px; height: 8px; border-radius: 50%; }
+.trend-canvas { width: 100%; height: 160px; }
+
+/* ===== Scrollbar ===== */
+::-webkit-scrollbar { display: none; }
+
+/* ===== Animations ===== */
+@keyframes slideUp {
+  from { transform: translateY(100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+.slide-up { animation: slideUp 0.3s ease-out; }
+</style>
+</head>
+<body>
+
+<!-- ===== Calendar Page ===== -->
+<div class="page active" id="calPage">
+  <div class="status-bar">16:32</div>
+  <div class="cal-header">
+    <div class="month-nav">
+      <button onclick="changeMonth(-1)">‹</button>
+      <span class="month-title" id="monthTitle"></span>
+      <button onclick="changeMonth(1)">›</button>
+    </div>
+    <button class="summary-btn" onclick="showSummary()">📊 月度总结</button>
+  </div>
+  <div class="cal-legend">
+    <span><span class="dot user-dot"></span>我</span>
+    <span><span class="dot npc-dot"></span>江晦</span>
+  </div>
+  <div class="cal-weekdays">
+    <span>一</span><span>二</span><span>三</span><span>四</span>
+    <span>五</span><span>六</span><span>日</span>
+  </div>
+  <div class="cal-grid" id="calGrid"></div>
+</div>
+
+<!-- ===== Mood Picker ===== -->
+<div class="mood-picker" id="moodPicker">
+  <div class="mood-picker-header">
+    <div>
+      <div class="mood-picker-date" id="pickerDate"></div>
+      <div class="mood-picker-weekday" id="pickerWeekday"></div>
+    </div>
+    <button class="mood-picker-close" onclick="closeMoodPicker()">✕</button>
+  </div>
+  <div class="mood-picker-prompt">Hi，今天心情怎么样？</div>
+  <div class="mood-picker-grid" id="moodGrid"></div>
+</div>
+
+<!-- ===== Entry Input ===== -->
+<div class="entry-input" id="entryInput">
+  <div class="entry-input-header">
+    <button class="back-btn" onclick="closeEntryInput()">‹ 返回</button>
+    <button class="save-btn" onclick="saveEntry()">完成</button>
+  </div>
+  <div class="entry-input-card">
+    <div class="entry-input-date" id="inputDate"></div>
+    <div class="entry-input-mood" id="inputMood"></div>
+    <textarea id="inputText" placeholder="记录此刻的心情..."></textarea>
+  </div>
+</div>
+
+<!-- ===== Day Detail ===== -->
+<div class="day-detail" id="dayDetail">
+  <div class="day-detail-header">
+    <button class="back-btn" onclick="closeDayDetail()">‹ 返回</button>
+  </div>
+  <div class="day-detail-content" id="detailContent"></div>
+</div>
+
+<!-- ===== Summary Page ===== -->
+<div class="summary-page" id="summaryPage">
+  <div class="summary-header">
+    <button class="back-btn" onclick="closeSummary()">‹ 返回</button>
+    <span class="summary-title" id="summaryTitle"></span>
+    <span style="width:60px"></span>
+  </div>
+  <div class="summary-content" id="summaryContent"></div>
+</div>
+
+<script>
+// ===== Config =====
+const NPC_NAME = '江晦';
+const USER_NAME = '栗川';
+
+// ===== Mood Definitions =====
+const MOODS = [
+  { id: 'happy',     emoji: '😊', label: '开心', color: '#FF9F43', cls: 'mood-happy' },
+  { id: 'heartbeat', emoji: '🥰', label: '心动', color: '#FF6B8A', cls: 'mood-heartbeat' },
+  { id: 'excited',   emoji: '🤩', label: '兴奋', color: '#FECA57', cls: 'mood-excited' },
+  { id: 'calm',      emoji: '😌', label: '平静', color: '#54D2A0', cls: 'mood-calm' },
+  { id: 'tired',     emoji: '😮‍💨', label: '心累', color: '#A0A0B0', cls: 'mood-tired' },
+  { id: 'angry',     emoji: '😤', label: '生气', color: '#FF5252', cls: 'mood-angry' },
+  { id: 'irritated', emoji: '😣', label: '烦躁', color: '#9B8FFF', cls: 'mood-irritated' },
+  { id: 'sad',       emoji: '😢', label: '伤心', color: '#5EAFFF', cls: 'mood-sad' },
+];
+
+function getMood(id) { return MOODS.find(m => m.id === id) || MOODS[0]; }
+function randomMood() { return MOODS[Math.floor(Math.random() * MOODS.length)]; }
+
+// ===== Mock Data =====
+function generateMockData() {
+  const data = {};
+  const now = new Date();
+  // Generate 60 days of data ending yesterday
+  for (let i = 1; i <= 60; i++) {
+    const d = new Date(now);
+    d.setDate(d.getDate() - i);
+    const key = dateKey(d);
+    const userMood = randomMood();
+    const npcMood = randomMood();
+    const userTexts = [
+      '今天工作好累，但晚上和朋友吃了火锅，开心！',
+      '一个人逛了书店，买了两本新书📚',
+      '下雨了，窝在家里看电影，很惬意',
+      '被领导表扬了，心情超好！',
+      '和闺蜜视频聊了好久，想她了',
+      '今天什么也不想做，就想躺着…',
+      '学会了一道新菜！虽然卖相不太行哈哈',
+      '刷到一个好笑的视频，笑了好半天',
+      '加班到好晚，有点疲惫',
+      '周末终于到了！睡到自然醒的感觉真好',
+    ];
+    const npcTexts = [
+      '看你今天笑得很开心，我也跟着高兴了',
+      '下雨了记得带伞，别感冒了',
+      '你今天的穿搭很好看',
+      '辛苦了，给你泡杯热茶吧',
+      '发现你最近很努力，但也要注意休息',
+      '想和你一起去看海',
+      '你不开心的时候，可以找我说说话',
+      '我今天看了一本你推荐的书，很喜欢',
+      '早睡早起，我可不想看到你有黑眼圈',
+      '不管怎样，我都在你身边',
+    ];
+    data[key] = {
+      user: {
+        mood: userMood.id,
+        text: userTexts[Math.floor(Math.random() * userTexts.length)]
+      },
+      npc: {
+        mood: npcMood.id,
+        text: npcTexts[Math.floor(Math.random() * npcTexts.length)],
+        locked: Math.random() > 0.4 // 60% locked
+      }
+    };
+  }
+  return data;
+}
+
+const diaryData = generateMockData();
+
+// ===== State =====
+let currentYear, currentMonth;
+let selectedMoodId = null;
+let writingDateKey = null;
+
+function dateKey(d) {
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+
+const WEEKDAYS = ['日','一','二','三','四','五','六'];
+
+// ===== Calendar =====
+function renderCalendar() {
+  const title = document.getElementById('monthTitle');
+  title.textContent = `${currentYear}年${currentMonth + 1}月`;
+
+  const grid = document.getElementById('calGrid');
+  grid.innerHTML = '';
+
+  const firstDay = new Date(currentYear, currentMonth, 1);
+  let startDow = firstDay.getDay(); // 0=Sun
+  startDow = startDow === 0 ? 6 : startDow - 1; // Convert to Mon=0
+
+  const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+  const today = new Date();
+  const todayKey = dateKey(today);
+
+  // Empty cells
+  for (let i = 0; i < startDow; i++) {
+    const empty = document.createElement('div');
+    empty.className = 'cal-day empty';
+    grid.appendChild(empty);
+  }
+
+  for (let d = 1; d <= daysInMonth; d++) {
+    const date = new Date(currentYear, currentMonth, d);
+    const key = dateKey(date);
+    const isToday = key === todayKey;
+    const entry = diaryData[key];
+
+    const cell = document.createElement('div');
+    cell.className = 'cal-day' + (isToday ? ' today' : '');
+
+    const numEl = document.createElement('span');
+    numEl.className = 'day-num';
+    numEl.textContent = d;
+    cell.appendChild(numEl);
+
+    if (entry) {
+      const moodsWrap = document.createElement('div');
+      moodsWrap.className = 'day-moods';
+
+      // User mood
+      const userIcon = document.createElement('div');
+      const um = getMood(entry.user.mood);
+      userIcon.className = 'day-mood-icon user';
+      userIcon.style.background = um.color + '22';
+      userIcon.textContent = um.emoji;
+      moodsWrap.appendChild(userIcon);
+
+      // NPC mood
+      const npcIcon = document.createElement('div');
+      const nm = getMood(entry.npc.mood);
+      npcIcon.className = 'day-mood-icon npc';
+      npcIcon.style.background = nm.color + '22';
+      npcIcon.textContent = nm.emoji;
+      moodsWrap.appendChild(npcIcon);
+
+      cell.appendChild(moodsWrap);
+      cell.onclick = () => showDayDetail(key, date);
+    } else if (isToday) {
+      // Show write button for today
+      const btn = document.createElement('button');
+      btn.className = 'write-btn';
+      btn.textContent = '✏️';
+      btn.onclick = (e) => { e.stopPropagation(); openMoodPicker(key, date); };
+      cell.appendChild(btn);
+    }
+
+    grid.appendChild(cell);
+  }
+}
+
+function changeMonth(delta) {
+  currentMonth += delta;
+  if (currentMonth > 11) { currentMonth = 0; currentYear++; }
+  if (currentMonth < 0) { currentMonth = 11; currentYear--; }
+  renderCalendar();
+}
+
+// ===== Mood Picker =====
+function openMoodPicker(key, date) {
+  writingDateKey = key;
+  const picker = document.getElementById('moodPicker');
+  document.getElementById('pickerDate').textContent = `${date.getMonth()+1}月${date.getDate()}日`;
+  document.getElementById('pickerWeekday').textContent = `星期${WEEKDAYS[date.getDay()]}`;
+
+  const grid = document.getElementById('moodGrid');
+  grid.innerHTML = '';
+  MOODS.forEach(m => {
+    const opt = document.createElement('div');
+    opt.className = 'mood-option ' + m.cls;
+    opt.innerHTML = `
+      <div class="mood-circle" style="background:${m.color}22; box-shadow: 0 0 20px ${m.color}15;">
+        ${m.emoji}
+      </div>
+      <span class="mood-label">${m.label}</span>
+    `;
+    opt.onclick = () => selectMood(m.id);
+    grid.appendChild(opt);
+  });
+
+  picker.classList.add('active', 'slide-up');
+}
+
+function closeMoodPicker() {
+  document.getElementById('moodPicker').classList.remove('active', 'slide-up');
+}
+
+function selectMood(moodId) {
+  selectedMoodId = moodId;
+  closeMoodPicker();
+  openEntryInput();
+}
+
+// ===== Entry Input =====
+function openEntryInput() {
+  const mood = getMood(selectedMoodId);
+  document.getElementById('inputDate').textContent = writingDateKey;
+  document.getElementById('inputMood').innerHTML = `
+    <span class="mood-big">${mood.emoji}</span>
+    <span class="mood-tag" style="background:${mood.color}22; color:${mood.color};">${mood.label}</span>
+  `;
+  document.getElementById('inputText').value = '';
+  document.getElementById('entryInput').classList.add('active', 'slide-up');
+  setTimeout(() => document.getElementById('inputText').focus(), 400);
+}
+
+function closeEntryInput() {
+  document.getElementById('entryInput').classList.remove('active', 'slide-up');
+}
+
+function saveEntry() {
+  const text = document.getElementById('inputText').value.trim();
+  if (!text) { alert('写点什么吧~'); return; }
+
+  // Save user entry
+  if (!diaryData[writingDateKey]) {
+    diaryData[writingDateKey] = {};
+  }
+  diaryData[writingDateKey].user = { mood: selectedMoodId, text };
+
+  // Simulate NPC response
+  const npcMood = randomMood();
+  const npcResponses = [
+    `看到你说"${text.slice(0,6)}…"，我也想陪在你身边`,
+    '今天也辛苦了，早点休息哦',
+    '不管今天怎样，明天又是新的一天',
+    '你的心情我都感受到了',
+    '想给你一个拥抱',
+  ];
+  diaryData[writingDateKey].npc = {
+    mood: npcMood.id,
+    text: npcResponses[Math.floor(Math.random() * npcResponses.length)],
+    locked: false
+  };
+
+  closeEntryInput();
+  renderCalendar();
+
+  // Show the detail
+  setTimeout(() => {
+    const d = new Date(writingDateKey + 'T00:00:00');
+    showDayDetail(writingDateKey, d);
+  }, 300);
+}
+
+// ===== Day Detail =====
+function showDayDetail(key, date) {
+  const entry = diaryData[key];
+  if (!entry) return;
+
+  const content = document.getElementById('detailContent');
+  const dayNum = date.getDate();
+  const monthStr = `${date.getFullYear()}年${date.getMonth()+1}月`;
+  const weekday = `星期${WEEKDAYS[date.getDay()]}`;
+
+  let html = `
+    <div class="detail-date-big">${dayNum}日</div>
+    <div class="detail-weekday">${monthStr} · ${weekday}</div>
+  `;
+
+  // User entry
+  if (entry.user) {
+    const um = getMood(entry.user.mood);
+    html += `
+      <div class="detail-entry">
+        <div class="detail-entry-header">
+          <span class="detail-entry-avatar">${um.emoji}</span>
+          <span class="detail-entry-name user">${USER_NAME}</span>
+          <span class="detail-entry-mood-tag" style="background:${um.color}22; color:${um.color};">${um.label}</span>
+        </div>
+        <div class="detail-entry-text">${entry.user.text}</div>
+      </div>
+    `;
+  }
+
+  // NPC entry
+  if (entry.npc) {
+    const nm = getMood(entry.npc.mood);
+    const isLocked = entry.npc.locked;
+    html += `
+      <div class="detail-entry${isLocked ? ' locked' : ''}">
+        <div class="detail-entry-header">
+          <span class="detail-entry-avatar">${nm.emoji}</span>
+          <span class="detail-entry-name npc">${NPC_NAME}</span>
+          <span class="detail-entry-mood-tag" style="background:${nm.color}22; color:${nm.color};">${nm.label}</span>
+        </div>
+        <div class="detail-entry-text">${entry.npc.text}</div>
+        ${isLocked ? `
+          <div class="detail-lock-overlay">
+            <span class="detail-lock-icon">🔒</span>
+            <span class="detail-lock-text">${NPC_NAME}的心情还未解锁</span>
+            <button class="detail-unlock-btn" onclick="unlockEntry('${key}')">
+              💎 100 解锁
+            </button>
+          </div>
+        ` : ''}
+      </div>
+    `;
+  }
+
+  content.innerHTML = html;
+  document.getElementById('dayDetail').classList.add('active', 'slide-up');
+}
+
+function closeDayDetail() {
+  document.getElementById('dayDetail').classList.remove('active', 'slide-up');
+}
+
+function unlockEntry(key) {
+  if (diaryData[key] && diaryData[key].npc) {
+    diaryData[key].npc.locked = false;
+    const d = new Date(key + 'T00:00:00');
+    showDayDetail(key, d);
+  }
+}
+
+// ===== Summary Page =====
+function showSummary() {
+  document.getElementById('summaryTitle').textContent =
+    `${currentYear}年${currentMonth + 1}月 心情总结`;
+
+  const content = document.getElementById('summaryContent');
+  const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+
+  // Collect mood data for this month
+  const userMoods = [];
+  const npcMoods = [];
+  const userMoodCount = {};
+  const npcMoodCount = {};
+  const userDayMoods = [];
+  const npcDayMoods = [];
+
+  for (let d = 1; d <= daysInMonth; d++) {
+    const key = `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const entry = diaryData[key];
+    if (entry) {
+      if (entry.user) {
+        userMoods.push(entry.user.mood);
+        userMoodCount[entry.user.mood] = (userMoodCount[entry.user.mood] || 0) + 1;
+        userDayMoods.push({ day: d, mood: entry.user.mood });
+      }
+      if (entry.npc) {
+        npcMoods.push(entry.npc.mood);
+        npcMoodCount[entry.npc.mood] = (npcMoodCount[entry.npc.mood] || 0) + 1;
+        npcDayMoods.push({ day: d, mood: entry.npc.mood });
+      }
+    }
+  }
+
+  // Top mood for each
+  const userTop = Object.entries(userMoodCount).sort((a,b) => b[1]-a[1])[0];
+  const npcTop = Object.entries(npcMoodCount).sort((a,b) => b[1]-a[1])[0];
+
+  // Build jar balls
+  const allMoods = [...userMoods, ...npcMoods];
+  let jarBallsHtml = '';
+  allMoods.forEach((mId, i) => {
+    const m = getMood(mId);
+    jarBallsHtml += `<div class="jar-ball" style="background:${m.color}33; animation-delay:${i*0.02}s;">${m.emoji}</div>`;
+  });
+
+  let html = '';
+
+  // Mood Jar
+  html += `
+    <div class="mood-jar-wrap">
+      <div class="mood-jar">
+        <div class="jar-lid"></div>
+        <div class="jar-outline"></div>
+        <div class="jar-balls">${jarBallsHtml}</div>
+      </div>
+    </div>
+  `;
+
+  // Top Moods
+  html += `<div class="summary-section-title">本月最多心情</div>`;
+  html += `<div class="summary-stats">`;
+  if (userTop) {
+    const um = getMood(userTop[0]);
+    html += `
+      <div class="summary-stat-card">
+        <span class="stat-who" style="color:var(--user-accent);">${USER_NAME}</span>
+        <span class="stat-mood">${um.emoji}</span>
+        <span class="stat-label" style="color:${um.color};">${um.label}</span>
+        <span class="stat-count">× ${userTop[1]}</span>
+      </div>
+    `;
+  }
+  if (npcTop) {
+    const nm = getMood(npcTop[0]);
+    html += `
+      <div class="summary-stat-card">
+        <span class="stat-who" style="color:var(--npc-accent);">${NPC_NAME}</span>
+        <span class="stat-mood">${nm.emoji}</span>
+        <span class="stat-label" style="color:${nm.color};">${nm.label}</span>
+        <span class="stat-count">× ${npcTop[1]}</span>
+      </div>
+    `;
+  }
+  html += `</div>`;
+
+  // Trend Chart
+  html += `
+    <div class="summary-section-title">心情趋势</div>
+    <div class="trend-chart">
+      <div class="trend-legend">
+        <span><span class="leg-dot" style="background:var(--user-accent);"></span>${USER_NAME}</span>
+        <span><span class="leg-dot" style="background:var(--npc-accent);"></span>${NPC_NAME}</span>
+      </div>
+      <canvas class="trend-canvas" id="trendCanvas"></canvas>
+    </div>
+  `;
+
+  // Mood distribution
+  html += `<div class="summary-section-title">心情分布</div>`;
+  html += `<div style="display:flex;flex-wrap:wrap;gap:8px;">`;
+  MOODS.forEach(m => {
+    const count = (userMoodCount[m.id] || 0) + (npcMoodCount[m.id] || 0);
+    if (count > 0) {
+      html += `
+        <div style="background:${m.color}15; border:1px solid ${m.color}25; border-radius:12px;
+          padding:8px 14px; display:flex; align-items:center; gap:6px;">
+          <span style="font-size:18px;">${m.emoji}</span>
+          <span style="font-size:12px; color:${m.color};">${m.label}</span>
+          <span style="font-size:11px; color:var(--text-tertiary);">×${count}</span>
+        </div>
+      `;
+    }
+  });
+  html += `</div>`;
+
+  content.innerHTML = html;
+  document.getElementById('summaryPage').classList.add('active', 'slide-up');
+
+  // Draw trend chart
+  setTimeout(() => drawTrendChart(userDayMoods, npcDayMoods, daysInMonth), 100);
+}
+
+function closeSummary() {
+  document.getElementById('summaryPage').classList.remove('active', 'slide-up');
+}
+
+// Mood to numeric value for chart
+function moodToValue(moodId) {
+  const map = { excited: 8, heartbeat: 7, happy: 6, calm: 5, tired: 3, irritated: 2, angry: 1, sad: 0 };
+  return map[moodId] ?? 4;
+}
+
+function drawTrendChart(userDayMoods, npcDayMoods, daysInMonth) {
+  const canvas = document.getElementById('trendCanvas');
+  if (!canvas) return;
+  const dpr = window.devicePixelRatio || 1;
+  const rect = canvas.getBoundingClientRect();
+  canvas.width = rect.width * dpr;
+  canvas.height = rect.height * dpr;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  const W = rect.width, H = rect.height;
+  const padL = 30, padR = 10, padT = 10, padB = 20;
+  const chartW = W - padL - padR;
+  const chartH = H - padT - padB;
+
+  // Grid
+  ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+  ctx.lineWidth = 1;
+  for (let i = 0; i <= 4; i++) {
+    const y = padT + (chartH / 4) * i;
+    ctx.beginPath(); ctx.moveTo(padL, y); ctx.lineTo(W - padR, y); ctx.stroke();
+  }
+
+  // Y-axis labels
+  const yLabels = ['🤩','😊','😌','😮‍💨','😢'];
+  ctx.font = '10px sans-serif';
+  ctx.textAlign = 'right';
+  yLabels.forEach((label, i) => {
+    const y = padT + (chartH / 4) * i + 4;
+    ctx.fillText(label, padL - 4, y);
+  });
+
+  // Draw lines
+  function drawLine(dayMoods, color) {
+    if (dayMoods.length < 2) return;
+    ctx.beginPath();
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 2;
+    ctx.lineJoin = 'round';
+    dayMoods.forEach((dm, i) => {
+      const x = padL + ((dm.day - 1) / (daysInMonth - 1)) * chartW;
+      const val = moodToValue(dm.mood);
+      const y = padT + chartH - (val / 8) * chartH;
+      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    });
+    ctx.stroke();
+  }
+
+  drawLine(userDayMoods, '#60A5FA');
+  drawLine(npcDayMoods, '#F472B6');
+}
+
+// ===== Init =====
+const now = new Date();
+currentYear = now.getFullYear();
+currentMonth = now.getMonth();
+renderCalendar();
+</script>
+</body>
+</html>
