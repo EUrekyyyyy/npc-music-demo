@@ -643,13 +643,10 @@ const USER_NAME = '栗川';
 const ICON_BASE = 'https://eurekyyyyy.github.io/npc-music-demo/anniversary/icons/';
 
 const MOOD_COLORS = {
-  happy:     '#FFBA5C',
   heartbeat: '#FF7EB3',
-  excited:   '#FFD93D',
+  happy:     '#FFBA5C',
   calm:      '#7EC8A0',
   tired:     '#8E8EA0',
-  angry:     '#FF6B6B',
-  irritated: '#A78BFA',
   sad:       '#6BAFFF',
 };
 
@@ -665,13 +662,10 @@ function starSVG(moodId, size) {
 
 // ===== Mood Definitions =====
 const MOODS = [
-  { id: 'happy',     label: '开心' },
   { id: 'heartbeat', label: '心动' },
-  { id: 'excited',   label: '兴奋' },
+  { id: 'happy',     label: '开心' },
   { id: 'calm',      label: '平静' },
   { id: 'tired',     label: '心累' },
-  { id: 'angry',     label: '生气' },
-  { id: 'irritated', label: '烦躁' },
   { id: 'sad',       label: '伤心' },
 ];
 
@@ -1088,7 +1082,7 @@ function showSummary() {
 }
 function closeSummary() { document.getElementById('summaryPage').classList.remove('active','slide-up'); }
 
-function moodVal(id) { return {excited:7,heartbeat:6,happy:5,calm:4,tired:3,irritated:2,angry:1,sad:0}[id]??3; }
+function moodVal(id) { return {heartbeat:4,happy:3,calm:2,tired:1,sad:0}[id]??2; }
 
 function drawTrend(uDay, nDay, days) {
   const canvas = document.getElementById('trendCanvas'); if(!canvas) return;
@@ -1101,8 +1095,8 @@ function drawTrend(uDay, nDay, days) {
 
   // Light grid lines
   ctx.strokeStyle='rgba(255,255,255,0.04)'; ctx.lineWidth=1;
-  for(let i=0;i<=7;i++){
-    const y=pT+(cH/7)*i;
+  for(let i=0;i<=4;i++){
+    const y=pT+(cH/4)*i;
     ctx.beginPath();ctx.moveTo(pL,y);ctx.lineTo(W-pR,y);ctx.stroke();
   }
 
@@ -1121,13 +1115,13 @@ function drawTrend(uDay, nDay, days) {
     // Glow
     ctx.beginPath(); ctx.strokeStyle=color+'25'; ctx.lineWidth=5; ctx.lineJoin='round'; ctx.lineCap='round';
     dms.forEach((dm,i) => {
-      const x=pL+((dm.day-1)/(days-1))*cW, y=pT+cH-(moodVal(dm.mood)/7)*cH;
+      const x=pL+((dm.day-1)/(days-1))*cW, y=pT+cH-(moodVal(dm.mood)/4)*cH;
       i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
     }); ctx.stroke();
     // Main line
     ctx.beginPath(); ctx.strokeStyle=color; ctx.lineWidth=2;
     dms.forEach((dm,i) => {
-      const x=pL+((dm.day-1)/(days-1))*cW, y=pT+cH-(moodVal(dm.mood)/7)*cH;
+      const x=pL+((dm.day-1)/(days-1))*cW, y=pT+cH-(moodVal(dm.mood)/4)*cH;
       i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
     }); ctx.stroke();
   }
