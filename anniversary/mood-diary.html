@@ -57,14 +57,15 @@ body {
 /* ===== Header — dual avatars ===== */
 .header-section {
   display: flex; flex-direction: column; align-items: center;
-  padding: 8px 0 12px; position: relative;
+  padding: 14px 0 12px; position: relative;
 }
 .header-back {
-  position: absolute; left: 12px; top: 8px;
-  background: #2C2C2E; border: none; color: rgba(255,255,255,0.8);
-  font-size: 14px; cursor: pointer; padding: 6px 12px; border-radius: 16px;
-  z-index: 10;
+  position: absolute; left: 14px; top: 16px;
+  background: none; border: none; color: rgba(255,255,255,0.6);
+  font-size: 22px; cursor: pointer; padding: 4px 8px;
+  z-index: 10; line-height: 1;
 }
+.header-back:active { color: rgba(255,255,255,0.9); }
 .header-avatars {
   display: flex; align-items: center; position: relative;
   height: 46px;
@@ -649,7 +650,7 @@ body {
 <div class="page active" id="calPage">
   <div class="status-bar"></div>
   <div class="header-section">
-    <button class="header-back" onclick="history.back()">‹</button>
+    <button class="header-back" onclick="history.back()"><svg width="10" height="18" viewBox="0 0 10 18" fill="none"><path d="M9 1L1 9L9 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
     <div class="header-avatars">
       <img class="header-avatar user" src="https://filecdn-images.xingyeai.com/image_inference_output/nebula/prod/image/2025-12-17/8e78d170-c08e-4ab4-9acf-aba9d0feb8aa_meta.jpeg" alt="用户"
         onerror="this.style.background='linear-gradient(135deg,#C4B5FD,#E89AAF)';this.textContent='🌙';">
