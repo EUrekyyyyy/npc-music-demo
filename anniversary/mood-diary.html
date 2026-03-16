@@ -918,7 +918,7 @@ function renderCalendar() {
 
       const npcIcon = document.createElement('div');
       npcIcon.className = 'day-mood-icon';
-      npcIcon.innerHTML = starSVG(entry.npc.mood, 38) + (entry.npc.locked ? lockBadge() : '');
+      npcIcon.innerHTML = entry.npc.locked ? starOutlineSVG(38) + lockBadge() : starSVG(entry.npc.mood, 38);
       moodsWrap.appendChild(npcIcon);
 
       cell.appendChild(moodsWrap);
@@ -1092,7 +1092,7 @@ function showDayDetail(key, date) {
           <img class="detail-entry-photo" src="${NPC_AVATAR}" alt="${NPC_NAME}">
           <span class="detail-entry-who npc">${NPC_NAME}</span>
           <div class="detail-entry-mood-right">
-            <div class="mood-icon">${starSVG(entry.npc.mood, 32)}</div>
+            <div class="mood-icon">${locked ? starOutlineSVG(32) : starSVG(entry.npc.mood, 32)}</div>
             <span class="mood-tag" style="background:${c}18; color:${c};">${m.label}</span>
           </div>
         </div>
