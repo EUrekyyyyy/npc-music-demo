@@ -102,19 +102,27 @@ function moonSVG(mood, size) {
   const deco = moonDeco(mood.id, mood);
   return `<svg viewBox="0 0 100 100" width="${s}" height="${s}" xmlns="http://www.w3.org/2000/svg">
     ${deco}
-    <!-- Moon body: thick crescent -->
-    <path d="M58 8 C80 8 95 28 95 52 C95 76 80 95 58 95
-             C40 95 25 82 20 65
-             C35 75 50 68 50 52
-             C50 36 35 28 20 38
-             C25 20 40 8 58 8Z"
+    <!-- Moon body: pure C-shape crescent, no circle -->
+    <path d="M55 6
+             C78 6 96 24 96 50
+             C96 76 78 94 55 94
+             C42 94 30 86 24 74
+             C32 80 42 82 52 78
+             C68 70 76 56 76 50
+             C76 44 68 30 52 22
+             C42 18 32 20 24 26
+             C30 14 42 6 55 6Z"
       fill="${mood.fill}" stroke="${mood.shade}" stroke-width="1.5"/>
     <!-- Shading -->
-    <path d="M58 8 C80 8 95 28 95 52 C95 76 80 95 58 95
-             C40 95 25 82 20 65
-             C35 75 50 68 50 52
-             C50 36 35 28 20 38
-             C25 20 40 8 58 8Z"
+    <path d="M55 6
+             C78 6 96 24 96 50
+             C96 76 78 94 55 94
+             C42 94 30 86 24 74
+             C32 80 42 82 52 78
+             C68 70 76 56 76 50
+             C76 44 68 30 52 22
+             C42 18 32 20 24 26
+             C30 14 42 6 55 6Z"
       fill="url(#moonShade_${mood.id})" opacity="0.3"/>
     <defs>
       <linearGradient id="moonShade_${mood.id}" x1="0.3" y1="0" x2="0.8" y2="1">
