@@ -399,7 +399,7 @@ body {
 
 /* Mood Jar — mason jar sketch */
 .mood-jar-wrap { display: flex; justify-content: center; padding: 10px 0 16px; }
-.mood-jar { width: 220px; height: 300px; position: relative; }
+.mood-jar { width: 260px; height: 340px; position: relative; }
 .mood-jar .jar-outline {
   position: absolute; inset: 0;
   border: 1.5px solid rgba(255,255,255,0.08);
@@ -422,7 +422,7 @@ body {
   overflow: hidden;
 }
 .mood-jar .jar-ball {
-  width: 22px; height: 22px; display: flex;
+  width: 32px; height: 32px; display: flex;
   align-items: center; justify-content: center;
   position: absolute;
   animation: jarDrop 0.5s ease-out forwards; opacity: 0;
@@ -958,12 +958,12 @@ function showSummary() {
     const j = Math.floor(Math.random() * (i + 1));
     [allMoods[i], allMoods[j]] = [allMoods[j], allMoods[i]];
   }
-  const jarW = 200, jarH = 270, bs = 18;
+  const jarW = 240, jarH = 310, bs = 18;
   const balls = []; // {cx, cy}
   
   // Natural scatter layout — like real balls dropped into a jar
   const jarMoods = allMoods.slice(0, 62);
-  const iconSize = 20;
+  const iconSize = 32;
   const placed = []; // {x, y} bottom-left positions
   
   function tryPlace() {
@@ -998,7 +998,7 @@ function showSummary() {
     
     const rot = (Math.random() - 0.5) * 40;
     const scale = 0.85 + Math.random() * 0.2;
-    const svg = item.type === 'moon' ? moonSVG(item.m, iconSize) : starSVG(item.m, iconSize);
+    const svg = item.type === 'moon' ? moonSVG(item.m, 32) : starSVG(item.m, 32);
     const dropDist = -(jarH - best.y + 40);
     jarHtml += `<div class="jar-ball" style="left:${best.x.toFixed(1)}px;bottom:${best.y.toFixed(1)}px;--rot:${rot.toFixed(0)}deg;--drop-y:${dropDist}px;animation-delay:${(i*0.05).toFixed(2)}s;animation-duration:0.5s;">${svg}</div>`;
   });
