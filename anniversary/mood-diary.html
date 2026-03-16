@@ -397,109 +397,93 @@ body {
   -webkit-overflow-scrolling: touch;
 }
 
-/* Mood Jar — mason jar sketch */
-.mood-jar-wrap { display: flex; justify-content: center; padding: 10px 0 16px; }
-.mood-jar { width: 260px; height: 340px; position: relative; }
-/* Jar body — rounded bottom like a real glass jar */
+/* ===== Dual Jars ===== */
+.dual-jars { display: flex; gap: 10px; padding: 10px 0 8px; justify-content: center; }
+.jar-col { display: flex; flex-direction: column; align-items: center; flex: 1; }
+.jar-label { display: flex; align-items: center; gap: 6px; margin-top: 8px; font-size: 12px; color: var(--text-secondary); }
+.jar-label img { width: 22px; height: 22px; border-radius: 50%; object-fit: cover; border: 1px solid rgba(255,255,255,0.1); }
+.mood-jar { width: 100%; max-width: 160px; height: 220px; position: relative; }
 .mood-jar .jar-outline {
-  position: absolute; top: 28px; left: 10px; right: 10px; bottom: 0;
+  position: absolute; top: 22px; left: 6px; right: 6px; bottom: 0;
   border: 1.5px solid rgba(255,255,255,0.1);
-  border-radius: 20px 20px 50px 50px;
+  border-radius: 14px 14px 36px 36px;
   background: rgba(255,255,255,0.03);
 }
-/* Jar neck — narrower top opening */
 .mood-jar .jar-neck {
-  position: absolute; top: 10px; left: 55px; right: 55px; height: 22px;
-  border: 1.5px solid rgba(255,255,255,0.1);
-  border-bottom: none;
-  border-radius: 6px 6px 0 0;
-  background: rgba(255,255,255,0.02);
+  position: absolute; top: 6px; left: 35%; right: 35%; height: 18px;
+  border: 1.5px solid rgba(255,255,255,0.1); border-bottom: none;
+  border-radius: 4px 4px 0 0; background: rgba(255,255,255,0.02);
 }
-/* Jar shoulder — connects neck to body */
-.mood-jar .jar-shoulder {
-  position: absolute; top: 26px; left: 10px; right: 10px; height: 20px;
-  border-left: 1.5px solid rgba(255,255,255,0.1);
-  border-right: 1.5px solid rgba(255,255,255,0.1);
-  border-radius: 0;
-  background: linear-gradient(to bottom, rgba(255,255,255,0.02), transparent);
-}
-/* Lid / cap */
 .mood-jar .jar-lid {
-  position: absolute; top: 2px; left: 60px; right: 60px;
-  height: 12px; border-radius: 4px 4px 2px 2px;
+  position: absolute; top: 0; left: 33%; right: 33%;
+  height: 8px; border-radius: 3px 3px 1px 1px;
   background: rgba(255,255,255,0.12);
   border: 1.5px solid rgba(255,255,255,0.1);
 }
-/* Glass shine highlight */
 .mood-jar .jar-shine {
-  position: absolute; top: 40px; left: 20px; width: 3px; height: 60px;
-  border-radius: 2px; background: rgba(255,255,255,0.08);
-  transform: rotate(-2deg);
-}
-.mood-jar .jar-shine2 {
-  position: absolute; top: 50px; left: 26px; width: 2px; height: 30px;
-  border-radius: 2px; background: rgba(255,255,255,0.05);
-  transform: rotate(-2deg);
+  position: absolute; top: 30px; left: 14px; width: 2px; height: 40px;
+  border-radius: 2px; background: rgba(255,255,255,0.08); transform: rotate(-2deg);
 }
 .mood-jar .jar-balls {
-  position: absolute; bottom: 12px; left: 18px; right: 18px; top: 46px;
-  overflow: hidden;
-  border-radius: 0 0 40px 40px;
+  position: absolute; bottom: 8px; left: 12px; right: 12px; top: 38px;
+  overflow: hidden; border-radius: 0 0 30px 30px;
 }
 .mood-jar .jar-ball {
-  width: 32px; height: 32px; display: flex;
+  width: 24px; height: 24px; display: flex;
   align-items: center; justify-content: center;
   position: absolute;
-  animation: jarDrop 0.5s ease-out forwards; opacity: 0;
+  animation: jarDrop 0.4s ease-out forwards; opacity: 0;
 }
-.mood-jar .jar-ball svg { width: 100%; height: 100%; }
 @keyframes jarDrop {
-  0% { opacity: 0; transform: translateY(var(--drop-y, -200px)) rotate(0deg) scale(0.5); }
+  0% { opacity: 0; transform: translateY(var(--drop-y, -150px)) rotate(0deg) scale(0.5); }
   15% { opacity: 1; }
-  70% { transform: translateY(8px) rotate(var(--rot, 0deg)) scale(1.05); }
-  85% { transform: translateY(-3px) rotate(var(--rot, 0deg)) scale(0.97); }
+  70% { transform: translateY(6px) rotate(var(--rot, 0deg)) scale(1.05); }
+  85% { transform: translateY(-2px) rotate(var(--rot, 0deg)) scale(0.97); }
   100% { opacity: 1; transform: translateY(0) rotate(var(--rot, 0deg)) scale(1); }
 }
 
+/* ===== Mood Distribution Bars ===== */
 .summary-section-title {
-  font-size: 15px; margin: 12px 0 6px; color: var(--text-primary);
-  font-family: -apple-system, 'PingFang SC', sans-serif;
+  font-size: 15px; margin: 16px 0 8px; color: var(--text-primary);
+  text-align: center;
 }
-.summary-stats { display: flex; gap: 8px; }
-.summary-stat-card {
-  flex: 1; background: rgba(255,255,255,0.05);
-  border-radius: 10px;
-  padding: 10px 12px; display: flex; align-items: center; gap: 8px;
+.mood-dist {
+  background: rgba(255,255,255,0.04); border-radius: 12px; padding: 14px 12px;
 }
-.summary-stat-card .stat-avatar {
-  width: 28px; height: 28px; border-radius: 50%; object-fit: cover;
-  border: 1.5px solid rgba(255,255,255,0.1); flex-shrink: 0;
+.mood-dist-row {
+  display: flex; align-items: center; gap: 6px; margin-bottom: 6px;
 }
-.summary-stat-card .stat-mood { width: 32px; height: 32px; flex-shrink: 0; }
-.summary-stat-card .stat-mood img { width: 100%; height: 100%; object-fit: contain; }
-.summary-stat-card .stat-count { font-size: 16px; font-weight: 600; color: var(--text-primary); margin-left: auto; }
+.mood-dist-row:last-child { margin-bottom: 0; }
+.mood-dist-icon { width: 24px; height: 24px; flex-shrink: 0; }
+.mood-dist-icon img { width: 100%; height: 100%; object-fit: contain; }
+.mood-dist-bars { flex: 1; display: flex; gap: 4px; align-items: center; height: 18px; }
+.mood-dist-bar {
+  height: 14px; border-radius: 7px; min-width: 4px;
+  transition: width 0.5s ease;
+}
+.mood-dist-bar.user { background: var(--pink); }
+.mood-dist-bar.npc { background: var(--blue); }
 
-.trend-chart {
-  background: rgba(255,255,255,0.05);
-  border-radius: 10px; padding: 12px; margin-top: 8px;
+/* ===== Monthly Title ===== */
+.monthly-title-section {
+  background: rgba(255,255,255,0.04); border-radius: 12px;
+  padding: 18px; text-align: center; margin-top: 12px;
 }
-.trend-legend {
-  display: flex; gap: 14px; margin-bottom: 8px; font-size: 11px;
-  font-family: -apple-system, 'PingFang SC', sans-serif;
+.monthly-title-section h3 { font-size: 16px; font-weight: 600; margin-bottom: 4px; color: var(--text-primary); }
+.monthly-title-section .subtitle { font-size: 12px; color: var(--text-tertiary); margin-bottom: 14px; }
+.monthly-title-cards { display: flex; gap: 12px; justify-content: center; }
+.monthly-title-card {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
 }
-.trend-legend span { display: flex; align-items: center; gap: 4px; color: var(--text-secondary); }
-.trend-legend .leg-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-.trend-legend .leg-dot.user { background: var(--pink); }
-.trend-legend .leg-dot.npc { background: var(--blue); }
-.trend-canvas { width: 100%; height: 200px; }
-.trend-chart-wrap { display: flex; gap: 0; align-items: stretch; }
-.trend-y-axis {
-  display: flex; flex-direction: column; justify-content: space-between;
-  padding: 6px 3px 24px 0; width: 22px; flex-shrink: 0;
+.monthly-title-card img {
+  width: 48px; height: 48px; border-radius: 50%; object-fit: cover;
+  border: 1.5px solid rgba(255,255,255,0.1);
+  filter: blur(3px) brightness(0.6);
 }
-.trend-y-axis .y-icon { width: 14px; height: 14px; display: flex; align-items: center; justify-content: center; }
-.trend-y-axis .y-icon svg { width: 100%; height: 100%; }
-.trend-canvas-wrap { flex: 1; min-width: 0; }
+.monthly-title-card span {
+  font-size: 11px; color: var(--text-tertiary);
+  background: rgba(255,255,255,0.06); padding: 3px 10px; border-radius: 8px;
+}
 
 ::-webkit-scrollbar { display: none; }
 
@@ -961,172 +945,121 @@ function unlockEntry(key) {
 }
 
 // ===== Summary =====
-function showSummary() {
-  document.getElementById('summaryTitle').textContent = `${currentYear}年${currentMonth+1}月`;
-  const content = document.getElementById('summaryContent');
-  const daysInMonth = new Date(currentYear, currentMonth+1, 0).getDate();
-  const userMoods=[], npcMoods=[], userCount={}, npcCount={}, userDay=[], npcDay=[];
-
-  for (let d=1; d<=daysInMonth; d++) {
-    const key = `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-    const entry = diaryData[key];
-    if (entry) {
-      if (entry.user) { userMoods.push(entry.user.mood); userCount[entry.user.mood]=(userCount[entry.user.mood]||0)+1; userDay.push({day:d,mood:entry.user.mood}); }
-      if (entry.npc) { npcMoods.push(entry.npc.mood); npcCount[entry.npc.mood]=(npcCount[entry.npc.mood]||0)+1; npcDay.push({day:d,mood:entry.npc.mood}); }
-    }
-  }
-
-  const userTop = Object.entries(userCount).sort((a,b)=>b[1]-a[1])[0];
-  const npcTop = Object.entries(npcCount).sort((a,b)=>b[1]-a[1])[0];
-
-  // Jar - natural gravity stacking (heap shape, center-heavy like reference)
-  const allMoods = [...userMoods.map(m=>({m,type:'moon'})), ...npcMoods.map(m=>({m,type:'star'}))];
-  for (let i = allMoods.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [allMoods[i], allMoods[j]] = [allMoods[j], allMoods[i]];
-  }
-  const jarW = 224, jarH = 280, bs = 18;
-  const balls = []; // {cx, cy}
-  
-  // Natural scatter layout — like real balls dropped into a jar
-  const jarMoods = allMoods.slice(0, 62);
-  const iconSize = 32;
-  const placed = []; // {x, y} bottom-left positions
-  
+function buildJarHtml(moods, type, jarW, jarH, iconSize) {
+  const items = moods.slice(0, 30);
+  const placed = [];
   function tryPlace() {
-    // Random x, biased toward center
     const r = (Math.random() + Math.random()) / 2;
-    const x = 6 + r * (jarW - iconSize - 12);
-    // Find the lowest available y at this x
-    let y = 8; // start from jar bottom
+    const x = 4 + r * (jarW - iconSize - 8);
+    let y = 4;
     for (const p of placed) {
-      // Check if horizontally overlapping
-      if (Math.abs((x + iconSize/2) - (p.x + iconSize/2)) < iconSize * 0.88) {
-        // Stack on top
-        const topY = p.y + iconSize * 0.78 + Math.random() * 2;
+      if (Math.abs((x + iconSize/2) - (p.x + iconSize/2)) < iconSize * 0.85) {
+        const topY = p.y + iconSize * 0.75 + Math.random() * 2;
         if (topY > y) y = topY;
       }
     }
     return { x, y };
   }
-  
-  let jarHtml = '';
-  jarMoods.forEach((item, i) => {
-    // Try several positions, pick the lowest (gravity)
+  let html = '';
+  items.forEach((mood, i) => {
     let best = null;
-    for (let t = 0; t < 10; t++) {
+    for (let t = 0; t < 8; t++) {
       const pos = tryPlace();
       if (!best || pos.y < best.y) best = pos;
     }
-    // Add small jitter for organic feel
-    best.x += (Math.random() - 0.5) * 5;
-    best.x = Math.max(3, Math.min(jarW - iconSize - 3, best.x));
+    best.x += (Math.random() - 0.5) * 4;
+    best.x = Math.max(2, Math.min(jarW - iconSize - 2, best.x));
     placed.push(best);
-    
-    const rot = (Math.random() - 0.5) * 40;
-    const scale = 0.85 + Math.random() * 0.2;
-    const svg = item.type === 'moon' ? moonSVG(item.m, 32) : starSVG(item.m, 32);
-    const dropDist = -(jarH - best.y + 40);
-    jarHtml += `<div class="jar-ball" style="left:${best.x.toFixed(1)}px;bottom:${best.y.toFixed(1)}px;--rot:${rot.toFixed(0)}deg;--drop-y:${dropDist}px;animation-delay:${(i*0.05).toFixed(2)}s;animation-duration:0.5s;">${svg}</div>`;
+    const rot = (Math.random() - 0.5) * 35;
+    const svg = type === 'moon' ? moonSVG(mood, iconSize) : starSVG(mood, iconSize);
+    const dropDist = -(jarH - best.y + 30);
+    html += `<div class="jar-ball" style="left:${best.x.toFixed(1)}px;bottom:${best.y.toFixed(1)}px;--rot:${rot.toFixed(0)}deg;--drop-y:${dropDist}px;animation-delay:${(i*0.04).toFixed(2)}s;">${svg}</div>`;
   });
+  return html;
+}
 
-  let html = `<div class="mood-jar-wrap"><div class="mood-jar">
-    <div class="jar-outline"></div><div class="jar-neck"></div><div class="jar-shoulder"></div><div class="jar-lid"></div><div class="jar-shine"></div><div class="jar-shine2"></div>
-    <div class="jar-balls">${jarHtml}</div></div></div>`;
+function showSummary() {
+  document.getElementById('summaryTitle').textContent = `${currentYear}年${currentMonth+1}月`;
+  const content = document.getElementById('summaryContent');
+  const daysInMonth = new Date(currentYear, currentMonth+1, 0).getDate();
+  const userMoods=[], npcMoods=[], userCount={}, npcCount={};
 
-  // 本月最多心情 — compact horizontal layout: name + icon + label + count
-  html += `<div class="summary-section-title">本月最多心情</div><div class="summary-stats">`;
-  if (userTop) {
-    html += `<div class="summary-stat-card">
-      <img class="stat-avatar" src="${USER_AVATAR}" alt="${USER_NAME}">
-      <div class="stat-mood">${moonSVG(userTop[0],32)}</div>
-      <span class="stat-count">${userTop[1]}</span></div>`;
+  for (let d=1; d<=daysInMonth; d++) {
+    const key = `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const entry = diaryData[key];
+    if (entry) {
+      if (entry.user) { userMoods.push(entry.user.mood); userCount[entry.user.mood]=(userCount[entry.user.mood]||0)+1; }
+      if (entry.npc) { npcMoods.push(entry.npc.mood); npcCount[entry.npc.mood]=(npcCount[entry.npc.mood]||0)+1; }
+    }
   }
-  if (npcTop) {
-    html += `<div class="summary-stat-card">
-      <img class="stat-avatar" src="${NPC_AVATAR}" alt="${NPC_NAME}">
-      <div class="stat-mood">${starSVG(npcTop[0],32)}</div>
-      <span class="stat-count">${npcTop[1]}</span></div>`;
-  }
+
+  // Dual jars
+  const jarW = 136, jarH = 170, iconSize = 24;
+  const userJar = buildJarHtml(userMoods, 'moon', jarW, jarH, iconSize);
+  const npcJar = buildJarHtml(npcMoods, 'star', jarW, jarH, iconSize);
+
+  let html = `<div class="dual-jars">
+    <div class="jar-col">
+      <div class="mood-jar">
+        <div class="jar-outline"></div><div class="jar-neck"></div><div class="jar-lid"></div><div class="jar-shine"></div>
+        <div class="jar-balls">${userJar}</div>
+      </div>
+      <div class="jar-label">${moonSVG('heartbeat',22)} 我的心情</div>
+    </div>
+    <div class="jar-col">
+      <div class="mood-jar">
+        <div class="jar-outline"></div><div class="jar-neck"></div><div class="jar-lid"></div><div class="jar-shine"></div>
+        <div class="jar-balls">${npcJar}</div>
+      </div>
+      <div class="jar-label">Ta的心情 <img src="${NPC_AVATAR}" alt="${NPC_NAME}"></div>
+    </div>
+  </div>`;
+
+  // Mood distribution bars — side by side
+  const allMoodIds = ['happy','heartbeat','excited','calm','tired','angry','irritated','sad'];
+  const maxCount = Math.max(
+    ...allMoodIds.map(m => userCount[m]||0),
+    ...allMoodIds.map(m => npcCount[m]||0),
+    1
+  );
+
+  html += `<div class="mood-dist">`;
+  allMoodIds.forEach(mid => {
+    const uC = userCount[mid]||0;
+    const nC = npcCount[mid]||0;
+    const uW = Math.round((uC / maxCount) * 100);
+    const nW = Math.round((nC / maxCount) * 100);
+    html += `<div class="mood-dist-row">
+      <div class="mood-dist-icon">${moonSVG(mid, 24)}</div>
+      <div class="mood-dist-bars">
+        <div class="mood-dist-bar user" style="width:${uW}%;"></div>
+        <div class="mood-dist-bar npc" style="width:${nW}%;"></div>
+      </div>
+      <div class="mood-dist-icon">${starSVG(mid, 24)}</div>
+    </div>`;
+  });
   html += `</div>`;
 
-  // 心情趋势 — Y-axis mood icons, pink/blue dot legend
-  const yAxisMoods = ['excited','heartbeat','happy','calm','tired','irritated','angry','sad'];
-  let yAxisHtml = '';
-  yAxisMoods.forEach(mid => {
-    yAxisHtml += `<div class="y-icon">${moonSVG(mid, 16)}</div>`;
-  });
-  html += `<div class="summary-section-title">心情趋势</div>
-    <div class="trend-chart">
-      <div class="trend-legend">
-        <span><span class="leg-dot user"></span>${USER_NAME}</span>
-        <span><span class="leg-dot npc"></span>${NPC_NAME}</span>
+  // Monthly title section
+  html += `<div class="monthly-title-section">
+    <h3>月度称号</h3>
+    <div class="subtitle">将于次月1日揭晓</div>
+    <div class="monthly-title-cards">
+      <div class="monthly-title-card">
+        <img src="${USER_AVATAR}" alt="${USER_NAME}">
+        <span>等待揭晓</span>
       </div>
-      <div class="trend-chart-wrap">
-        <div class="trend-y-axis">${yAxisHtml}</div>
-        <div class="trend-canvas-wrap"><canvas class="trend-canvas" id="trendCanvas"></canvas></div>
+      <div class="monthly-title-card">
+        <img src="${NPC_AVATAR}" alt="${NPC_NAME}">
+        <span>等待揭晓</span>
       </div>
-    </div>`;
+    </div>
+  </div>`;
 
   content.innerHTML = html;
   document.getElementById('summaryPage').classList.add('active','slide-up');
-  setTimeout(() => drawTrend(userDay, npcDay, daysInMonth), 80);
 }
 function closeSummary() { document.getElementById('summaryPage').classList.remove('active','slide-up'); }
-
-// 0=sad(bottom) to 7=excited(top), matching Y-axis icon order
-function moodVal(id) { return {excited:7,heartbeat:6,happy:5,calm:4,tired:3,irritated:2,angry:1,sad:0}[id]??3; }
-
-function drawTrend(uDay, nDay, days) {
-  const canvas = document.getElementById('trendCanvas'); if(!canvas) return;
-  const dpr = window.devicePixelRatio||1;
-  const rect = canvas.getBoundingClientRect();
-  canvas.width = rect.width*dpr; canvas.height = rect.height*dpr;
-  const ctx = canvas.getContext('2d'); ctx.scale(dpr,dpr);
-  const W=rect.width, H=rect.height, pL=4, pR=8, pT=8, pB=28;
-  const cW=W-pL-pR, cH=H-pT-pB;
-
-  // Horizontal grid lines for each mood level (8 levels, 0-7)
-  ctx.strokeStyle='rgba(255,255,255,0.05)'; ctx.lineWidth=1;
-  for(let i=0;i<=7;i++){
-    const y=pT+(cH/7)*i;
-    ctx.beginPath();ctx.moveTo(pL,y);ctx.lineTo(W-pR,y);ctx.stroke();
-  }
-
-  // X-axis date labels: 1, 5, 10, 15, 20, 25, 30
-  const xDates = [1, 5, 10, 15, 20, 25, 30].filter(d => d <= days);
-  ctx.fillStyle = 'rgba(232,236,244,0.35)';
-  ctx.font = '11px -apple-system, PingFang SC, sans-serif';
-  ctx.textAlign = 'center';
-  xDates.forEach(d => {
-    const x = pL + ((d - 1) / (days - 1)) * cW;
-    ctx.fillText(d, x, H - 6);
-    ctx.strokeStyle = 'rgba(255,255,255,0.06)'; ctx.lineWidth = 1;
-    ctx.beginPath(); ctx.moveTo(x, pT + cH); ctx.lineTo(x, pT + cH + 4); ctx.stroke();
-  });
-
-  function drawLine(dms, color) {
-    if(dms.length<2) return;
-    ctx.beginPath(); ctx.strokeStyle=color; ctx.lineWidth=1.5; ctx.lineJoin='round';
-    dms.forEach((dm,i) => {
-      const x = pL+((dm.day-1)/(days-1))*cW;
-      const y = pT+cH-(moodVal(dm.mood)/7)*cH;
-      if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
-    });
-    ctx.stroke();
-    // Glow
-    ctx.strokeStyle = color + '30'; ctx.lineWidth = 4;
-    ctx.beginPath();
-    dms.forEach((dm,i) => {
-      const x = pL+((dm.day-1)/(days-1))*cW;
-      const y = pT+cH-(moodVal(dm.mood)/7)*cH;
-      if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
-    });
-    ctx.stroke();
-  }
-  drawLine(uDay, '#E89AAF');
-  drawLine(nDay, '#7BA3C9');
-}
 
 // ===== Init =====
 const now = new Date();
