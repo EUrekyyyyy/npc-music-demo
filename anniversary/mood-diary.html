@@ -578,9 +578,8 @@ body {
 const NPC_NAME = '江晦';
 const USER_NAME = '栗川';
 
-// ===== SVG Mood Icons =====
-// Moon = User, Star = NPC
-// Each mood has a color + face expression drawn on the shape
+// ===== Mood Icons (PNG images) =====
+const ICON_BASE = 'https://eurekyyyyy.github.io/npc-music-demo/anniversary/icons/';
 
 const MOOD_COLORS = {
   happy:     '#FFBA5C',
@@ -593,143 +592,14 @@ const MOOD_COLORS = {
   sad:       '#6BAFFF',
 };
 
-// Moon shape path (crescent)
 function moonSVG(moodId, size) {
-  const c = MOOD_COLORS[moodId] || '#AAA';
-  const face = moonFace(moodId);
-  return `<svg viewBox="0 0 48 48" width="${size||48}" height="${size||48}" xmlns="http://www.w3.org/2000/svg">
-    <!-- Crescent moon body -->
-    <circle cx="24" cy="24" r="20" fill="${c}" opacity="0.9"/>
-    <circle cx="32" cy="16" r="14" fill="${c}" opacity="0.15"/>
-    <circle cx="32" cy="16" r="13" fill="#121214"/>
-    <!-- Glow -->
-    <circle cx="24" cy="24" r="20" fill="none" stroke="${c}" stroke-width="0.5" opacity="0.3"/>
-    <!-- Sticker border -->
-    <circle cx="24" cy="24" r="21" fill="none" stroke="#fff" stroke-width="1.5" opacity="0.15"/>
-    <!-- Face -->
-    ${face}
-  </svg>`;
+  const s = size || 48;
+  return `<img src="${ICON_BASE}moon_${moodId}.png" width="${s}" height="${s}" style="object-fit:contain;" alt="${moodId}">`;
 }
 
-function moonFace(mood) {
-  const f = {
-    happy: `
-      <circle cx="16" cy="22" r="1.8" fill="#4A3520"/>
-      <circle cx="24" cy="20" r="1.8" fill="#4A3520"/>
-      <path d="M14 28 Q19 33 26 28" stroke="#4A3520" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-      <circle cx="12" cy="27" r="2.5" fill="${MOOD_COLORS.happy}" opacity="0.3"/>`,
-    heartbeat: `
-      <path d="M15 21 Q16 19 17 21" stroke="#9B3060" stroke-width="1.3" fill="none" stroke-linecap="round"/>
-      <path d="M23 19 Q24 17 25 19" stroke="#9B3060" stroke-width="1.3" fill="none" stroke-linecap="round"/>
-      <path d="M15 27 Q19 31 25 27" stroke="#9B3060" stroke-width="1.3" fill="none" stroke-linecap="round"/>
-      <circle cx="12" cy="27" r="2.5" fill="#FF7EB3" opacity="0.35"/>
-      <circle cx="27" cy="25" r="2" fill="#FF7EB3" opacity="0.35"/>
-      <path d="M28 14 L29 12 L30 14 L28 14Z" fill="#FF4080" opacity="0.7"/>`,
-    excited: `
-      <path d="M14 20 L16 22 L18 20" stroke="#6B5A10" stroke-width="1.3" fill="none" stroke-linecap="round"/>
-      <path d="M22 18 L24 20 L26 18" stroke="#6B5A10" stroke-width="1.3" fill="none" stroke-linecap="round"/>
-      <ellipse cx="19" cy="29" rx="5" ry="3.5" fill="#4A3A10" opacity="0.6"/>
-      <path d="M10 16 L11 13 L13 15" stroke="${MOOD_COLORS.excited}" stroke-width="1" fill="none" opacity="0.6"/>
-      <path d="M27 12 L29 10 L28 13" stroke="${MOOD_COLORS.excited}" stroke-width="1" fill="none" opacity="0.6"/>`,
-    calm: `
-      <path d="M14 22 Q16 21 18 22" stroke="#2D5A40" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-      <path d="M22 20 Q24 19 26 20" stroke="#2D5A40" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-      <path d="M16 27 Q19 29 24 27" stroke="#2D5A40" stroke-width="1.2" fill="none" stroke-linecap="round"/>`,
-    tired: `
-      <path d="M14 22 Q16 23 18 22" stroke="#4A4A55" stroke-width="1.3" fill="none" stroke-linecap="round"/>
-      <path d="M22 20 Q24 21 26 20" stroke="#4A4A55" stroke-width="1.3" fill="none" stroke-linecap="round"/>
-      <path d="M17 28 Q19 27 22 28" stroke="#4A4A55" stroke-width="1.2" fill="none" stroke-linecap="round"/>
-      <ellipse cx="10" cy="30" rx="1.5" ry="2" fill="#8E8EA0" opacity="0.3"/>`,
-    angry: `
-      <line x1="13" y1="19" x2="18" y2="21" stroke="#6B2020" stroke-width="1.5" stroke-linecap="round"/>
-      <line x1="27" y1="17" x2="22" y2="19" stroke="#6B2020" stroke-width="1.5" stroke-linecap="round"/>
-      <circle cx="16" cy="23" r="1.5" fill="#6B2020"/>
-      <circle cx="24" cy="21" r="1.5" fill="#6B2020"/>
-      <path d="M15 29 Q19 27 24 29" stroke="#6B2020" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-      <path d="M9 17 L10 15 M10 15 L12 16" stroke="#FF6B6B" stroke-width="0.8" opacity="0.5"/>`,
-    irritated: `
-      <line x1="14" y1="20" x2="18" y2="22" stroke="#4A3580" stroke-width="1.3" stroke-linecap="round"/>
-      <line x1="26" y1="18" x2="22" y2="20" stroke="#4A3580" stroke-width="1.3" stroke-linecap="round"/>
-      <circle cx="16" cy="24" r="1.3" fill="#4A3580"/>
-      <circle cx="24" cy="22" r="1.3" fill="#4A3580"/>
-      <path d="M16 28 Q18 29 19 28 Q20 27 22 28" stroke="#4A3580" stroke-width="1.2" fill="none" stroke-linecap="round"/>`,
-    sad: `
-      <circle cx="16" cy="22" r="2" fill="#2A4A6B"/>
-      <circle cx="24" cy="20" r="2" fill="#2A4A6B"/>
-      <circle cx="16" cy="22" r="0.8" fill="#fff" opacity="0.6"/>
-      <circle cx="24" cy="20" r="0.8" fill="#fff" opacity="0.6"/>
-      <path d="M15 29 Q19 26 25 29" stroke="#2A4A6B" stroke-width="1.3" fill="none" stroke-linecap="round"/>
-      <ellipse cx="18" cy="26" rx="0.8" ry="1.5" fill="#6BAFFF" opacity="0.5"/>`,
-  };
-  return f[mood] || f.calm;
-}
-
-// Star shape
 function starSVG(moodId, size) {
-  const c = MOOD_COLORS[moodId] || '#AAA';
-  const face = starFace(moodId);
-  // 5-pointed star path
-  return `<svg viewBox="0 0 48 48" width="${size||48}" height="${size||48}" xmlns="http://www.w3.org/2000/svg">
-    <!-- Sticker border -->
-    <path d="M24 3 L29.8 16.5 L44.5 18.2 L33.3 28.8 L36 43.5 L24 36.5 L12 43.5 L14.7 28.8 L3.5 18.2 L18.2 16.5Z"
-      fill="#fff" opacity="0.1"/>
-    <path d="M24 4 L29.5 17 L44 18.5 L33 28.5 L35.5 43 L24 36 L12.5 43 L15 28.5 L4 18.5 L18.5 17Z"
-      fill="${c}" opacity="0.9"/>
-    <path d="M24 4 L29.5 17 L44 18.5 L33 28.5 L35.5 43 L24 36 L12.5 43 L15 28.5 L4 18.5 L18.5 17Z"
-      fill="none" stroke="${c}" stroke-width="0.5" opacity="0.3"/>
-    ${face}
-  </svg>`;
-}
-
-function starFace(mood) {
-  const f = {
-    happy: `
-      <circle cx="20" cy="22" r="1.8" fill="#4A3520"/>
-      <circle cx="28" cy="22" r="1.8" fill="#4A3520"/>
-      <path d="M19 27 Q24 32 29 27" stroke="#4A3520" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-      <circle cx="17" cy="26" r="2" fill="${MOOD_COLORS.happy}" opacity="0.3"/>
-      <circle cx="31" cy="26" r="2" fill="${MOOD_COLORS.happy}" opacity="0.3"/>`,
-    heartbeat: `
-      <path d="M19 21 Q20 19 21 21" stroke="#9B3060" stroke-width="1.3" fill="none" stroke-linecap="round"/>
-      <path d="M27 21 Q28 19 29 21" stroke="#9B3060" stroke-width="1.3" fill="none" stroke-linecap="round"/>
-      <path d="M20 27 Q24 31 28 27" stroke="#9B3060" stroke-width="1.3" fill="none" stroke-linecap="round"/>
-      <circle cx="17" cy="26" r="2" fill="#FF7EB3" opacity="0.35"/>
-      <circle cx="31" cy="26" r="2" fill="#FF7EB3" opacity="0.35"/>`,
-    excited: `
-      <path d="M18 21 L20 23 L22 21" stroke="#6B5A10" stroke-width="1.3" fill="none" stroke-linecap="round"/>
-      <path d="M26 21 L28 23 L30 21" stroke="#6B5A10" stroke-width="1.3" fill="none" stroke-linecap="round"/>
-      <ellipse cx="24" cy="28" rx="4" ry="3" fill="#4A3A10" opacity="0.6"/>`,
-    calm: `
-      <path d="M19 22 Q20 21 22 22" stroke="#2D5A40" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-      <path d="M26 22 Q28 21 29 22" stroke="#2D5A40" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-      <path d="M21 27 Q24 29 27 27" stroke="#2D5A40" stroke-width="1.2" fill="none" stroke-linecap="round"/>`,
-    tired: `
-      <path d="M19 22 Q20 23 22 22" stroke="#4A4A55" stroke-width="1.3" fill="none" stroke-linecap="round"/>
-      <path d="M26 22 Q28 23 29 22" stroke="#4A4A55" stroke-width="1.3" fill="none" stroke-linecap="round"/>
-      <path d="M22 28 Q24 27 26 28" stroke="#4A4A55" stroke-width="1.2" fill="none" stroke-linecap="round"/>
-      <ellipse cx="30" cy="20" rx="1" ry="1.5" fill="#8E8EA0" opacity="0.4"/>`,
-    angry: `
-      <line x1="17" y1="19" x2="22" y2="21" stroke="#6B2020" stroke-width="1.5" stroke-linecap="round"/>
-      <line x1="31" y1="19" x2="26" y2="21" stroke="#6B2020" stroke-width="1.5" stroke-linecap="round"/>
-      <circle cx="20" cy="23" r="1.5" fill="#6B2020"/>
-      <circle cx="28" cy="23" r="1.5" fill="#6B2020"/>
-      <path d="M21 29 Q24 27 27 29" stroke="#6B2020" stroke-width="1.5" fill="none" stroke-linecap="round"/>`,
-    irritated: `
-      <line x1="18" y1="20" x2="22" y2="22" stroke="#4A3580" stroke-width="1.3" stroke-linecap="round"/>
-      <line x1="30" y1="20" x2="26" y2="22" stroke="#4A3580" stroke-width="1.3" stroke-linecap="round"/>
-      <circle cx="20" cy="24" r="1.3" fill="#4A3580"/>
-      <circle cx="28" cy="24" r="1.3" fill="#4A3580"/>
-      <path d="M22 28 Q23 29 24 28 Q25 27 27 28" stroke="#4A3580" stroke-width="1.2" fill="none" stroke-linecap="round"/>`,
-    sad: `
-      <circle cx="20" cy="22" r="2" fill="#2A4A6B"/>
-      <circle cx="28" cy="22" r="2" fill="#2A4A6B"/>
-      <circle cx="20" cy="22" r="0.8" fill="#fff" opacity="0.6"/>
-      <circle cx="28" cy="22" r="0.8" fill="#fff" opacity="0.6"/>
-      <path d="M21 29 Q24 26 27 29" stroke="#2A4A6B" stroke-width="1.3" fill="none" stroke-linecap="round"/>
-      <ellipse cx="22" cy="26" rx="0.8" ry="1.5" fill="#6BAFFF" opacity="0.5"/>
-      <ellipse cx="27" cy="26" rx="0.8" ry="1.5" fill="#6BAFFF" opacity="0.4"/>`,
-  };
-  return f[mood] || f.calm;
+  const s = size || 48;
+  return `<img src="${ICON_BASE}star_${moodId}.png" width="${s}" height="${s}" style="object-fit:contain;" alt="${moodId}">`;
 }
 
 // ===== Mood Definitions =====
@@ -747,18 +617,14 @@ const MOODS = [
 function getMood(id) { return MOODS.find(m => m.id === id) || MOODS[0]; }
 function randomMood() { return MOODS[Math.floor(Math.random() * MOODS.length)]; }
 
-// Hollow/outline icons for empty days - pencil sketch style
+// Hollow/outline icons for empty days - faded version of actual icons
 function moonOutlineSVG(size) {
-  return `<svg viewBox="0 0 48 48" width="${size||48}" height="${size||48}" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="24" cy="24" r="18" fill="none" stroke="rgba(232,236,244,0.12)" stroke-width="1.5" stroke-dasharray="3,2"/>
-    <circle cx="32" cy="16" r="12" fill="none" stroke="rgba(232,236,244,0.06)" stroke-width="1" stroke-dasharray="2,2"/>
-  </svg>`;
+  const s = size || 48;
+  return `<img src="${ICON_BASE}moon_calm.png" width="${s}" height="${s}" style="object-fit:contain;opacity:0.15;filter:grayscale(100%);" alt="empty">`;
 }
 function starOutlineSVG(size) {
-  return `<svg viewBox="0 0 48 48" width="${size||48}" height="${size||48}" xmlns="http://www.w3.org/2000/svg">
-    <path d="M24 6 L28.5 17.5 L41 19 L32 27.5 L34 40 L24 34.5 L14 40 L16 27.5 L7 19 L19.5 17.5Z"
-      fill="none" stroke="rgba(232,236,244,0.12)" stroke-width="1.5" stroke-linejoin="round" stroke-dasharray="3,2"/>
-  </svg>`;
+  const s = size || 48;
+  return `<img src="${ICON_BASE}star_calm.png" width="${s}" height="${s}" style="object-fit:contain;opacity:0.15;filter:grayscale(100%);" alt="empty">`;
 }
 
 // ===== Mock Data =====
