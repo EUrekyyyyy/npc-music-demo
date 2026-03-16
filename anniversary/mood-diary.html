@@ -837,8 +837,8 @@ function generateMockData() {
       '不管怎样，我都在',
     ];
     data[key] = {
-      user: { mood: randomMood().id, text: userTexts[Math.floor(Math.random() * userTexts.length)] },
-      npc: { mood: randomMood().id, text: npcTexts[Math.floor(Math.random() * npcTexts.length)], locked: Math.random() > 0.4 }
+      user: { mood: Math.random() > 0.5 ? 'heartbeat' : 'happy', text: userTexts[Math.floor(Math.random() * userTexts.length)] },
+      npc: { mood: 'calm', text: npcTexts[Math.floor(Math.random() * npcTexts.length)], locked: Math.random() > 0.4 }
     };
   }
   return data;
