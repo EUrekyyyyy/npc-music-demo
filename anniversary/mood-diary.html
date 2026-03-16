@@ -1198,10 +1198,10 @@ function showSummaryForMonth(year, month) {
     </div>
   </div>`;
 
-  // 本月最多心情
+  // 最多心情
   const userTop = Object.entries(userCount).sort((a,b)=>b[1]-a[1])[0];
   const npcTop = Object.entries(npcCount).sort((a,b)=>b[1]-a[1])[0];
-  html += `<div class="summary-section-title">本月最多心情</div><div class="summary-stats">`;
+  html += `<div class="summary-section-title">最多心情</div><div class="summary-stats">`;
   if (userTop) {
     html += `<div class="summary-stat-card">
       <img class="stat-avatar" src="${USER_AVATAR}" alt="${USER_NAME}">
