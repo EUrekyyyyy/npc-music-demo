@@ -4,165 +4,160 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>心情日记</title>
+<link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Caveat:wght@400;600&display=swap" rel="stylesheet">
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
 :root {
-  --bg: #0B0E1A;
-  --bg-card: #131829;
-  --bg-elevated: #1A2035;
-  --bg-modal: #0D1020;
-  --text-primary: #E8ECF4;
-  --text-secondary: rgba(232,236,244,0.50);
-  --text-tertiary: rgba(232,236,244,0.25);
-  --accent: #6E8EFA;
-  --accent-soft: rgba(110,142,250,0.10);
-  --user-accent: #C4B5FD;
-  --npc-accent: #67B2FF;
-  --border: rgba(255,255,255,0.05);
-  --glass: rgba(255,255,255,0.03);
-  /* NPC theme - 江晦 cool blue */
-  --npc-theme: #4A90D9;
-  --npc-theme-soft: rgba(74,144,217,0.08);
+  --paper: #FDF6EC;
+  --paper-deep: #F5E6D0;
+  --paper-line: rgba(90,74,58,0.08);
+  --ink: #5A4A3A;
+  --ink-light: rgba(90,74,58,0.5);
+  --ink-faint: rgba(90,74,58,0.2);
+  --pink: #E89AAF;
+  --pink-soft: rgba(232,154,175,0.15);
+  --blue: #7BA3C9;
+  --blue-soft: rgba(123,163,201,0.15);
+  --mint: #9EC5AB;
+  --lavender: #C3B1E1;
+  --peach: #F5C7A9;
+  --tape-pink: rgba(255,182,193,0.35);
+  --tape-blue: rgba(173,216,230,0.35);
+  --tape-yellow: rgba(255,239,170,0.45);
+  --tape-green: rgba(180,220,180,0.35);
+  --shadow: 0 2px 8px rgba(90,74,58,0.08);
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'PingFang SC', sans-serif;
-  background: var(--bg);
-  color: var(--text-primary);
+  font-family: 'Ma Shan Zheng', 'PingFang SC', cursive;
+  background: var(--paper);
+  color: var(--ink);
   width: 390px; height: 844px;
   overflow: hidden; position: relative; margin: 0 auto;
+  /* Subtle paper texture via noise */
   background-image:
-    radial-gradient(ellipse at 80% 0%, rgba(74,144,217,0.06) 0%, transparent 60%),
-    radial-gradient(ellipse at 20% 100%, rgba(110,142,250,0.04) 0%, transparent 60%);
+    repeating-linear-gradient(0deg, transparent, transparent 23px, var(--paper-line) 23px, var(--paper-line) 24px),
+    repeating-linear-gradient(90deg, transparent, transparent 23px, rgba(90,74,58,0.03) 23px, rgba(90,74,58,0.03) 24px);
 }
 
-/* ===== Mood Colors ===== */
-:root {
-  --c-happy: #FFBA5C;
-  --c-heartbeat: #FF7EB3;
-  --c-excited: #FFD93D;
-  --c-calm: #7EC8A0;
-  --c-tired: #8E8EA0;
-  --c-angry: #FF6B6B;
-  --c-irritated: #A78BFA;
-  --c-sad: #6BAFFF;
-}
-
-/* ===== Status Bar (removed time, just spacing) ===== */
-.status-bar {
-  height: 48px;
-}
+/* ===== Status Bar ===== */
+.status-bar { height: 44px; }
 
 /* ===== Pages ===== */
 .page { position: absolute; inset: 0; display: none; flex-direction: column; }
 .page.active { display: flex; }
 
-/* ===== NPC Header Banner ===== */
+/* ===== NPC Header Banner — washi tape style ===== */
 .npc-banner {
   position: relative; overflow: visible;
-  margin: 0 16px; border-radius: 16px;
-  background: linear-gradient(135deg, #1a2a4a 0%, #0f1a30 100%);
-  border: 1px solid var(--border);
-  margin-bottom: 12px;
-  padding: 18px 20px 18px 20px;
-  display: flex; align-items: center; gap: 14px;
+  margin: 0 16px; border-radius: 4px;
+  background: #fff;
+  border: 1px dashed var(--ink-faint);
+  margin-bottom: 10px;
+  padding: 14px 16px;
+  display: flex; align-items: center; gap: 12px;
+  box-shadow: var(--shadow);
+  transform: rotate(-0.5deg);
 }
-.npc-avatar-wrap {
-  position: relative; flex-shrink: 0;
+/* Washi tape decoration */
+.npc-banner::before {
+  content: ''; position: absolute; top: -6px; left: 30px;
+  width: 70px; height: 14px; background: var(--tape-pink);
+  transform: rotate(-2deg); border-radius: 1px;
 }
+.npc-banner::after {
+  content: ''; position: absolute; bottom: -5px; right: 25px;
+  width: 55px; height: 12px; background: var(--tape-blue);
+  transform: rotate(1.5deg); border-radius: 1px;
+}
+.npc-avatar-wrap { position: relative; flex-shrink: 0; }
 .npc-avatar {
-  width: 56px; height: 56px; border-radius: 50%;
-  object-fit: cover; border: 2px solid rgba(103,178,255,0.3);
-  background: var(--bg-elevated);
+  width: 50px; height: 50px; border-radius: 50%;
+  object-fit: cover; border: 3px solid #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  background: var(--paper-deep);
 }
-/* Speech bubble */
 .npc-bubble {
   position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%);
-  background: rgba(103,178,255,0.15); border: 1px solid rgba(103,178,255,0.2);
-  border-radius: 10px; padding: 5px 10px;
-  font-size: 10px; color: var(--npc-accent); white-space: nowrap;
-  margin-bottom: 6px;
+  background: #fff; border: 1px dashed var(--pink);
+  border-radius: 8px; padding: 3px 8px;
+  font-size: 10px; color: var(--pink); white-space: nowrap;
+  margin-bottom: 6px; font-family: 'Ma Shan Zheng', cursive;
   animation: bubbleFloat 3s ease-in-out infinite;
 }
 .npc-bubble::after {
   content: ''; position: absolute; top: 100%; left: 50%;
   transform: translateX(-50%);
-  border: 5px solid transparent;
-  border-top-color: rgba(103,178,255,0.2);
+  border: 4px solid transparent; border-top-color: var(--pink);
 }
 @keyframes bubbleFloat {
   0%, 100% { transform: translateX(-50%) translateY(0); }
   50% { transform: translateX(-50%) translateY(-3px); }
 }
-.npc-banner-info {
-  flex: 1; min-width: 0;
-}
+.npc-banner-info { flex: 1; min-width: 0; }
 .npc-banner-title {
-  font-size: 17px; font-weight: 700; margin-bottom: 6px;
-  background: linear-gradient(135deg, #C4B5FD, #67B2FF);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  font-size: 17px; font-weight: 400; margin-bottom: 4px;
+  color: var(--ink); font-family: 'Ma Shan Zheng', cursive;
 }
 .npc-banner-days {
   display: inline-flex; align-items: center; gap: 4px;
-  background: rgba(110,142,250,0.12); border-radius: 10px;
-  padding: 4px 12px; font-size: 12px; color: var(--accent);
+  background: var(--pink-soft); border-radius: 8px;
+  padding: 3px 10px; font-size: 12px; color: var(--pink);
+  font-family: 'Caveat', cursive;
 }
 .npc-banner-days .day-count {
-  font-weight: 800; font-size: 16px;
-  background: linear-gradient(135deg, #C4B5FD, #67B2FF);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  font-weight: 600; font-size: 16px; color: var(--pink);
   display: inline-block; transition: transform 0.3s;
+  font-family: 'Caveat', cursive;
 }
-.npc-banner-days .day-count.bounce {
-  animation: dayBounce 0.6s ease;
-}
+.npc-banner-days .day-count.bounce { animation: dayBounce 0.6s ease; }
 @keyframes dayBounce {
-  0% { transform: scale(1); }
-  30% { transform: scale(1.4) translateY(-4px); }
-  50% { transform: scale(0.9); }
-  70% { transform: scale(1.15); }
-  100% { transform: scale(1); }
+  0% { transform: scale(1); } 30% { transform: scale(1.4) translateY(-4px); }
+  50% { transform: scale(0.9); } 70% { transform: scale(1.15); } 100% { transform: scale(1); }
 }
 
 /* ===== Calendar ===== */
 .cal-header {
-  padding: 0 20px 10px; display: flex;
+  padding: 0 20px 8px; display: flex;
   align-items: center; justify-content: space-between;
 }
-.cal-header .month-nav {
-  display: flex; align-items: center; gap: 14px;
-}
+.cal-header .month-nav { display: flex; align-items: center; gap: 12px; }
 .cal-header .month-nav button {
-  background: none; border: none; color: var(--text-secondary);
-  font-size: 18px; padding: 4px 6px; cursor: pointer;
+  background: none; border: none; color: var(--ink-light);
+  font-size: 20px; padding: 4px; cursor: pointer; font-family: 'Caveat', cursive;
 }
-.cal-header .month-title { font-size: 17px; font-weight: 700; color: var(--text-primary); }
+.cal-header .month-title {
+  font-size: 18px; font-weight: 400; color: var(--ink);
+  font-family: 'Ma Shan Zheng', cursive;
+}
 .cal-header .summary-btn {
-  background: var(--accent-soft); border: 1px solid rgba(110,142,250,0.15);
-  color: var(--accent); padding: 6px 8px;
-  border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;
-  width: 32px; height: 32px;
+  background: #fff; border: 1px dashed var(--ink-faint);
+  color: var(--ink-light); padding: 5px 7px;
+  border-radius: 50%; cursor: pointer; display: flex;
+  align-items: center; justify-content: center;
+  width: 30px; height: 30px; box-shadow: var(--shadow);
 }
 
 .cal-legend {
-  display: flex; justify-content: center; gap: 20px;
-  padding: 0 20px 8px; font-size: 11px;
+  display: flex; justify-content: center; gap: 16px;
+  padding: 0 20px 6px; font-size: 11px;
+  font-family: 'Ma Shan Zheng', cursive;
 }
-.cal-legend span { display: flex; align-items: center; gap: 5px; color: var(--text-secondary); }
+.cal-legend span { display: flex; align-items: center; gap: 4px; color: var(--ink-light); }
 .cal-legend .leg-icon { width: 14px; height: 14px; }
 
 .cal-weekdays {
   display: grid; grid-template-columns: repeat(7, 1fr);
-  padding: 0 12px; margin-bottom: 4px;
+  padding: 0 10px; margin-bottom: 2px;
 }
 .cal-weekdays span {
-  text-align: center; font-size: 10px; color: var(--text-tertiary);
-  font-weight: 600; letter-spacing: 1px;
+  text-align: center; font-size: 11px; color: var(--ink-light);
+  font-weight: 400; font-family: 'Ma Shan Zheng', cursive;
 }
 
 .cal-grid {
-  flex: 1; overflow-y: auto; padding: 0 4px 20px;
+  flex: 1; overflow-y: auto; padding: 0 4px 60px;
   display: grid; grid-template-columns: repeat(7, 1fr);
   gap: 0; align-content: start;
   -webkit-overflow-scrolling: touch;
@@ -170,260 +165,284 @@ body {
 
 .cal-day {
   display: flex; flex-direction: column; align-items: center;
-  padding: 4px 0; cursor: pointer; border-radius: 10px;
-  transition: background 0.15s; min-height: 82px;
+  padding: 3px 0; cursor: pointer; border-radius: 6px;
+  transition: background 0.15s; min-height: 78px;
+  border-right: 1px solid var(--paper-line);
+  border-bottom: 1px solid var(--paper-line);
 }
-.cal-day:active { background: var(--glass); }
+.cal-day:active { background: var(--pink-soft); }
 .cal-day.empty { cursor: default; }
+.cal-day.today {
+  background: var(--tape-yellow);
+  border-radius: 6px;
+}
 .cal-day.today .day-num {
-  background: var(--accent); color: #fff; border-radius: 50%;
-  width: 20px; height: 20px; display: flex; align-items: center;
+  background: var(--pink); color: #fff; border-radius: 50%;
+  width: 18px; height: 18px; display: flex; align-items: center;
   justify-content: center; font-size: 10px;
 }
 .day-num {
-  font-size: 10px; color: var(--text-tertiary); margin-bottom: 3px;
-  font-weight: 600;
+  font-size: 10px; color: var(--ink-light); margin-bottom: 2px;
+  font-weight: 400; font-family: 'Caveat', cursive; font-size: 12px;
 }
-.day-moods {
-  display: flex; flex-direction: column; gap: 2px; align-items: center;
-}
-.day-mood-icon {
-  width: 26px; height: 26px; display: flex;
-  align-items: center; justify-content: center;
-}
-.day-mood-icon svg { width: 100%; height: 100%; }
+.day-moods { display: flex; flex-direction: column; gap: 1px; align-items: center; }
+.day-mood-icon { width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; }
+.day-mood-icon svg { width: 100%; height: 100%; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.1)); }
+.day-mood-icon.empty-icon { opacity: 0.4; }
+.day-mood-icon.empty-icon svg { filter: none; }
 
-.day-mood-icon.empty-icon { opacity: 0.2; }
-
-/* FAB write button */
+/* ===== FAB write button — sticker style ===== */
 .fab-write {
-  position: absolute; bottom: 30px; right: 20px; z-index: 100;
+  position: absolute; bottom: 28px; right: 20px; z-index: 100;
   width: 50px; height: 50px; border-radius: 50%;
-  background: linear-gradient(135deg, var(--accent), #5570E0);
+  background: #fff;
+  border: 2px dashed var(--pink);
   display: flex; align-items: center; justify-content: center;
-  border: none; cursor: pointer;
-  box-shadow: 0 4px 20px rgba(110,142,250,0.4);
-  color: #fff; font-size: 20px;
+  cursor: pointer; box-shadow: 0 3px 12px rgba(232,154,175,0.3);
+  color: var(--pink); font-size: 20px;
   transition: transform 0.2s;
 }
-.fab-write:active { transform: scale(0.9); }
-/* Backfill pay dialog */
+.fab-write:active { transform: scale(0.9) rotate(-5deg); }
+
+/* ===== Backfill Dialog — cute note ===== */
 .backfill-dialog {
   position: absolute; inset: 0; z-index: 300;
-  background: rgba(0,0,0,0.6); display: none;
+  background: rgba(90,74,58,0.3); display: none;
   align-items: center; justify-content: center;
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(3px);
 }
 .backfill-dialog.active { display: flex; }
 .backfill-card {
-  background: var(--bg-card); border: 1px solid var(--border);
-  border-radius: 20px; padding: 28px; text-align: center;
-  width: 280px;
+  background: #fff; border: 1px dashed var(--ink-faint);
+  border-radius: 4px; padding: 28px; text-align: center;
+  width: 260px; box-shadow: 0 4px 20px rgba(90,74,58,0.15);
+  transform: rotate(-1deg);
+  position: relative;
 }
-.backfill-card .bf-title { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
-.backfill-card .bf-desc { font-size: 13px; color: var(--text-secondary); margin-bottom: 20px; }
+.backfill-card::before {
+  content: ''; position: absolute; top: -5px; left: 40%;
+  width: 50px; height: 12px; background: var(--tape-yellow);
+  transform: rotate(1deg); border-radius: 1px;
+}
+.backfill-card .bf-title { font-size: 18px; margin-bottom: 8px; font-family: 'Ma Shan Zheng', cursive; }
+.backfill-card .bf-desc { font-size: 13px; color: var(--ink-light); margin-bottom: 18px; font-family: 'Ma Shan Zheng', cursive; }
 .backfill-card .bf-btns { display: flex; gap: 10px; }
 .backfill-card .bf-btn {
-  flex: 1; padding: 10px; border-radius: 14px; border: none;
-  font-size: 13px; font-weight: 600; cursor: pointer;
+  flex: 1; padding: 9px; border-radius: 8px; border: none;
+  font-size: 13px; font-weight: 400; cursor: pointer;
+  font-family: 'Ma Shan Zheng', cursive;
 }
-.backfill-card .bf-btn.cancel { background: var(--glass); color: var(--text-secondary); border: 1px solid var(--border); }
-.backfill-card .bf-btn.pay { background: linear-gradient(135deg, var(--accent), #5570E0); color: #fff; }
+.backfill-card .bf-btn.cancel { background: var(--paper-deep); color: var(--ink-light); }
+.backfill-card .bf-btn.pay { background: var(--pink); color: #fff; }
 
-/* ===== Mood Picker ===== */
+/* ===== Mood Picker — journal page ===== */
 .mood-picker {
   position: absolute; inset: 0; z-index: 200;
-  background: var(--bg-modal); display: none; flex-direction: column;
-  background-image: radial-gradient(ellipse at 50% 30%, rgba(110,142,250,0.06) 0%, transparent 70%);
+  background: var(--paper); display: none; flex-direction: column;
 }
 .mood-picker.active { display: flex; }
 .mood-picker-header {
-  padding: 60px 24px 0; display: flex;
+  padding: 56px 24px 0; display: flex;
   justify-content: space-between; align-items: flex-start;
 }
-.mood-picker-date { font-size: 32px; font-weight: 700; }
-.mood-picker-weekday { font-size: 14px; color: var(--text-secondary); margin-top: 4px; }
+.mood-picker-date { font-size: 32px; font-family: 'Ma Shan Zheng', cursive; }
+.mood-picker-weekday { font-size: 14px; color: var(--ink-light); margin-top: 2px; font-family: 'Caveat', cursive; }
 .mood-picker-close {
-  background: var(--glass); border: 1px solid var(--border);
-  color: var(--text-secondary); width: 32px; height: 32px;
+  background: #fff; border: 1px dashed var(--ink-faint);
+  color: var(--ink-light); width: 30px; height: 30px;
   border-radius: 50%; cursor: pointer; font-size: 14px;
   display: flex; align-items: center; justify-content: center;
 }
 .mood-picker-prompt {
-  text-align: center; font-size: 16px; font-weight: 500;
-  padding: 32px 0 28px; color: var(--text-secondary);
+  text-align: center; font-size: 17px;
+  padding: 28px 0 24px; color: var(--ink-light);
+  font-family: 'Ma Shan Zheng', cursive;
 }
 .mood-picker-grid {
   flex: 1; display: flex; flex-wrap: wrap;
   justify-content: center; align-content: center;
-  gap: 16px; padding: 0 24px;
+  gap: 14px; padding: 0 20px;
 }
 .mood-option {
   display: flex; flex-direction: column; align-items: center;
-  gap: 8px; cursor: pointer; transition: transform 0.2s;
-  width: 76px;
+  gap: 6px; cursor: pointer; transition: transform 0.2s; width: 72px;
 }
-.mood-option:active { transform: scale(0.88); }
+.mood-option:active { transform: scale(0.88) rotate(-3deg); }
 .mood-option .mood-circle {
-  width: 60px; height: 60px; border-radius: 50%;
+  width: 56px; height: 56px; border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
-  border: 2px solid transparent; transition: all 0.2s;
-  background: var(--glass);
+  border: 2px dashed transparent; transition: all 0.2s;
+  background: #fff; box-shadow: var(--shadow);
 }
-.mood-option .mood-circle svg { width: 42px; height: 42px; }
+.mood-option .mood-circle svg { width: 40px; height: 40px; }
 .mood-option .mood-label {
-  font-size: 12px; color: var(--text-secondary); font-weight: 500;
+  font-size: 13px; color: var(--ink-light); font-family: 'Ma Shan Zheng', cursive;
 }
 
-/* ===== Entry Input ===== */
+/* ===== Entry Input — journal entry ===== */
 .entry-input {
   position: absolute; inset: 0; z-index: 200;
-  background: var(--bg-modal); display: none; flex-direction: column;
+  background: var(--paper); display: none; flex-direction: column;
 }
 .entry-input.active { display: flex; }
 .entry-input-header {
-  padding: 60px 20px 16px; display: flex;
+  padding: 56px 20px 12px; display: flex;
   justify-content: space-between; align-items: center;
 }
 .entry-input-header .back-btn {
-  background: none; border: none; color: var(--text-secondary);
-  font-size: 15px; cursor: pointer;
+  background: none; border: none; color: var(--ink-light);
+  font-size: 15px; cursor: pointer; font-family: 'Ma Shan Zheng', cursive;
 }
 .entry-input-header .save-btn {
-  background: linear-gradient(135deg, var(--accent), #5570E0);
-  border: none; color: #fff; font-size: 13px; font-weight: 600;
-  padding: 8px 22px; border-radius: 16px; cursor: pointer;
+  background: var(--pink); border: none; color: #fff;
+  font-size: 14px; padding: 7px 20px; border-radius: 12px; cursor: pointer;
+  font-family: 'Ma Shan Zheng', cursive;
 }
 .entry-input-card {
-  margin: 16px 20px; border-radius: 16px;
-  background: var(--bg-card); border: 1px solid var(--border);
-  padding: 24px; flex: 1; display: flex; flex-direction: column;
+  margin: 12px 20px; border-radius: 4px;
+  background: #fff; border: 1px dashed var(--ink-faint);
+  padding: 20px; flex: 1; display: flex; flex-direction: column;
+  box-shadow: var(--shadow); transform: rotate(0.3deg);
+  position: relative;
 }
-.entry-input-date { font-size: 13px; color: var(--text-tertiary); margin-bottom: 20px; }
-.entry-input-mood {
-  display: flex; flex-direction: column; align-items: center;
-  margin-bottom: 24px;
+.entry-input-card::before {
+  content: ''; position: absolute; top: -5px; right: 20px;
+  width: 60px; height: 12px; background: var(--tape-green);
+  transform: rotate(-1deg); border-radius: 1px;
 }
-.entry-input-mood .mood-big { width: 56px; height: 56px; margin-bottom: 8px; }
+.entry-input-date { font-size: 12px; color: var(--ink-light); margin-bottom: 16px; font-family: 'Caveat', cursive; }
+.entry-input-mood { display: flex; flex-direction: column; align-items: center; margin-bottom: 20px; }
+.entry-input-mood .mood-big { width: 56px; height: 56px; margin-bottom: 6px; }
 .entry-input-mood .mood-big svg { width: 100%; height: 100%; }
 .entry-input-mood .mood-tag {
-  font-size: 12px; padding: 4px 14px; border-radius: 10px; font-weight: 500;
+  font-size: 12px; padding: 3px 12px; border-radius: 8px;
+  font-family: 'Ma Shan Zheng', cursive;
 }
 .entry-input textarea {
-  flex: 1; background: none; border: none; color: var(--text-primary);
-  font-size: 15px; line-height: 1.7; resize: none; outline: none;
-  font-family: inherit;
+  flex: 1; background: none; border: none; color: var(--ink);
+  font-size: 16px; line-height: 24px; resize: none; outline: none;
+  font-family: 'Ma Shan Zheng', cursive;
+  background-image: repeating-linear-gradient(transparent, transparent 23px, var(--paper-line) 23px, var(--paper-line) 24px);
 }
-.entry-input textarea::placeholder { color: var(--text-tertiary); }
+.entry-input textarea::placeholder { color: var(--ink-faint); }
 
-/* ===== Day Detail ===== */
+/* ===== Day Detail — sticky note style ===== */
 .day-detail {
   position: absolute; inset: 0; z-index: 200;
-  background: var(--bg-modal); display: none; flex-direction: column;
+  background: var(--paper); display: none; flex-direction: column;
 }
 .day-detail.active { display: flex; }
 .day-detail-header {
-  padding: 60px 20px 16px; display: flex;
+  padding: 56px 20px 12px; display: flex;
   justify-content: space-between; align-items: center;
 }
 .day-detail-header .back-btn {
-  background: none; border: none; color: var(--text-secondary);
-  font-size: 15px; cursor: pointer;
+  background: none; border: none; color: var(--ink-light);
+  font-size: 15px; cursor: pointer; font-family: 'Ma Shan Zheng', cursive;
 }
 .day-detail-content {
   flex: 1; overflow-y: auto; padding: 0 20px 40px;
   -webkit-overflow-scrolling: touch;
 }
-.detail-date-big { font-size: 36px; font-weight: 700; margin-bottom: 2px; }
-.detail-weekday { font-size: 13px; color: var(--text-secondary); margin-bottom: 24px; }
+.detail-date-big { font-size: 36px; font-family: 'Ma Shan Zheng', cursive; }
+.detail-weekday { font-size: 14px; color: var(--ink-light); margin-bottom: 20px; font-family: 'Caveat', cursive; }
 .detail-entry {
-  background: var(--bg-card); border-radius: 16px;
-  border: 1px solid var(--border); padding: 20px; margin-bottom: 14px;
+  background: #fff; border-radius: 4px;
+  border: 1px dashed var(--ink-faint); padding: 16px; margin-bottom: 12px;
   position: relative; overflow: hidden;
+  box-shadow: var(--shadow);
+  transform: rotate(0.3deg);
 }
-.detail-entry-header { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
-.detail-entry-avatar { width: 32px; height: 32px; }
+.detail-entry:nth-child(odd) { transform: rotate(-0.5deg); }
+.detail-entry::before {
+  content: ''; position: absolute; top: -4px; left: 20px;
+  width: 45px; height: 10px; background: var(--tape-pink);
+  transform: rotate(-1deg); border-radius: 1px;
+}
+.detail-entry:nth-child(even)::before { background: var(--tape-blue); left: auto; right: 20px; }
+.detail-entry-header { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.detail-entry-avatar { width: 30px; height: 30px; }
 .detail-entry-avatar svg { width: 100%; height: 100%; }
-.detail-entry-name { font-size: 14px; font-weight: 600; }
-.detail-entry-name.user { color: var(--user-accent); }
-.detail-entry-name.npc { color: var(--npc-accent); }
+.detail-entry-name { font-size: 15px; font-family: 'Ma Shan Zheng', cursive; }
+.detail-entry-name.user { color: var(--pink); }
+.detail-entry-name.npc { color: var(--blue); }
 .detail-entry-mood-tag {
-  font-size: 11px; padding: 3px 10px; border-radius: 8px;
-  font-weight: 500; margin-left: auto;
+  font-size: 11px; padding: 2px 8px; border-radius: 6px;
+  font-family: 'Ma Shan Zheng', cursive; margin-left: auto;
 }
-.detail-entry-text { font-size: 14px; line-height: 1.7; color: var(--text-secondary); }
+.detail-entry-text {
+  font-size: 15px; line-height: 1.7; color: var(--ink-light);
+  font-family: 'Ma Shan Zheng', cursive;
+}
 .detail-entry.locked .detail-entry-text { filter: blur(6px); user-select: none; }
 .detail-lock-overlay {
   position: absolute; inset: 0; display: flex;
   flex-direction: column; align-items: center; justify-content: center;
-  background: rgba(11,14,26,0.7); border-radius: 16px;
-  backdrop-filter: blur(2px);
+  background: rgba(253,246,236,0.8); border-radius: 4px;
 }
-.detail-lock-icon { font-size: 24px; margin-bottom: 8px; }
-.detail-lock-text { font-size: 12px; color: var(--text-secondary); margin-bottom: 10px; }
+.detail-lock-icon { font-size: 22px; margin-bottom: 6px; }
+.detail-lock-text { font-size: 13px; color: var(--ink-light); margin-bottom: 8px; font-family: 'Ma Shan Zheng', cursive; }
 .detail-unlock-btn {
-  background: linear-gradient(135deg, var(--accent), #5570E0);
-  border: none; color: #fff; font-size: 12px; font-weight: 600;
-  padding: 8px 18px; border-radius: 14px; cursor: pointer;
+  background: var(--pink); border: none; color: #fff;
+  font-size: 13px; padding: 7px 16px; border-radius: 10px; cursor: pointer;
+  font-family: 'Ma Shan Zheng', cursive;
 }
 
-/* ===== Summary Page ===== */
+/* ===== Summary Page — journal spread ===== */
 .summary-page {
   position: absolute; inset: 0; z-index: 200;
-  background: var(--bg-modal); display: none; flex-direction: column;
+  background: var(--paper); display: none; flex-direction: column;
 }
 .summary-page.active { display: flex; }
 .summary-header {
-  padding: 60px 20px 16px; display: flex;
+  padding: 56px 20px 12px; display: flex;
   justify-content: space-between; align-items: center;
 }
 .summary-header .back-btn {
-  background: none; border: none; color: var(--text-secondary);
-  font-size: 15px; cursor: pointer;
+  background: none; border: none; color: var(--ink-light);
+  font-size: 15px; cursor: pointer; font-family: 'Ma Shan Zheng', cursive;
 }
 .summary-title {
-  font-size: 16px; font-weight: 700;
-  background: linear-gradient(135deg, #C4B5FD, #67B2FF);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  font-size: 18px; font-family: 'Ma Shan Zheng', cursive; color: var(--ink);
 }
 .summary-content {
-  flex: 1; overflow-y: auto; padding: 0 20px 40px;
+  flex: 1; overflow-y: auto; padding: 0 16px 40px;
   -webkit-overflow-scrolling: touch;
 }
 
-/* Mood Jar */
-.mood-jar-wrap { display: flex; justify-content: center; padding: 16px 0 24px; }
+/* Mood Jar — mason jar sketch */
+.mood-jar-wrap { display: flex; justify-content: center; padding: 10px 0 16px; }
 .mood-jar { width: 220px; height: 300px; position: relative; }
 .mood-jar .jar-outline {
   position: absolute; inset: 0;
-  border: 1.5px solid rgba(110,142,250,0.18);
-  border-radius: 10px 10px 36px 36px;
-  background: rgba(110,142,250,0.02);
+  border: 2px dashed var(--ink-faint);
+  border-radius: 8px 8px 40px 40px;
+  background: rgba(255,255,255,0.5);
 }
 .mood-jar .jar-lid {
-  position: absolute; top: -10px; left: 28px; right: 28px;
-  height: 14px; border-radius: 5px 5px 0 0;
-  background: rgba(110,142,250,0.10);
-  border: 1.5px solid rgba(110,142,250,0.18); border-bottom: none;
+  position: absolute; top: -10px; left: 30px; right: 30px;
+  height: 14px; border-radius: 4px 4px 0 0;
+  background: var(--paper-deep);
+  border: 2px dashed var(--ink-faint); border-bottom: none;
 }
 .mood-jar .jar-shine {
-  position: absolute; top: 16px; left: 14px; width: 6px; height: 60px;
-  border-radius: 3px; background: rgba(255,255,255,0.04);
-  transform: rotate(-4deg);
+  position: absolute; top: 18px; left: 16px; width: 4px; height: 50px;
+  border-radius: 2px; background: rgba(255,255,255,0.5);
+  transform: rotate(-3deg);
 }
 .mood-jar .jar-balls {
-  position: absolute; bottom: 8px; left: 8px; right: 8px; top: 16px;
+  position: absolute; bottom: 10px; left: 10px; right: 10px; top: 18px;
   overflow: hidden;
 }
 .mood-jar .jar-ball {
   width: 22px; height: 22px; display: flex;
   align-items: center; justify-content: center;
   position: absolute;
-  animation: jarDrop 0.4s ease-out forwards; opacity: 0;
+  animation: jarDrop 0.5s ease-out forwards; opacity: 0;
 }
 .mood-jar .jar-ball svg { width: 100%; height: 100%; }
 @keyframes jarDrop {
-  0% { opacity: 0; transform: translateY(var(--drop-y, -200px)) rotate(0deg) scale(0.6); }
+  0% { opacity: 0; transform: translateY(var(--drop-y, -200px)) rotate(0deg) scale(0.5); }
   15% { opacity: 1; }
   70% { transform: translateY(8px) rotate(var(--rot, 0deg)) scale(1.05); }
   85% { transform: translateY(-3px) rotate(var(--rot, 0deg)) scale(0.97); }
@@ -431,56 +450,51 @@ body {
 }
 
 .summary-section-title {
-  font-size: 13px; font-weight: 600; margin: 14px 0 6px;
-  color: var(--text-primary);
+  font-size: 15px; margin: 12px 0 6px; color: var(--ink);
+  font-family: 'Ma Shan Zheng', cursive;
+  position: relative; padding-left: 14px;
+}
+.summary-section-title::before {
+  content: ''; position: absolute; left: 0; top: 4px;
+  width: 6px; height: 14px; background: var(--tape-pink); border-radius: 1px;
+  transform: rotate(-2deg);
 }
 .summary-stats { display: flex; gap: 8px; }
 .summary-stat-card {
-  flex: 1; background: var(--bg-card);
-  border: 1px solid var(--border); border-radius: 12px;
-  padding: 10px; display: flex; align-items: center; gap: 8px;
+  flex: 1; background: #fff;
+  border: 1px dashed var(--ink-faint); border-radius: 4px;
+  padding: 8px 10px; display: flex; align-items: center; gap: 6px;
+  box-shadow: var(--shadow); transform: rotate(0.3deg);
 }
-.summary-stat-card .stat-who { font-size: 11px; font-weight: 600; white-space: nowrap; }
-.summary-stat-card .stat-mood { width: 28px; height: 28px; flex-shrink: 0; }
+.summary-stat-card:nth-child(2) { transform: rotate(-0.5deg); }
+.summary-stat-card .stat-who { font-size: 12px; font-family: 'Ma Shan Zheng', cursive; white-space: nowrap; }
+.summary-stat-card .stat-mood { width: 26px; height: 26px; flex-shrink: 0; }
 .summary-stat-card .stat-mood svg { width: 100%; height: 100%; }
-.summary-stat-card .stat-label { font-size: 11px; font-weight: 500; }
-.summary-stat-card .stat-count { font-size: 10px; color: var(--text-tertiary); margin-left: auto; }
+.summary-stat-card .stat-label { font-size: 12px; font-family: 'Ma Shan Zheng', cursive; }
+.summary-stat-card .stat-count { font-size: 11px; color: var(--ink-light); margin-left: auto; font-family: 'Caveat', cursive; }
 
 .trend-chart {
-  background: var(--bg-card); border: 1px solid var(--border);
-  border-radius: 14px; padding: 14px; margin-top: 10px;
+  background: #fff; border: 1px dashed var(--ink-faint);
+  border-radius: 4px; padding: 12px; margin-top: 8px;
+  box-shadow: var(--shadow); transform: rotate(-0.3deg);
 }
 .trend-legend {
-  display: flex; gap: 16px; margin-bottom: 10px; font-size: 10px;
+  display: flex; gap: 14px; margin-bottom: 8px; font-size: 11px;
+  font-family: 'Ma Shan Zheng', cursive;
 }
-.trend-legend span { display: flex; align-items: center; gap: 5px; color: var(--text-secondary); }
+.trend-legend span { display: flex; align-items: center; gap: 4px; color: var(--ink-light); }
 .trend-legend .leg-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-.trend-legend .leg-dot.user { background: #FF7EB3; }
-.trend-legend .leg-dot.npc { background: #67B2FF; }
-.trend-legend .leg-icon { width: 12px; height: 12px; }
-.trend-canvas { width: 100%; height: 220px; }
+.trend-legend .leg-dot.user { background: var(--pink); }
+.trend-legend .leg-dot.npc { background: var(--blue); }
+.trend-canvas { width: 100%; height: 200px; }
 .trend-chart-wrap { display: flex; gap: 0; align-items: stretch; }
 .trend-y-axis {
   display: flex; flex-direction: column; justify-content: space-between;
-  padding: 8px 4px 28px 0; width: 24px; flex-shrink: 0;
+  padding: 6px 3px 24px 0; width: 22px; flex-shrink: 0;
 }
-.trend-y-axis .y-icon { width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; }
+.trend-y-axis .y-icon { width: 14px; height: 14px; display: flex; align-items: center; justify-content: center; }
 .trend-y-axis .y-icon svg { width: 100%; height: 100%; }
 .trend-canvas-wrap { flex: 1; min-width: 0; }
-
-.mood-dist {
-  display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px;
-}
-.mood-dist-tag {
-  border-radius: 10px; padding: 6px 12px;
-  display: flex; align-items: center; gap: 5px;
-  border: 1px solid var(--border);
-  background: var(--bg-card);
-}
-.mood-dist-tag .tag-icon { width: 18px; height: 18px; }
-.mood-dist-tag .tag-icon svg { width: 100%; height: 100%; }
-.mood-dist-tag .tag-label { font-size: 11px; }
-.mood-dist-tag .tag-count { font-size: 10px; color: var(--text-tertiary); }
 
 ::-webkit-scrollbar { display: none; }
 
@@ -498,12 +512,12 @@ body {
   <div class="status-bar"></div>
   <div class="npc-banner">
     <div class="npc-avatar-wrap">
-      <div class="npc-bubble">今天过得怎么样？</div>
+      <div class="npc-bubble">今天过得怎么样？✨</div>
       <img class="npc-avatar" src="https://xingyeai-images-cdn.oss-cn-shanghai.aliyuncs.com/talkie-user-img/148772284551305/354206459928687.jpeg" alt="江晦"
-        onerror="this.style.background='linear-gradient(135deg,#4A90D9,#2A5A8A)';this.style.fontSize='28px';this.style.display='flex';this.style.alignItems='center';this.style.justifyContent='center';this.textContent='🌟';">
+        onerror="this.style.background='linear-gradient(135deg,#E89AAF,#7BA3C9)';this.style.fontSize='24px';this.style.display='flex';this.style.alignItems='center';this.style.justifyContent='center';this.textContent='🌟';">
     </div>
     <div class="npc-banner-info">
-      <div class="npc-banner-title">Eureka & 江晦 心情日记</div>
+      <div class="npc-banner-title">Eureka & 江晦 心情日记 📖</div>
       <div class="npc-banner-days">已记录 <span class="day-count" id="totalDays">0</span> 天</div>
     </div>
   </div>
@@ -539,10 +553,10 @@ body {
 <!-- Backfill Pay Dialog -->
 <div class="backfill-dialog" id="backfillDialog">
   <div class="backfill-card">
-    <div class="bf-title">补签心情</div>
+    <div class="bf-title">📝 补签心情</div>
     <div class="bf-desc" id="backfillDesc">补写过去的心情需要 💎100</div>
     <div class="bf-btns">
-      <button class="bf-btn cancel" onclick="closeBackfill()">取消</button>
+      <button class="bf-btn cancel" onclick="closeBackfill()">算了</button>
       <button class="bf-btn pay" onclick="confirmBackfill()">💎 100 补签</button>
     </div>
   </div>
@@ -565,12 +579,12 @@ body {
 <div class="entry-input" id="entryInput">
   <div class="entry-input-header">
     <button class="back-btn" onclick="closeEntryInput()">‹ 返回</button>
-    <button class="save-btn" onclick="saveEntry()">完成</button>
+    <button class="save-btn" onclick="saveEntry()">写好了 ✓</button>
   </div>
   <div class="entry-input-card">
     <div class="entry-input-date" id="inputDate"></div>
     <div class="entry-input-mood" id="inputMood"></div>
-    <textarea id="inputText" placeholder="记录此刻的心情..."></textarea>
+    <textarea id="inputText" placeholder="在这里写下此刻的心情..."></textarea>
   </div>
 </div>
 
@@ -620,9 +634,11 @@ function moonSVG(moodId, size) {
     <!-- Crescent moon body -->
     <circle cx="24" cy="24" r="20" fill="${c}" opacity="0.9"/>
     <circle cx="32" cy="16" r="14" fill="${c}" opacity="0.15"/>
-    <circle cx="32" cy="16" r="13" fill="rgba(11,14,26,0.85)"/>
+    <circle cx="32" cy="16" r="13" fill="#FDF6EC"/>
     <!-- Glow -->
     <circle cx="24" cy="24" r="20" fill="none" stroke="${c}" stroke-width="0.5" opacity="0.3"/>
+    <!-- Sticker border -->
+    <circle cx="24" cy="24" r="21" fill="none" stroke="#fff" stroke-width="2" opacity="0.6"/>
     <!-- Face -->
     ${face}
   </svg>`;
@@ -687,6 +703,9 @@ function starSVG(moodId, size) {
   const face = starFace(moodId);
   // 5-pointed star path
   return `<svg viewBox="0 0 48 48" width="${size||48}" height="${size||48}" xmlns="http://www.w3.org/2000/svg">
+    <!-- Sticker border -->
+    <path d="M24 3 L29.8 16.5 L44.5 18.2 L33.3 28.8 L36 43.5 L24 36.5 L12 43.5 L14.7 28.8 L3.5 18.2 L18.2 16.5Z"
+      fill="#fff" opacity="0.6"/>
     <path d="M24 4 L29.5 17 L44 18.5 L33 28.5 L35.5 43 L24 36 L12.5 43 L15 28.5 L4 18.5 L18.5 17Z"
       fill="${c}" opacity="0.9"/>
     <path d="M24 4 L29.5 17 L44 18.5 L33 28.5 L35.5 43 L24 36 L12.5 43 L15 28.5 L4 18.5 L18.5 17Z"
@@ -761,17 +780,17 @@ const MOODS = [
 function getMood(id) { return MOODS.find(m => m.id === id) || MOODS[0]; }
 function randomMood() { return MOODS[Math.floor(Math.random() * MOODS.length)]; }
 
-// Hollow/outline icons for empty days
+// Hollow/outline icons for empty days - pencil sketch style
 function moonOutlineSVG(size) {
   return `<svg viewBox="0 0 48 48" width="${size||48}" height="${size||48}" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="24" cy="24" r="18" fill="none" stroke="rgba(232,236,244,0.12)" stroke-width="1.5"/>
-    <circle cx="32" cy="16" r="12" fill="none" stroke="rgba(232,236,244,0.06)" stroke-width="1"/>
+    <circle cx="24" cy="24" r="18" fill="none" stroke="rgba(90,74,58,0.15)" stroke-width="1.5" stroke-dasharray="3,2"/>
+    <circle cx="32" cy="16" r="12" fill="none" stroke="rgba(90,74,58,0.08)" stroke-width="1" stroke-dasharray="2,2"/>
   </svg>`;
 }
 function starOutlineSVG(size) {
   return `<svg viewBox="0 0 48 48" width="${size||48}" height="${size||48}" xmlns="http://www.w3.org/2000/svg">
     <path d="M24 6 L28.5 17.5 L41 19 L32 27.5 L34 40 L24 34.5 L14 40 L16 27.5 L7 19 L19.5 17.5Z"
-      fill="none" stroke="rgba(232,236,244,0.12)" stroke-width="1.5" stroke-linejoin="round"/>
+      fill="none" stroke="rgba(90,74,58,0.15)" stroke-width="1.5" stroke-linejoin="round" stroke-dasharray="3,2"/>
   </svg>`;
 }
 
@@ -1138,7 +1157,7 @@ function showSummary() {
   if (userTop) {
     const m = getMood(userTop[0]); const c = MOOD_COLORS[userTop[0]];
     html += `<div class="summary-stat-card">
-      <span class="stat-who" style="color:#FF7EB3;">${USER_NAME}</span>
+      <span class="stat-who" style="color:#E89AAF;">${USER_NAME}</span>
       <div class="stat-mood">${moonSVG(userTop[0],28)}</div>
       <span class="stat-label" style="color:${c};">${m.label}</span>
       <span class="stat-count">×${userTop[1]}</span></div>`;
@@ -1146,7 +1165,7 @@ function showSummary() {
   if (npcTop) {
     const m = getMood(npcTop[0]); const c = MOOD_COLORS[npcTop[0]];
     html += `<div class="summary-stat-card">
-      <span class="stat-who" style="color:#67B2FF;">${NPC_NAME}</span>
+      <span class="stat-who" style="color:#7BA3C9;">${NPC_NAME}</span>
       <div class="stat-mood">${starSVG(npcTop[0],28)}</div>
       <span class="stat-label" style="color:${c};">${m.label}</span>
       <span class="stat-count">×${npcTop[1]}</span></div>`;
@@ -1190,7 +1209,7 @@ function drawTrend(uDay, nDay, days) {
   const cW=W-pL-pR, cH=H-pT-pB;
 
   // Horizontal grid lines for each mood level (8 levels, 0-7)
-  ctx.strokeStyle='rgba(255,255,255,0.04)'; ctx.lineWidth=1;
+  ctx.strokeStyle='rgba(90,74,58,0.06)'; ctx.lineWidth=1;
   for(let i=0;i<=7;i++){
     const y=pT+(cH/7)*i;
     ctx.beginPath();ctx.moveTo(pL,y);ctx.lineTo(W-pR,y);ctx.stroke();
@@ -1198,13 +1217,13 @@ function drawTrend(uDay, nDay, days) {
 
   // X-axis date labels: 1, 5, 10, 15, 20, 25, 30
   const xDates = [1, 5, 10, 15, 20, 25, 30].filter(d => d <= days);
-  ctx.fillStyle = 'rgba(232,236,244,0.3)';
-  ctx.font = '10px -apple-system, sans-serif';
+  ctx.fillStyle = 'rgba(90,74,58,0.35)';
+  ctx.font = '11px Caveat, cursive';
   ctx.textAlign = 'center';
   xDates.forEach(d => {
     const x = pL + ((d - 1) / (days - 1)) * cW;
     ctx.fillText(d, x, H - 6);
-    ctx.strokeStyle = 'rgba(255,255,255,0.06)'; ctx.lineWidth = 1;
+    ctx.strokeStyle = 'rgba(90,74,58,0.08)'; ctx.lineWidth = 1;
     ctx.beginPath(); ctx.moveTo(x, pT + cH); ctx.lineTo(x, pT + cH + 4); ctx.stroke();
   });
 
@@ -1227,8 +1246,8 @@ function drawTrend(uDay, nDay, days) {
     });
     ctx.stroke();
   }
-  drawLine(uDay, '#FF7EB3');
-  drawLine(nDay, '#67B2FF');
+  drawLine(uDay, '#E89AAF');
+  drawLine(nDay, '#7BA3C9');
 }
 
 // ===== Init =====
