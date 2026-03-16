@@ -242,24 +242,28 @@ body {
   font-family: -apple-system, 'PingFang SC', sans-serif;
 }
 .mood-picker-grid {
-  flex: 1; display: flex; flex-wrap: wrap;
-  justify-content: center; align-content: center;
-  gap: 14px; padding: 0 20px;
+  flex: 1; display: flex;
+  justify-content: center; align-items: center;
+  padding: 0 20px; position: relative;
+}
+.mood-circle-ring {
+  position: relative; width: 240px; height: 240px;
 }
 .mood-option {
   display: flex; flex-direction: column; align-items: center;
-  gap: 6px; cursor: pointer; transition: transform 0.2s; width: 72px;
+  gap: 4px; cursor: pointer; transition: transform 0.2s;
+  position: absolute; transform: translate(-50%, -50%);
 }
-.mood-option:active { transform: scale(0.88) rotate(-3deg); }
+.mood-option:active { transform: translate(-50%, -50%) scale(0.88) rotate(-3deg); }
 .mood-option .mood-circle {
   width: 56px; height: 56px; border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
   border: 2px solid transparent; transition: all 0.2s;
   background: rgba(255,255,255,0.05);
 }
-.mood-option .mood-circle svg { width: 40px; height: 40px; }
+.mood-option .mood-circle img { width: 40px; height: 40px; object-fit: contain; }
 .mood-option .mood-label {
-  font-size: 13px; color: var(--text-secondary); font-family: -apple-system, 'PingFang SC', sans-serif;
+  font-size: 12px; color: var(--text-secondary); font-family: -apple-system, 'PingFang SC', sans-serif;
 }
 
 /* ===== Entry Input — journal entry ===== */
@@ -320,47 +324,64 @@ body {
   flex: 1; overflow-y: auto; padding: 0 20px 40px;
   -webkit-overflow-scrolling: touch;
 }
-.detail-date-header {
-  text-align: center; padding: 8px 0 20px;
+
+/* ===== Diary date separator ===== */
+.diary-date-sep {
+  text-align: center; padding: 18px 0 8px; position: relative;
 }
-.detail-date-big {
-  font-size: 28px; font-weight: 600; color: var(--text-primary);
+.diary-date-sep .date-text {
+  font-size: 14px; font-weight: 500; color: var(--text-secondary);
+  background: var(--bg); padding: 0 12px; position: relative; z-index: 1;
 }
-.detail-weekday {
-  font-size: 13px; color: var(--text-tertiary); margin-top: 2px;
+.diary-date-sep::before {
+  content: ''; position: absolute; left: 20px; right: 20px; top: 50%;
+  height: 1px; background: rgba(255,255,255,0.06);
 }
+/* Selected date highlight */
+.diary-date-sep.selected .date-text {
+  color: var(--pink); font-weight: 600;
+}
+.diary-date-sep.selected::after {
+  content: ''; position: absolute; left: 50%; transform: translateX(-50%);
+  bottom: 2px; width: 4px; height: 4px; border-radius: 50%; background: var(--pink);
+}
+
 /* Each diary entry card */
 .detail-entry {
   background: rgba(255,255,255,0.05); border-radius: 14px;
-  padding: 20px; margin-bottom: 14px;
+  padding: 16px; margin-bottom: 10px;
   position: relative; overflow: hidden;
 }
+.detail-entry.selected {
+  border: 1.5px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.07);
+}
 .detail-entry-top {
-  display: flex; align-items: center; gap: 10px; margin-bottom: 14px;
+  display: flex; align-items: center; gap: 10px; margin-bottom: 10px;
 }
 .detail-entry-photo {
-  width: 36px; height: 36px; border-radius: 50%; object-fit: cover;
+  width: 32px; height: 32px; border-radius: 50%; object-fit: cover;
   border: 1.5px solid rgba(255,255,255,0.1); flex-shrink: 0;
 }
 .detail-entry-who {
-  font-size: 14px; font-weight: 500; flex: 1;
+  font-size: 13px; font-weight: 500; flex: 1;
 }
 .detail-entry-who.user { color: var(--pink); }
 .detail-entry-who.npc { color: var(--blue); }
-.detail-entry-mood-center {
-  display: flex; flex-direction: column; align-items: center; margin-bottom: 16px;
+.detail-entry-mood-inline {
+  display: flex; align-items: center; gap: 6px; margin-bottom: 10px;
 }
-.detail-entry-mood-center .mood-icon-big { width: 64px; height: 64px; margin-bottom: 6px; }
-.detail-entry-mood-center .mood-icon-big img { width: 100%; height: 100%; object-fit: contain; }
-.detail-entry-mood-tag {
-  font-size: 12px; padding: 3px 12px; border-radius: 8px;
+.detail-entry-mood-inline .mood-icon { width: 36px; height: 36px; }
+.detail-entry-mood-inline .mood-icon img { width: 100%; height: 100%; object-fit: contain; }
+.detail-entry-mood-inline .mood-tag {
+  font-size: 12px; padding: 2px 10px; border-radius: 8px;
 }
 .detail-entry-text {
-  font-size: 15px; line-height: 1.8; color: var(--text-secondary);
+  font-size: 14px; line-height: 1.7; color: var(--text-secondary);
 }
 /* Locked state */
 .detail-entry.locked .detail-entry-text { filter: blur(6px); user-select: none; }
-.detail-entry.locked .detail-entry-mood-center { filter: blur(4px); }
+.detail-entry.locked .detail-entry-mood-inline { filter: blur(4px); }
 .detail-lock-overlay {
   position: absolute; inset: 0; display: flex;
   flex-direction: column; align-items: center; justify-content: center;
@@ -884,20 +905,23 @@ function openMoodPicker(key, date) {
   document.getElementById('pickerDate').textContent = `${date.getMonth()+1}月${date.getDate()}日`;
   document.getElementById('pickerWeekday').textContent = `星期${WEEKDAYS[date.getDay()]}`;
   const grid = document.getElementById('moodGrid');
-  grid.innerHTML = '';
-  MOODS.forEach(m => {
-    const opt = document.createElement('div');
-    opt.className = 'mood-option';
+  const total = MOODS.length;
+  const radius = 90; // circle radius
+  const cx = 120, cy = 120; // center of 240x240
+  let ringHtml = '';
+  MOODS.forEach((m, i) => {
     const c = MOOD_COLORS[m.id];
-    opt.innerHTML = `
+    const angle = (-90 + (360 / total) * i) * Math.PI / 180;
+    const x = cx + radius * Math.cos(angle);
+    const y = cy + radius * Math.sin(angle);
+    ringHtml += `<div class="mood-option" style="left:${x.toFixed(0)}px;top:${y.toFixed(0)}px;" onclick="selectMood('${m.id}')">
       <div class="mood-circle" style="background:${c}10; border-color:${c}30;">
         ${moonSVG(m.id, 42)}
       </div>
       <span class="mood-label" style="color:${c};">${m.label}</span>
-    `;
-    opt.onclick = () => selectMood(m.id);
-    grid.appendChild(opt);
+    </div>`;
   });
+  grid.innerHTML = `<div class="mood-circle-ring">${ringHtml}</div>`;
   document.getElementById('moodPicker').classList.add('active','slide-up');
 }
 function closeMoodPicker() { document.getElementById('moodPicker').classList.remove('active','slide-up'); }
@@ -934,54 +958,74 @@ const USER_AVATAR = 'https://filecdn-images.xingyeai.com/image_inference_output/
 const NPC_AVATAR = 'https://xingyeai-images-cdn.oss-cn-shanghai.aliyuncs.com/talkie-user-img/148772284551305/354206459928687.jpeg';
 
 function showDayDetail(key, date) {
-  const entry = diaryData[key]; if (!entry) return;
   const content = document.getElementById('detailContent');
-  const weekday = `星期${WEEKDAYS[date.getDay()]}`;
-  let html = `<div class="detail-date-header">
-    <div class="detail-date-big">${date.getMonth()+1}月${date.getDate()}日</div>
-    <div class="detail-weekday">${date.getFullYear()}年 · ${weekday}</div>
-  </div>`;
+  const daysInMonth = new Date(currentYear, currentMonth+1, 0).getDate();
+  let html = '';
 
-  if (entry.user) {
-    const m = getMood(entry.user.mood); const c = MOOD_COLORS[entry.user.mood];
-    html += `<div class="detail-entry">
-      <div class="detail-entry-top">
-        <img class="detail-entry-photo" src="${USER_AVATAR}" alt="${USER_NAME}">
-        <span class="detail-entry-who user">${USER_NAME}</span>
-      </div>
-      <div class="detail-entry-mood-center">
-        <div class="mood-icon-big">${moonSVG(entry.user.mood, 64)}</div>
-        <span class="detail-entry-mood-tag" style="background:${c}18; color:${c};">${m.label}</span>
-      </div>
-      <div class="detail-entry-text">${entry.user.text}</div>
-    </div>`;
-  }
+  for (let d = 1; d <= daysInMonth; d++) {
+    const dayKey = `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const entry = diaryData[dayKey];
+    if (!entry) continue;
+    const dayDate = new Date(dayKey + 'T00:00:00');
+    const weekday = `星期${WEEKDAYS[dayDate.getDay()]}`;
+    const isSelected = dayKey === key;
 
-  if (entry.npc) {
-    const m = getMood(entry.npc.mood); const c = MOOD_COLORS[entry.npc.mood];
-    const locked = entry.npc.locked;
-    html += `<div class="detail-entry${locked?' locked':''}">
-      <div class="detail-entry-top">
-        <img class="detail-entry-photo" src="${NPC_AVATAR}" alt="${NPC_NAME}">
-        <span class="detail-entry-who npc">${NPC_NAME}</span>
-      </div>
-      <div class="detail-entry-mood-center">
-        <div class="mood-icon-big">${starSVG(entry.npc.mood, 64)}</div>
-        <span class="detail-entry-mood-tag" style="background:${c}18; color:${c};">${m.label}</span>
-      </div>
-      <div class="detail-entry-text">${entry.npc.text}</div>
-      ${locked?`<div class="detail-lock-overlay">
-        <span class="detail-lock-text">${NPC_NAME}的心情还未解锁</span>
-        <button class="detail-unlock-btn" onclick="unlockEntry('${key}')">💎 100 解锁</button>
-      </div>`:''}
+    html += `<div class="diary-date-sep${isSelected?' selected':''}" id="date-${dayKey}">
+      <span class="date-text">${dayDate.getMonth()+1}月${d}日 · ${weekday}</span>
     </div>`;
+
+    if (entry.user) {
+      const m = getMood(entry.user.mood); const c = MOOD_COLORS[entry.user.mood];
+      html += `<div class="detail-entry${isSelected?' selected':''}">
+        <div class="detail-entry-top">
+          <img class="detail-entry-photo" src="${USER_AVATAR}" alt="${USER_NAME}">
+          <span class="detail-entry-who user">${USER_NAME}</span>
+        </div>
+        <div class="detail-entry-mood-inline">
+          <div class="mood-icon">${moonSVG(entry.user.mood, 36)}</div>
+          <span class="mood-tag" style="background:${c}18; color:${c};">${m.label}</span>
+        </div>
+        <div class="detail-entry-text">${entry.user.text}</div>
+      </div>`;
+    }
+
+    if (entry.npc) {
+      const m = getMood(entry.npc.mood); const c = MOOD_COLORS[entry.npc.mood];
+      const locked = entry.npc.locked;
+      html += `<div class="detail-entry${locked?' locked':''}${isSelected?' selected':''}">
+        <div class="detail-entry-top">
+          <img class="detail-entry-photo" src="${NPC_AVATAR}" alt="${NPC_NAME}">
+          <span class="detail-entry-who npc">${NPC_NAME}</span>
+        </div>
+        <div class="detail-entry-mood-inline">
+          <div class="mood-icon">${starSVG(entry.npc.mood, 36)}</div>
+          <span class="mood-tag" style="background:${c}18; color:${c};">${m.label}</span>
+        </div>
+        <div class="detail-entry-text">${entry.npc.text}</div>
+        ${locked?`<div class="detail-lock-overlay">
+          <span class="detail-lock-text">${NPC_NAME}的心情还未解锁</span>
+          <button class="detail-unlock-btn" onclick="unlockEntry('${dayKey}')">💎 100 解锁</button>
+        </div>`:''}
+      </div>`;
+    }
   }
   content.innerHTML = html;
   document.getElementById('dayDetail').classList.add('active','slide-up');
+  // Auto-scroll to selected date
+  setTimeout(() => {
+    const target = document.getElementById('date-' + key);
+    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 100);
 }
 function closeDayDetail() { document.getElementById('dayDetail').classList.remove('active','slide-up'); }
 function unlockEntry(key) {
-  if (diaryData[key]?.npc) { diaryData[key].npc.locked = false; const d = new Date(key+'T00:00:00'); showDayDetail(key, d); }
+  if (diaryData[key]?.npc) {
+    diaryData[key].npc.locked = false;
+    // Re-render with same scroll position
+    const scrollTop = document.getElementById('detailContent').scrollTop;
+    showDayDetail(key, new Date(key+'T00:00:00'));
+    setTimeout(() => { document.getElementById('detailContent').scrollTop = scrollTop; }, 50);
+  }
 }
 
 // ===== Summary =====
