@@ -513,7 +513,7 @@ body {
   overflow: hidden; border-radius: 0 0 30px 30px;
 }
 .mood-jar .jar-ball {
-  width: 24px; height: 24px; display: flex;
+  width: 22px; height: 22px; display: flex;
   align-items: center; justify-content: center;
   position: absolute;
   animation: jarDrop 0.4s ease-out forwards; opacity: 0;
@@ -1125,7 +1125,7 @@ function unlockEntry(key) {
 
 // ===== Summary =====
 function buildJarHtml(moods, type, jarW, jarH, iconSize) {
-  const items = moods.slice(0, 30);
+  const items = moods.slice(0, 31);
   const placed = [];
   function tryPlace() {
     const r = (Math.random() + Math.random()) / 2;
@@ -1177,7 +1177,7 @@ function showSummaryForMonth(year, month) {
   }
 
   // Dual jars
-  const jarW = 136, jarH = 170, iconSize = 24;
+  const jarW = 136, jarH = 170, iconSize = 22;
   const userJar = buildJarHtml(userMoods, 'moon', jarW, jarH, iconSize);
   const npcJar = buildJarHtml(npcMoods, 'star', jarW, jarH, iconSize);
 
