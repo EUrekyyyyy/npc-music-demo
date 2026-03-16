@@ -1049,7 +1049,7 @@ function showDayDetail(key, date) {
   const daysInMonth = new Date(currentYear, currentMonth+1, 0).getDate();
   let html = '';
 
-  for (let d = 1; d <= daysInMonth; d++) {
+  for (let d = daysInMonth; d >= 1; d--) {
     const dayKey = `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
     const entry = diaryData[dayKey];
     if (!entry) continue;
