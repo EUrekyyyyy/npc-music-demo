@@ -481,17 +481,11 @@ body {
 /* ===== Dual Jars ===== */
 .dual-jars { display: flex; gap: 10px; padding: 10px 0 8px; justify-content: center; }
 .jar-col { display: flex; flex-direction: column; align-items: center; flex: 1; }
-.jar-label {
-  display: flex; align-items: center; gap: 5px;
-  font-size: 12px; color: var(--text-secondary); margin-top: 8px;
+.jar-avatar {
+  width: 36px; height: 36px; border-radius: 50%; object-fit: cover;
+  border: 2px solid rgba(255,255,255,0.1); margin-bottom: 6px;
 }
-.jar-label .jar-avatar {
-  width: 24px; height: 24px; border-radius: 50%; object-fit: cover;
-  border: 1.5px solid rgba(255,255,255,0.1);
-}
-.jar-label .jar-stat {
-  font-size: 13px; font-weight: 500; color: var(--text-primary);
-}
+.jar-label { font-size: 12px; color: var(--text-secondary); margin-top: 6px; }
 .mood-jar { width: 100%; max-width: 160px; height: 220px; position: relative; }
 .mood-jar .jar-outline {
   position: absolute; top: 22px; left: 6px; right: 6px; bottom: 0;
@@ -594,6 +588,21 @@ body {
 .summary-stat-card .stat-mood { width: 28px; height: 28px; flex-shrink: 0; }
 .summary-stat-card .stat-mood img { width: 100%; height: 100%; object-fit: contain; }
 .summary-stat-card .stat-count { font-size: 14px; font-weight: 500; color: var(--text-secondary); }
+
+/* ===== Top Mood Stats ===== */
+.summary-stats { display: flex; gap: 8px; }
+.summary-stat-card {
+  flex: 1; background: rgba(255,255,255,0.05);
+  border-radius: 10px;
+  padding: 10px 12px; display: flex; align-items: center; gap: 8px;
+}
+.summary-stat-card .stat-avatar {
+  width: 28px; height: 28px; border-radius: 50%; object-fit: cover;
+  border: 1.5px solid rgba(255,255,255,0.1); flex-shrink: 0;
+}
+.summary-stat-card .stat-mood { width: 32px; height: 32px; flex-shrink: 0; }
+.summary-stat-card .stat-mood img { width: 100%; height: 100%; object-fit: contain; }
+.summary-stat-card .stat-count { font-size: 16px; font-weight: 600; color: var(--text-primary); margin-left: auto; }
 
 /* ===== Simple Trend Line Chart ===== */
 .trend-simple {
@@ -1172,33 +1181,42 @@ function showSummaryForMonth(year, month) {
   const userJar = buildJarHtml(userMoods, 'moon', jarW, jarH, iconSize);
   const npcJar = buildJarHtml(npcMoods, 'star', jarW, jarH, iconSize);
 
-  const userTop = Object.entries(userCount).sort((a,b)=>b[1]-a[1])[0];
-  const npcTop = Object.entries(npcCount).sort((a,b)=>b[1]-a[1])[0];
-
-  // User jar label: avatar + top mood
-  const userLabel = userTop
-    ? `<img class="jar-avatar" src="${USER_AVATAR}" alt="${USER_NAME}"> ${moonSVG(userTop[0],18)} <span class="jar-stat">×${userTop[1]}</span>`
-    : `<img class="jar-avatar" src="${USER_AVATAR}" alt="${USER_NAME}">`;
-  const npcLabel = npcTop
-    ? `<img class="jar-avatar" src="${NPC_AVATAR}" alt="${NPC_NAME}"> ${starSVG(npcTop[0],18)} <span class="jar-stat">×${npcTop[1]}</span>`
-    : `<img class="jar-avatar" src="${NPC_AVATAR}" alt="${NPC_NAME}">`;
-
   let html = `<div class="dual-jars">
     <div class="jar-col">
+      <img class="jar-avatar" src="${USER_AVATAR}" alt="${USER_NAME}">
       <div class="mood-jar">
         <div class="jar-outline"></div><div class="jar-neck"></div><div class="jar-lid"></div><div class="jar-shine"></div>
         <div class="jar-balls">${userJar}</div>
       </div>
-      <div class="jar-label">${userLabel}</div>
+      <div class="jar-label">我的心情</div>
     </div>
     <div class="jar-col">
+      <img class="jar-avatar" src="${NPC_AVATAR}" alt="${NPC_NAME}">
       <div class="mood-jar">
         <div class="jar-outline"></div><div class="jar-neck"></div><div class="jar-lid"></div><div class="jar-shine"></div>
         <div class="jar-balls">${npcJar}</div>
       </div>
-      <div class="jar-label">${npcLabel}</div>
+      <div class="jar-label">Ta的心情</div>
     </div>
   </div>`;
+
+  // 本月最多心情
+  const userTop = Object.entries(userCount).sort((a,b)=>b[1]-a[1])[0];
+  const npcTop = Object.entries(npcCount).sort((a,b)=>b[1]-a[1])[0];
+  html += `<div class="summary-section-title">本月最多心情</div><div class="summary-stats">`;
+  if (userTop) {
+    html += `<div class="summary-stat-card">
+      <img class="stat-avatar" src="${USER_AVATAR}" alt="${USER_NAME}">
+      <div class="stat-mood">${moonSVG(userTop[0],28)}</div>
+      <span class="stat-count">×${userTop[1]}</span></div>`;
+  }
+  if (npcTop) {
+    html += `<div class="summary-stat-card">
+      <img class="stat-avatar" src="${NPC_AVATAR}" alt="${NPC_NAME}">
+      <div class="stat-mood">${starSVG(npcTop[0],28)}</div>
+      <span class="stat-count">×${npcTop[1]}</span></div>`;
+  }
+  html += `</div>`;
 
   // Trend line chart
   html += `<div class="summary-section-title">心情趋势</div><div class="trend-simple">
@@ -1211,8 +1229,8 @@ function showSummaryForMonth(year, month) {
       <div class="trend-canvas-wrap"><canvas id="trendCanvas"></canvas></div>
     </div>
     <div class="trend-simple-legend">
-      <span><span class="leg-dot user"></span>🌙</span>
-      <span><span class="leg-dot npc"></span>⭐</span>
+      <span><span class="leg-dot user"></span>${USER_NAME}</span>
+      <span><span class="leg-dot npc"></span>${NPC_NAME}</span>
     </div>
   </div>`;
 
