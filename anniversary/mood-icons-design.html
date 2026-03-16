@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>心情图标设计稿</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: #0B0E1A;
+  font-family: -apple-system, 'PingFang SC', sans-serif;
+  color: #E8ECF4;
+  padding: 40px 20px;
+  display: flex; flex-direction: column; align-items: center;
+  min-height: 100vh;
+}
+h1 {
+  font-size: 24px; font-weight: 700; margin-bottom: 8px;
+  background: linear-gradient(135deg, #C4B5FD, #67B2FF);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.subtitle { font-size: 13px; color: rgba(232,236,244,0.4); margin-bottom: 40px; }
+
+.section-title {
+  font-size: 16px; font-weight: 600; margin: 32px 0 20px;
+  display: flex; align-items: center; gap: 8px;
+}
+.section-title .badge {
+  font-size: 11px; padding: 3px 10px; border-radius: 8px;
+  font-weight: 500;
+}
+
+.grid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 24px; max-width: 480px; width: 100%;
+}
+.icon-cell {
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+}
+.icon-wrap {
+  width: 80px; height: 80px; border-radius: 20px;
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+}
+.icon-wrap svg { filter: drop-shadow(0 2px 8px var(--glow)); }
+.icon-label { font-size: 12px; color: rgba(232,236,244,0.5); font-weight: 500; }
+.icon-color { font-size: 10px; color: rgba(232,236,244,0.25); font-family: monospace; }
+
+.divider {
+  width: 100%; max-width: 480px; height: 1px;
+  background: rgba(255,255,255,0.05); margin: 32px 0;
+}
+
+/* Size comparison */
+.sizes-row {
+  display: flex; gap: 24px; align-items: flex-end; margin-top: 20px;
+}
+.size-item {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+}
+.size-label { font-size: 10px; color: rgba(232,236,244,0.3); }
+</style>
+</head>
+<body>
+
+<h1>心情图标设计系统</h1>
+<p class="subtitle">🌙 月亮 = 用户　　⭐ 星星 = 智能体</p>
+
+<!-- ===== Moon Series ===== -->
+<div class="section-title">
+  <span>🌙 月亮表情</span>
+  <span class="badge" style="background:rgba(196,181,253,0.12);color:#C4B5FD;">用户</span>
+</div>
+
+<div class="grid" id="moonGrid"></div>
+
+<div class="divider"></div>
+
+<!-- ===== Star Series ===== -->
+<div class="section-title">
+  <span>⭐ 星星表情</span>
+  <span class="badge" style="background:rgba(103,178,255,0.12);color:#67B2FF;">智能体</span>
+</div>
+
+<div class="grid" id="starGrid"></div>
+
+<div class="divider"></div>
+
+<!-- ===== Size Preview ===== -->
+<div class="section-title">📐 尺寸预览</div>
+<div class="sizes-row" id="sizePreview"></div>
+
+<div class="divider"></div>
+
+<!-- ===== In-Context Preview ===== -->
+<div class="section-title">📅 日历效果预览</div>
+<div id="calPreview" style="margin-top:12px;"></div>
+
+<script>
+// ===== Color Config =====
+const MOODS = [
+  { id: 'happy',     label: '开心', color: '#FFBA5C', glow: 'rgba(255,186,92,0.25)' },
+  { id: 'heartbeat', label: '心动', color: '#FF7EB3', glow: 'rgba(255,126,179,0.25)' },
+  { id: 'excited',   label: '兴奋', color: '#FFD93D', glow: 'rgba(255,217,61,0.25)' },
+  { id: 'calm',      label: '平静', color: '#7EC8A0', glow: 'rgba(126,200,160,0.25)' },
+  { id: 'tired',     label: '心累', color: '#8E8EA0', glow: 'rgba(142,142,160,0.2)' },
+  { id: 'angry',     label: '生气', color: '#FF6B6B', glow: 'rgba(255,107,107,0.25)' },
+  { id: 'irritated', label: '烦躁', color: '#A78BFA', glow: 'rgba(167,139,250,0.25)' },
+  { id: 'sad',       label: '伤心', color: '#6BAFFF', glow: 'rgba(107,175,255,0.25)' },
+];
+
+// ===== Moon SVG Generator =====
+function moonSVG(mood, size) {
+  const c = mood.color;
+  const s = size || 64;
+  // Scale factor relative to 64
+  const face = moonFace(mood.id, c);
+  return `<svg viewBox="0 0 64 64" width="${s}" height="${s}" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <radialGradient id="mg_${mood.id}" cx="35%" cy="35%">
+        <stop offset="0%" stop-color="${c}" stop-opacity="1"/>
+        <stop offset="100%" stop-color="${darken(c,30)}" stop-opacity="0.9"/>
+      </radialGradient>
+      <filter id="glow_m_${mood.id}">
+        <feGaussianBlur stdDeviation="2" result="g"/>
+        <feMerge><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+    </defs>
+    <!-- Moon body -->
+    <circle cx="30" cy="32" r="26" fill="url(#mg_${mood.id})" filter="url(#glow_m_${mood.id})"/>
+    <!-- Crescent cutout -->
+    <circle cx="42" cy="20" r="20" fill="#0B0E1A"/>
+    <!-- Subtle inner glow -->
+    <circle cx="30" cy="32" r="25" fill="none" stroke="${c}" stroke-width="0.8" opacity="0.15"/>
+    <!-- Craters/spots for texture -->
+    <circle cx="18" cy="38" r="3" fill="${c}" opacity="0.12"/>
+    <circle cx="26" cy="44" r="2" fill="${c}" opacity="0.10"/>
+    <!-- Face -->
+    ${face}
+  </svg>`;
+}
+
+function moonFace(id, c) {
+  const dk = darken(c, 50);
+  const faces = {
+    happy: `
+      <!-- Eyes -->
+      <ellipse cx="20" cy="28" rx="2.5" ry="2.8" fill="${dk}"/>
+      <ellipse cx="30" cy="26" rx="2.5" ry="2.8" fill="${dk}"/>
+      <!-- Eye highlights -->
+      <circle cx="21" cy="27" r="1" fill="#fff" opacity="0.7"/>
+      <circle cx="31" cy="25" r="1" fill="#fff" opacity="0.7"/>
+      <!-- Smile -->
+      <path d="M17 34 Q24 41 33 34" stroke="${dk}" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <!-- Blush -->
+      <ellipse cx="14" cy="34" rx="3.5" ry="2" fill="${c}" opacity="0.25"/>
+    `,
+    heartbeat: `
+      <!-- Heart eyes -->
+      <path d="M18 26 C18 24 20 23 21 25 C22 23 24 24 24 26 C24 29 21 31 21 31 C21 31 18 29 18 26Z" fill="#FF4080" opacity="0.8"/>
+      <path d="M28 24 C28 22 30 21 31 23 C32 21 34 22 34 24 C34 27 31 29 31 29 C31 29 28 27 28 24Z" fill="#FF4080" opacity="0.8"/>
+      <!-- Smile -->
+      <path d="M18 35 Q24 40 32 35" stroke="${darken(c,50)}" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+      <!-- Blush -->
+      <ellipse cx="14" cy="34" rx="3.5" ry="2.2" fill="#FF7EB3" opacity="0.35"/>
+      <ellipse cx="34" cy="32" rx="3" ry="2" fill="#FF7EB3" opacity="0.3"/>
+      <!-- Sparkle -->
+      <path d="M38 16 L39 13 L40 16 L43 17 L40 18 L39 21 L38 18 L35 17Z" fill="#FF7EB3" opacity="0.5"/>
+    `,
+    excited: `
+      <!-- Star eyes -->
+      <polygon points="20,24 21.5,27 25,27.5 22.5,29.5 23,33 20,31 17,33 17.5,29.5 15,27.5 18.5,27" fill="${dk}" opacity="0.9"/>
+      <polygon points="30,22 31.5,25 35,25.5 32.5,27.5 33,31 30,29 27,31 27.5,27.5 25,25.5 28.5,25" fill="${dk}" opacity="0.9"/>
+      <!-- Star highlights -->
+      <circle cx="20" cy="28" r="1.2" fill="#fff" opacity="0.5"/>
+      <circle cx="30" cy="26" r="1.2" fill="#fff" opacity="0.5"/>
+      <!-- Big open smile -->
+      <ellipse cx="24" cy="37" rx="6" ry="4.5" fill="${dk}" opacity="0.7"/>
+      <ellipse cx="24" cy="35.5" rx="5" ry="2" fill="${c}" opacity="0.3"/>
+      <!-- Sparkles -->
+      <circle cx="8" cy="22" r="1.5" fill="${c}" opacity="0.4"/>
+      <circle cx="38" cy="14" r="1" fill="${c}" opacity="0.3"/>
+    `,
+    calm: `
+      <!-- Closed eyes (happy arcs) -->
+      <path d="M17 28 Q20 25 23 28" stroke="${dk}" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <path d="M27 26 Q30 23 33 26" stroke="${dk}" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <!-- Gentle smile -->
+      <path d="M19 34 Q24 37 30 34" stroke="${dk}" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+      <!-- Subtle blush -->
+      <ellipse cx="15" cy="33" rx="3" ry="1.8" fill="${c}" opacity="0.15"/>
+      <!-- Zzz -->
+      <text x="38" y="20" font-size="8" fill="${c}" opacity="0.3" font-weight="bold">z</text>
+      <text x="42" y="16" font-size="6" fill="${c}" opacity="0.2" font-weight="bold">z</text>
+    `,
+    tired: `
+      <!-- Droopy half-closed eyes -->
+      <path d="M17 27 L24 27" stroke="${dk}" stroke-width="2" stroke-linecap="round"/>
+      <path d="M27 25 L34 25" stroke="${dk}" stroke-width="2" stroke-linecap="round"/>
+      <ellipse cx="20" cy="28.5" rx="2.5" ry="1.5" fill="${dk}" opacity="0.5"/>
+      <ellipse cx="30" cy="26.5" rx="2.5" ry="1.5" fill="${dk}" opacity="0.5"/>
+      <!-- Slight frown -->
+      <path d="M20 35 Q24 33 28 35" stroke="${dk}" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <!-- Sweat drop -->
+      <ellipse cx="12" cy="32" rx="1.8" ry="2.8" fill="#6BAFFF" opacity="0.35"/>
+    `,
+    angry: `
+      <!-- Angry eyebrows -->
+      <line x1="15" y1="23" x2="23" y2="26" stroke="${dk}" stroke-width="2.2" stroke-linecap="round"/>
+      <line x1="35" y1="21" x2="27" y2="24" stroke="${dk}" stroke-width="2.2" stroke-linecap="round"/>
+      <!-- Angry eyes -->
+      <circle cx="20" cy="29" r="2.2" fill="${dk}"/>
+      <circle cx="30" cy="27" r="2.2" fill="${dk}"/>
+      <circle cx="20.5" cy="28.5" r="0.8" fill="#fff" opacity="0.6"/>
+      <circle cx="30.5" cy="26.5" r="0.8" fill="#fff" opacity="0.6"/>
+      <!-- Angry pout -->
+      <path d="M19 36 Q24 33 29 36" stroke="${dk}" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <!-- Steam puffs -->
+      <circle cx="8" cy="20" r="2" fill="${c}" opacity="0.2"/>
+      <circle cx="5" cy="17" r="1.5" fill="${c}" opacity="0.15"/>
+      <circle cx="40" cy="12" r="2" fill="${c}" opacity="0.2"/>
+    `,
+    irritated: `
+      <!-- Furrowed brows -->
+      <line x1="16" y1="24" x2="22" y2="26" stroke="${dk}" stroke-width="1.8" stroke-linecap="round"/>
+      <line x1="34" y1="22" x2="28" y2="24" stroke="${dk}" stroke-width="1.8" stroke-linecap="round"/>
+      <!-- Eyes (one squinting) -->
+      <circle cx="20" cy="29" r="2" fill="${dk}"/>
+      <path d="M27 26 Q30 28 33 26" stroke="${dk}" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <!-- Squiggly mouth -->
+      <path d="M18 35 Q21 37 24 35 Q27 33 30 35" stroke="${dk}" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+      <!-- Irritation mark -->
+      <path d="M38 14 L42 14 L42 18 M40 14 L40 18 L44 18" stroke="${c}" stroke-width="1.2" fill="none" opacity="0.4"/>
+    `,
+    sad: `
+      <!-- Big teary eyes -->
+      <ellipse cx="20" cy="28" rx="3" ry="3.5" fill="${dk}"/>
+      <ellipse cx="30" cy="26" rx="3" ry="3.5" fill="${dk}"/>
+      <!-- Eye highlights (watery) -->
+      <circle cx="21.5" cy="27" r="1.5" fill="#fff" opacity="0.6"/>
+      <circle cx="31.5" cy="25" r="1.5" fill="#fff" opacity="0.6"/>
+      <circle cx="19" cy="29" r="0.8" fill="#fff" opacity="0.3"/>
+      <circle cx="29" cy="27" r="0.8" fill="#fff" opacity="0.3"/>
+      <!-- Sad mouth -->
+      <path d="M19 36 Q24 33 29 36" stroke="${dk}" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+      <!-- Tear drops -->
+      <ellipse cx="23" cy="33" rx="1.2" ry="2.2" fill="#6BAFFF" opacity="0.5"/>
+      <ellipse cx="33" cy="31" rx="1" ry="1.8" fill="#6BAFFF" opacity="0.4"/>
+    `,
+  };
+  return faces[id] || faces.calm;
+}
+
+// ===== Star SVG Generator =====
+function starSVG(mood, size) {
+  const c = mood.color;
+  const s = size || 64;
+  const face = starFace(mood.id, c);
+  return `<svg viewBox="0 0 64 64" width="${s}" height="${s}" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="sg_${mood.id}" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="${lighten(c,15)}"/>
+        <stop offset="100%" stop-color="${darken(c,15)}"/>
+      </linearGradient>
+      <filter id="glow_s_${mood.id}">
+        <feGaussianBlur stdDeviation="1.5" result="g"/>
+        <feMerge><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+    </defs>
+    <!-- Star body (rounded) -->
+    <path d="M32 4 L38 22 L56 24 L43 36 L46 54 L32 46 L18 54 L21 36 L8 24 L26 22Z"
+      fill="url(#sg_${mood.id})" filter="url(#glow_s_${mood.id})"
+      stroke="${c}" stroke-width="0.5" stroke-opacity="0.2"/>
+    <!-- Inner highlight -->
+    <path d="M32 10 L36 22 L48 24 L39 33 L41 45 L32 40 L23 45 L25 33 L16 24 L28 22Z"
+      fill="${c}" opacity="0.08"/>
+    <!-- Face -->
+    ${face}
+  </svg>`;
+}
+
+function starFace(id, c) {
+  const dk = darken(c, 50);
+  const faces = {
+    happy: `
+      <ellipse cx="27" cy="30" rx="2.5" ry="2.8" fill="${dk}"/>
+      <ellipse cx="37" cy="30" rx="2.5" ry="2.8" fill="${dk}"/>
+      <circle cx="28" cy="29" r="1" fill="#fff" opacity="0.7"/>
+      <circle cx="38" cy="29" r="1" fill="#fff" opacity="0.7"/>
+      <path d="M25 36 Q32 42 39 36" stroke="${dk}" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <ellipse cx="23" cy="35" rx="3" ry="2" fill="${c}" opacity="0.2"/>
+      <ellipse cx="41" cy="35" rx="3" ry="2" fill="${c}" opacity="0.2"/>
+    `,
+    heartbeat: `
+      <path d="M25 28 C25 26 27 25 28 27 C29 25 31 26 31 28 C31 31 28 33 28 33 C28 33 25 31 25 28Z" fill="#FF4080" opacity="0.8"/>
+      <path d="M33 28 C33 26 35 25 36 27 C37 25 39 26 39 28 C39 31 36 33 36 33 C36 33 33 31 33 28Z" fill="#FF4080" opacity="0.8"/>
+      <path d="M26 37 Q32 42 38 37" stroke="${dk}" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+      <ellipse cx="23" cy="36" rx="3" ry="2" fill="#FF7EB3" opacity="0.3"/>
+      <ellipse cx="41" cy="36" rx="3" ry="2" fill="#FF7EB3" opacity="0.3"/>
+    `,
+    excited: `
+      <polygon points="27,27 28.2,29.5 31,30 29,31.8 29.3,34.5 27,33 24.7,34.5 25,31.8 23,30 25.8,29.5" fill="${dk}" opacity="0.85"/>
+      <polygon points="37,27 38.2,29.5 41,30 39,31.8 39.3,34.5 37,33 34.7,34.5 35,31.8 33,30 35.8,29.5" fill="${dk}" opacity="0.85"/>
+      <ellipse cx="32" cy="39" rx="5" ry="4" fill="${dk}" opacity="0.6"/>
+      <ellipse cx="32" cy="37.5" rx="4" ry="1.8" fill="${c}" opacity="0.25"/>
+      <circle cx="18" cy="20" r="1.2" fill="${c}" opacity="0.4"/>
+      <circle cx="46" cy="20" r="1" fill="${c}" opacity="0.3"/>
+    `,
+    calm: `
+      <path d="M24 30 Q27 27 30 30" stroke="${dk}" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <path d="M34 30 Q37 27 40 30" stroke="${dk}" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <path d="M28 36 Q32 39 36 36" stroke="${dk}" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+      <ellipse cx="24" cy="35" rx="2.5" ry="1.5" fill="${c}" opacity="0.12"/>
+      <ellipse cx="40" cy="35" rx="2.5" ry="1.5" fill="${c}" opacity="0.12"/>
+    `,
+    tired: `
+      <path d="M24 29 L30 29" stroke="${dk}" stroke-width="2" stroke-linecap="round"/>
+      <path d="M34 29 L40 29" stroke="${dk}" stroke-width="2" stroke-linecap="round"/>
+      <ellipse cx="27" cy="30.5" rx="2.2" ry="1.3" fill="${dk}" opacity="0.45"/>
+      <ellipse cx="37" cy="30.5" rx="2.2" ry="1.3" fill="${dk}" opacity="0.45"/>
+      <path d="M29 37 Q32 35 35 37" stroke="${dk}" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <ellipse cx="21" cy="34" rx="1.5" ry="2.5" fill="#6BAFFF" opacity="0.3"/>
+    `,
+    angry: `
+      <line x1="22" y1="25" x2="30" y2="28" stroke="${dk}" stroke-width="2.2" stroke-linecap="round"/>
+      <line x1="42" y1="25" x2="34" y2="28" stroke="${dk}" stroke-width="2.2" stroke-linecap="round"/>
+      <circle cx="27" cy="31" r="2.2" fill="${dk}"/>
+      <circle cx="37" cy="31" r="2.2" fill="${dk}"/>
+      <circle cx="27.5" cy="30.5" r="0.8" fill="#fff" opacity="0.6"/>
+      <circle cx="37.5" cy="30.5" r="0.8" fill="#fff" opacity="0.6"/>
+      <path d="M27 38 Q32 35 37 38" stroke="${dk}" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <circle cx="15" cy="18" r="1.8" fill="${c}" opacity="0.2"/>
+      <circle cx="49" cy="18" r="1.8" fill="${c}" opacity="0.2"/>
+    `,
+    irritated: `
+      <line x1="23" y1="26" x2="29" y2="28" stroke="${dk}" stroke-width="1.8" stroke-linecap="round"/>
+      <line x1="41" y1="26" x2="35" y2="28" stroke="${dk}" stroke-width="1.8" stroke-linecap="round"/>
+      <circle cx="27" cy="31" r="2" fill="${dk}"/>
+      <path d="M34 30 Q37 32 40 30" stroke="${dk}" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <path d="M27 37 Q30 39 32 37 Q34 35 37 37" stroke="${dk}" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+    `,
+    sad: `
+      <ellipse cx="27" cy="30" rx="3" ry="3.5" fill="${dk}"/>
+      <ellipse cx="37" cy="30" rx="3" ry="3.5" fill="${dk}"/>
+      <circle cx="28.5" cy="29" r="1.5" fill="#fff" opacity="0.6"/>
+      <circle cx="38.5" cy="29" r="1.5" fill="#fff" opacity="0.6"/>
+      <circle cx="26" cy="31" r="0.7" fill="#fff" opacity="0.3"/>
+      <circle cx="36" cy="31" r="0.7" fill="#fff" opacity="0.3"/>
+      <path d="M28 38 Q32 35 36 38" stroke="${dk}" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+      <ellipse cx="30" cy="35" rx="1.2" ry="2" fill="#6BAFFF" opacity="0.5"/>
+      <ellipse cx="40" cy="35" rx="1" ry="1.8" fill="#6BAFFF" opacity="0.4"/>
+    `,
+  };
+  return faces[id] || faces.calm;
+}
+
+// ===== Color Helpers =====
+function darken(hex, pct) {
+  const r = parseInt(hex.slice(1,3),16), g = parseInt(hex.slice(3,5),16), b = parseInt(hex.slice(5,7),16);
+  const f = (100-pct)/100;
+  return `rgb(${Math.round(r*f)},${Math.round(g*f)},${Math.round(b*f)})`;
+}
+function lighten(hex, pct) {
+  const r = parseInt(hex.slice(1,3),16), g = parseInt(hex.slice(3,5),16), b = parseInt(hex.slice(5,7),16);
+  const f = pct/100;
+  return `rgb(${Math.min(255,Math.round(r+(255-r)*f))},${Math.min(255,Math.round(g+(255-g)*f))},${Math.min(255,Math.round(b+(255-b)*f))})`;
+}
+
+// ===== Render Moon Grid =====
+const moonGrid = document.getElementById('moonGrid');
+MOODS.forEach(m => {
+  const cell = document.createElement('div');
+  cell.className = 'icon-cell';
+  cell.innerHTML = `
+    <div class="icon-wrap" style="background:${m.color}08; --glow:${m.glow};">
+      ${moonSVG(m, 64)}
+    </div>
+    <span class="icon-label">${m.label}</span>
+    <span class="icon-color">${m.color}</span>
+  `;
+  moonGrid.appendChild(cell);
+});
+
+// ===== Render Star Grid =====
+const starGrid = document.getElementById('starGrid');
+MOODS.forEach(m => {
+  const cell = document.createElement('div');
+  cell.className = 'icon-cell';
+  cell.innerHTML = `
+    <div class="icon-wrap" style="background:${m.color}08; --glow:${m.glow};">
+      ${starSVG(m, 64)}
+    </div>
+    <span class="icon-label">${m.label}</span>
+    <span class="icon-color">${m.color}</span>
+  `;
+  starGrid.appendChild(cell);
+});
+
+// ===== Size Preview =====
+const sizeRow = document.getElementById('sizePreview');
+const sizes = [
+  { s: 20, label: '日历 20px' },
+  { s: 32, label: '详情 32px' },
+  { s: 48, label: '选择 48px' },
+  { s: 64, label: '大图 64px' },
+];
+sizes.forEach(sz => {
+  const item = document.createElement('div');
+  item.className = 'size-item';
+  item.innerHTML = `
+    <div style="display:flex;gap:4px;">
+      ${moonSVG(MOODS[0], sz.s)}
+      ${starSVG(MOODS[1], sz.s)}
+    </div>
+    <span class="size-label">${sz.label}</span>
+  `;
+  sizeRow.appendChild(item);
+});
+
+// ===== Calendar Preview =====
+const calPreview = document.getElementById('calPreview');
+const days = [
+  { d: 12, um: 'happy', nm: 'heartbeat' },
+  { d: 13, um: 'calm', nm: 'happy' },
+  { d: 14, um: 'excited', nm: 'excited' },
+  { d: 15, um: 'sad', nm: 'calm' },
+  { d: 16, um: 'heartbeat', nm: 'heartbeat' },
+  { d: 17, um: null, nm: null },
+  { d: 18, um: null, nm: null },
+];
+let calHtml = `<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;max-width:360px;
+  background:rgba(255,255,255,0.02);border-radius:12px;padding:12px;">`;
+days.forEach(day => {
+  const um = MOODS.find(m=>m.id===day.um);
+  const nm = MOODS.find(m=>m.id===day.nm);
+  calHtml += `<div style="display:flex;flex-direction:column;align-items:center;padding:4px 0;gap:2px;">
+    <span style="font-size:10px;color:rgba(232,236,244,0.3);margin-bottom:2px;">${day.d}</span>
+    ${um ? moonSVG(um, 20) : '<div style="width:20px;height:20px;"></div>'}
+    ${nm ? starSVG(nm, 20) : '<div style="width:20px;height:20px;"></div>'}
+  </div>`;
+});
+calHtml += `</div>`;
+calPreview.innerHTML = calHtml;
+</script>
+</body>
+</html>
