@@ -364,7 +364,7 @@ body {
 
 /* Mood Jar */
 .mood-jar-wrap { display: flex; justify-content: center; padding: 16px 0 24px; }
-.mood-jar { width: 200px; height: 260px; position: relative; }
+.mood-jar { width: 220px; height: 300px; position: relative; }
 .mood-jar .jar-outline {
   position: absolute; inset: 0;
   border: 1.5px solid rgba(110,142,250,0.18);
@@ -384,18 +384,19 @@ body {
 }
 .mood-jar .jar-balls {
   position: absolute; bottom: 8px; left: 8px; right: 8px; top: 16px;
-  display: flex; flex-wrap: wrap-reverse; align-content: flex-start;
-  justify-content: center; gap: 2px; overflow: hidden;
+  overflow: hidden;
 }
 .mood-jar .jar-ball {
-  width: 20px; height: 20px; display: flex;
+  width: 22px; height: 22px; display: flex;
   align-items: center; justify-content: center;
-  animation: jarDrop 0.35s ease-out forwards; opacity: 0;
+  position: absolute;
+  animation: jarDrop 0.4s ease-out forwards; opacity: 0;
 }
 .mood-jar .jar-ball svg { width: 100%; height: 100%; }
 @keyframes jarDrop {
-  0% { opacity: 0; transform: translateY(-16px); }
-  100% { opacity: 1; transform: translateY(0); }
+  0% { opacity: 0; transform: translateY(-30px) rotate(0deg); }
+  60% { opacity: 1; }
+  100% { opacity: 1; transform: translateY(0) rotate(var(--rot, 0deg)); }
 }
 
 .summary-section-title {
@@ -947,12 +948,63 @@ function showSummary() {
   const userTop = Object.entries(userCount).sort((a,b)=>b[1]-a[1])[0];
   const npcTop = Object.entries(npcCount).sort((a,b)=>b[1]-a[1])[0];
 
-  // Jar
+  // Jar - natural gravity stacking (heap shape, center-heavy like reference)
   const allMoods = [...userMoods.map(m=>({m,type:'moon'})), ...npcMoods.map(m=>({m,type:'star'}))];
+  for (let i = allMoods.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [allMoods[i], allMoods[j]] = [allMoods[j], allMoods[i]];
+  }
+  const jarW = 200, jarH = 270, bs = 18;
+  const balls = []; // {cx, cy}
+  
+  // Simple 2D circle packing with gravity
+  function dropBall() {
+    // Bias toward center for heap shape (gaussian-ish)
+    const r1 = Math.random(), r2 = Math.random();
+    const gaussian = (r1 + r2) / 2; // 0-1, center-biased
+    const cx = bs + gaussian * (jarW - bs * 2);
+    
+    // Drop from top, find resting position
+    let cy = jarH - bs/2 - 8; // floor
+    
+    // Simulate gravity: find the highest obstacle below
+    let settled = false;
+    while (!settled) {
+      settled = true;
+      for (const b of balls) {
+        const dx = cx - b.cx, dy = cy - b.cy;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        const minDist = bs * 0.88;
+        if (dist < minDist) {
+          // Push up: sit on top of this ball
+          cy = b.cy - Math.sqrt(minDist * minDist - dx * dx) * 0.85;
+          settled = false;
+          break;
+        }
+      }
+    }
+    return { cx, cy };
+  }
+  
   let jarHtml = '';
-  allMoods.forEach((item,i) => {
-    const svg = item.type === 'moon' ? moonSVG(item.m, 20) : starSVG(item.m, 20);
-    jarHtml += `<div class="jar-ball" style="animation-delay:${i*0.02}s;">${svg}</div>`;
+  allMoods.forEach((item, i) => {
+    // Try several drops, prefer the lowest rest (gravity wins)
+    let best = null;
+    for (let t = 0; t < 12; t++) {
+      const pos = dropBall();
+      if (!best || pos.cy > best.cy) best = pos;
+    }
+    // Organic jitter
+    best.cx += (Math.random() - 0.5) * 4;
+    best.cy += (Math.random() - 0.5) * 2;
+    balls.push({ cx: best.cx, cy: best.cy });
+    
+    const rot = (Math.random() - 0.5) * 36;
+    const scale = 0.85 + Math.random() * 0.25;
+    const svg = item.type === 'moon' ? moonSVG(item.m, bs) : starSVG(item.m, bs);
+    const left = best.cx - bs/2;
+    const bottom = jarH - best.cy - bs/2;
+    jarHtml += `<div class="jar-ball" style="left:${left}px;bottom:${bottom}px;--rot:${rot}deg;transform:scale(${scale.toFixed(2)});animation-delay:${i*0.025}s;">${svg}</div>`;
   });
 
   let html = `<div class="mood-jar-wrap"><div class="mood-jar">
@@ -1014,11 +1066,23 @@ function drawTrend(uDay, nDay, days) {
   const rect = canvas.getBoundingClientRect();
   canvas.width = rect.width*dpr; canvas.height = rect.height*dpr;
   const ctx = canvas.getContext('2d'); ctx.scale(dpr,dpr);
-  const W=rect.width, H=rect.height, pL=8, pR=8, pT=8, pB=14;
+  const W=rect.width, H=rect.height, pL=8, pR=8, pT=8, pB=28;
   const cW=W-pL-pR, cH=H-pT-pB;
 
   ctx.strokeStyle='rgba(255,255,255,0.04)'; ctx.lineWidth=1;
   for(let i=0;i<=4;i++){const y=pT+(cH/4)*i; ctx.beginPath();ctx.moveTo(pL,y);ctx.lineTo(W-pR,y);ctx.stroke();}
+
+  // X-axis date labels every 5 days
+  ctx.fillStyle = 'rgba(232,236,244,0.3)';
+  ctx.font = '10px -apple-system, sans-serif';
+  ctx.textAlign = 'center';
+  for (let d = 1; d <= days; d += 5) {
+    const x = pL + ((d - 1) / (days - 1)) * cW;
+    ctx.fillText(d, x, H - 6);
+    // Small tick mark
+    ctx.strokeStyle = 'rgba(255,255,255,0.06)'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(x, pT + cH); ctx.lineTo(x, pT + cH + 4); ctx.stroke();
+  }
 
   function drawLine(dms, color) {
     if(dms.length<2) return;
