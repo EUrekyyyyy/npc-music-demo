@@ -390,8 +390,16 @@ body {
   font-size: 14px; line-height: 1.7; color: var(--text-secondary);
 }
 /* Locked state */
+.detail-entry .detail-entry-text { transition: filter 0.6s ease; }
+.detail-entry .detail-entry-mood-right { transition: filter 0.6s ease; }
 .detail-entry.locked .detail-entry-text { filter: blur(6px); user-select: none; }
 .detail-entry.locked .detail-entry-mood-right { filter: blur(4px); }
+.detail-lock-overlay {
+  transition: opacity 0.5s ease;
+}
+.detail-lock-overlay.unlocking {
+  opacity: 0; pointer-events: none;
+}
 .detail-lock-overlay {
   position: absolute; inset: 0; display: flex;
   flex-direction: column; align-items: center; justify-content: center;
@@ -1085,10 +1093,18 @@ function closeDayDetail() { document.getElementById('dayDetail').classList.remov
 function unlockEntry(key) {
   if (diaryData[key]?.npc) {
     diaryData[key].npc.locked = false;
-    // Re-render with same scroll position
-    const scrollTop = document.getElementById('detailContent').scrollTop;
-    showDayDetail(key, new Date(key+'T00:00:00'));
-    setTimeout(() => { document.getElementById('detailContent').scrollTop = scrollTop; }, 50);
+    // Find the button's parent overlay and card
+    const btn = event.target;
+    const overlay = btn.closest('.detail-lock-overlay');
+    const card = btn.closest('.detail-entry');
+    if (overlay && card) {
+      // Fade out overlay
+      overlay.classList.add('unlocking');
+      // Unblur content
+      card.classList.remove('locked');
+      // Remove overlay after animation
+      setTimeout(() => overlay.remove(), 600);
+    }
   }
 }
 
