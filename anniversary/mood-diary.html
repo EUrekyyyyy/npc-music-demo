@@ -957,40 +957,37 @@ function showSummary() {
   const jarW = 200, jarH = 270, bs = 18;
   const balls = []; // {cx, cy}
   
-  // Simple 2D circle packing with gravity
+  // Simple 2D circle packing with gravity (with safety limit)
   function dropBall() {
-    // Bias toward center for heap shape (gaussian-ish)
     const r1 = Math.random(), r2 = Math.random();
-    const gaussian = (r1 + r2) / 2; // 0-1, center-biased
+    const gaussian = (r1 + r2) / 2;
     const cx = bs + gaussian * (jarW - bs * 2);
+    let cy = jarH - bs/2 - 8;
+    const minDist = bs * 0.85;
     
-    // Drop from top, find resting position
-    let cy = jarH - bs/2 - 8; // floor
-    
-    // Simulate gravity: find the highest obstacle below
-    let settled = false;
-    while (!settled) {
-      settled = true;
+    // Max 50 iterations to prevent freeze
+    for (let iter = 0; iter < 50; iter++) {
+      let hit = false;
       for (const b of balls) {
         const dx = cx - b.cx, dy = cy - b.cy;
         const dist = Math.sqrt(dx * dx + dy * dy);
-        const minDist = bs * 0.88;
         if (dist < minDist) {
-          // Push up: sit on top of this ball
-          cy = b.cy - Math.sqrt(minDist * minDist - dx * dx) * 0.85;
-          settled = false;
+          cy = b.cy - minDist * 0.9;
+          hit = true;
           break;
         }
       }
+      if (!hit) break;
     }
     return { cx, cy };
   }
   
   let jarHtml = '';
-  allMoods.forEach((item, i) => {
-    // Try several drops, prefer the lowest rest (gravity wins)
+  // Limit jar to 60 balls max for performance
+  const jarMoods = allMoods.slice(0, 60);
+  jarMoods.forEach((item, i) => {
     let best = null;
-    for (let t = 0; t < 12; t++) {
+    for (let t = 0; t < 6; t++) {
       const pos = dropBall();
       if (!best || pos.cy > best.cy) best = pos;
     }
