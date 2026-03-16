@@ -3,315 +3,279 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>心情图标设计稿 v4</title>
+<title>心情图标 v5</title>
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body {
-  background: #1A1A2E;
-  font-family: -apple-system, 'PingFang SC', sans-serif;
-  color: #E8ECF4;
-  padding: 40px 16px;
-  display: flex; flex-direction: column; align-items: center;
-}
-h1 {
-  font-size: 22px; font-weight: 700; margin-bottom: 6px;
-  background: linear-gradient(135deg, #C4B5FD, #67B2FF);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-}
-.subtitle { font-size: 12px; color: rgba(232,236,244,0.35); margin-bottom: 36px; }
-.section-title {
-  font-size: 15px; font-weight: 600; margin: 28px 0 16px;
-  display: flex; align-items: center; gap: 8px;
-}
-.badge { font-size: 10px; padding: 3px 10px; border-radius: 8px; font-weight: 500; }
-.grid {
-  display: grid; grid-template-columns: repeat(4, 1fr);
-  gap: 14px; max-width: 400px; width: 100%;
-}
-.icon-cell { display: flex; flex-direction: column; align-items: center; gap: 6px; }
-.icon-label { font-size: 12px; color: rgba(232,236,244,0.5); font-weight: 500; }
-.divider { width: 100%; max-width: 400px; height: 1px; background: rgba(255,255,255,0.05); margin: 28px 0; }
-.sizes-row { display: flex; gap: 24px; align-items: flex-end; margin-top: 12px; flex-wrap: wrap; justify-content: center; }
-.size-item { display: flex; flex-direction: column; align-items: center; gap: 6px; }
-.size-label { font-size: 10px; color: rgba(232,236,244,0.25); }
-.cal-preview {
-  display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px;
-  max-width: 360px; width: 100%; background: rgba(255,255,255,0.02);
-  border-radius: 12px; padding: 10px; margin-top: 10px;
-}
-.cal-cell { display: flex; flex-direction: column; align-items: center; padding: 3px 0; gap: 2px; }
-.cal-cell .day-n { font-size: 9px; color: rgba(232,236,244,0.2); }
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#1A1A2E;font-family:-apple-system,'PingFang SC',sans-serif;color:#E8ECF4;padding:40px 16px;display:flex;flex-direction:column;align-items:center}
+h1{font-size:22px;font-weight:700;margin-bottom:6px;background:linear-gradient(135deg,#C4B5FD,#67B2FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.sub{font-size:12px;color:rgba(232,236,244,0.35);margin-bottom:36px}
+.st{font-size:15px;font-weight:600;margin:28px 0 16px;display:flex;align-items:center;gap:8px}
+.badge{font-size:10px;padding:3px 10px;border-radius:8px;font-weight:500}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;max-width:400px;width:100%}
+.ic{display:flex;flex-direction:column;align-items:center;gap:6px}
+.il{font-size:12px;color:rgba(232,236,244,0.5);font-weight:500}
+.div{width:100%;max-width:400px;height:1px;background:rgba(255,255,255,0.05);margin:28px 0}
+.sr{display:flex;gap:24px;align-items:flex-end;margin-top:12px;flex-wrap:wrap;justify-content:center}
+.si{display:flex;flex-direction:column;align-items:center;gap:6px}
+.sl{font-size:10px;color:rgba(232,236,244,0.25)}
+.cp{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;max-width:360px;width:100%;background:rgba(255,255,255,0.02);border-radius:12px;padding:10px;margin-top:10px}
+.cc{display:flex;flex-direction:column;align-items:center;padding:3px 0;gap:2px}
+.dn{font-size:9px;color:rgba(232,236,244,0.2)}
 </style>
 </head>
 <body>
+<h1>心情图标 v5</h1>
+<p class="sub">🌙 月亮 = 用户　⭐ 星星 = 智能体 · 对照参考图精调版</p>
 
-<h1>心情图标 v4</h1>
-<p class="subtitle">🌙 月亮 = 用户　⭐ 星星 = 智能体 · 对照参考图逐个调</p>
-
-<div class="section-title">
-  <span>🌙 月亮表情</span>
-  <span class="badge" style="background:rgba(196,181,253,0.12);color:#C4B5FD;">用户</span>
-</div>
-<div class="grid" id="moonGrid"></div>
-
-<div class="divider"></div>
-
-<div class="section-title">
-  <span>⭐ 星星表情</span>
-  <span class="badge" style="background:rgba(103,178,255,0.12);color:#67B2FF;">智能体</span>
-</div>
-<div class="grid" id="starGrid"></div>
-
-<div class="divider"></div>
-
-<div class="section-title">📐 尺寸预览</div>
-<div class="sizes-row" id="sizePreview"></div>
-
-<div class="divider"></div>
-
-<div class="section-title">📅 日历效果</div>
-<div class="cal-preview" id="calPreview"></div>
+<div class="st"><span>🌙 月亮表情</span><span class="badge" style="background:rgba(196,181,253,0.12);color:#C4B5FD">用户</span></div>
+<div class="grid" id="mG"></div>
+<div class="div"></div>
+<div class="st"><span>⭐ 星星表情</span><span class="badge" style="background:rgba(103,178,255,0.12);color:#67B2FF">智能体</span></div>
+<div class="grid" id="sG"></div>
+<div class="div"></div>
+<div class="st">📐 尺寸预览</div>
+<div class="sr" id="szP"></div>
+<div class="div"></div>
+<div class="st">📅 日历效果</div>
+<div class="cp" id="cP"></div>
 
 <script>
-const MOODS = [
-  { id: 'happy',     label: '开心', fill: '#F4A261', shade: '#D8894A', blush: '#D07840' },
-  { id: 'heartbeat', label: '心动', fill: '#F4B4C8', shade: '#D89AAE', blush: '#D06880' },
-  { id: 'excited',   label: '兴奋', fill: '#F4D35E', shade: '#D8B948', blush: '#C8A038' },
-  { id: 'calm',      label: '平静', fill: '#8BC98B', shade: '#6FAD6F', blush: '#5A9A5A' },
-  { id: 'tired',     label: '心累', fill: '#C4B5A0', shade: '#A89A86', blush: '#8A7A66' },
-  { id: 'angry',     label: '生气', fill: '#E87461', shade: '#CC5A48', blush: '#B84838' },
-  { id: 'irritated', label: '烦躁', fill: '#9B9BC8', shade: '#7F7FAA', blush: '#6868A0' },
-  { id: 'sad',       label: '伤心', fill: '#9CC8E8', shade: '#7AACCC', blush: '#6090B0' },
+const M = [
+  {id:'happy',    l:'开心', f:'#F4A261', s:'#D8894A'},
+  {id:'heartbeat',l:'心动', f:'#F4B4C8', s:'#D89AAE'},
+  {id:'excited',  l:'兴奋', f:'#F4D35E', s:'#D8B948'},
+  {id:'calm',     l:'平静', f:'#8BC98B', s:'#6FAD6F'},
+  {id:'tired',    l:'心累', f:'#C4B5A0', s:'#A89A86'},
+  {id:'angry',    l:'生气', f:'#E8855C', s:'#CC6A42'},
+  {id:'irritated',l:'烦躁', f:'#9B9BC8', s:'#7F7FAA'},
+  {id:'sad',      l:'伤心', f:'#9CC8E8', s:'#7AACCC'},
 ];
 
-// ===============================
-// MOON: Chubby crescent
-// ===============================
-function moonSVG(m, sz) {
-  const s = sz || 80;
-  return `<svg viewBox="0 0 100 100" width="${s}" height="${s}" xmlns="http://www.w3.org/2000/svg">
-    ${moonDeco(m)}
-    <path d="M58 8
-             C80 8 95 26 95 50
-             C95 74 80 92 58 92
-             C44 92 32 84 26 72
-             C36 80 48 78 56 70
-             C66 58 66 42 56 30
-             C48 22 36 20 26 28
-             C32 16 44 8 58 8Z"
-      fill="${m.fill}"/>
-    <ellipse cx="78" cy="34" rx="8" ry="12" fill="#fff" opacity="0.08" transform="rotate(-12 78 34)"/>
-    ${moonFace(m)}
+// ========================
+// MOON — face on CONCAVE side (left/inner arc)
+// Crescent opens RIGHT, face on LEFT inner area
+// ========================
+function moon(m, sz) {
+  return `<svg viewBox="0 0 100 100" width="${sz||80}" height="${sz||80}" xmlns="http://www.w3.org/2000/svg">
+    ${mDeco(m)}
+    <path d="M45 8
+             C22 12 8 28 8 50
+             C8 72 22 88 45 92
+             C56 92 66 88 72 80
+             C60 84 48 80 40 72
+             C30 60 30 40 40 28
+             C48 20 60 16 72 20
+             C66 12 56 8 45 8Z"
+      fill="${m.f}"/>
+    <ellipse cx="22" cy="38" rx="8" ry="11" fill="#fff" opacity="0.08" transform="rotate(8 22 38)"/>
+    ${mFace(m)}
   </svg>`;
 }
 
-function moonFace(m) {
-  // Blush helper: two short vertical lines ||
-  function blush(x1, y1, x2, y2, color) {
+function mFace(m) {
+  const dk='#3A3A3A';
+  // Diagonal blush lines // style
+  function blush(x1,y1,x2,y2,c) {
+    const cl = c||m.s;
     return `
-      <line x1="${x1}" y1="${y1}" x2="${x1}" y2="${y1+6}" stroke="${color||m.blush}" stroke-width="1.8" stroke-linecap="round" opacity="0.55"/>
-      <line x1="${x1+4}" y1="${y1}" x2="${x1+4}" y2="${y1+6}" stroke="${color||m.blush}" stroke-width="1.8" stroke-linecap="round" opacity="0.55"/>
-      <line x1="${x2}" y1="${y2}" x2="${x2}" y2="${y2+6}" stroke="${color||m.blush}" stroke-width="1.8" stroke-linecap="round" opacity="0.55"/>
-      <line x1="${x2+4}" y1="${y2}" x2="${x2+4}" y2="${y2+6}" stroke="${color||m.blush}" stroke-width="1.8" stroke-linecap="round" opacity="0.55"/>
+      <line x1="${x1}" y1="${y1}" x2="${x1+3}" y2="${y1+5}" stroke="${cl}" stroke-width="1.8" stroke-linecap="round" opacity="0.55"/>
+      <line x1="${x1+4}" y1="${y1-1}" x2="${x1+7}" y2="${y1+4}" stroke="${cl}" stroke-width="1.8" stroke-linecap="round" opacity="0.55"/>
+      <line x1="${x2}" y1="${y2}" x2="${x2+3}" y2="${y2+5}" stroke="${cl}" stroke-width="1.8" stroke-linecap="round" opacity="0.55"/>
+      <line x1="${x2+4}" y1="${y2-1}" x2="${x2+7}" y2="${y2+4}" stroke="${cl}" stroke-width="1.8" stroke-linecap="round" opacity="0.55"/>
     `;
   }
-  const dk = '#3A3A3A';
   const F = {
-    // 开心: round dot eyes + pink half-circle mouth + || blush
+    // 开心: dot eyes, big pink open mouth, // blush
     happy: `
-      <circle cx="62" cy="40" r="3.5" fill="${dk}"/>
-      <circle cx="80" cy="40" r="3.5" fill="${dk}"/>
-      <circle cx="63.5" cy="39" r="1.2" fill="#fff"/>
-      <circle cx="81.5" cy="39" r="1.2" fill="#fff"/>
-      <path d="M62 54 Q71 64 82 54" stroke="${dk}" stroke-width="2" fill="none" stroke-linecap="round"/>
-      <path d="M62 54 Q71 64 82 54" fill="#E8A0A0" opacity="0.6"/>
-      ${blush(55, 48, 84, 48)}
+      <circle cx="24" cy="42" r="3.5" fill="${dk}"/>
+      <circle cx="42" cy="42" r="3.5" fill="${dk}"/>
+      <circle cx="25" cy="41" r="1.2" fill="#fff"/>
+      <circle cx="43" cy="41" r="1.2" fill="#fff"/>
+      <path d="M22 55 Q33 66 46 55" stroke="${dk}" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <path d="M22 55 Q33 66 46 55Z" fill="#E8A0A0" opacity="0.55"/>
+      ${blush(14,48,46,48)}
     `,
-    // 心动: one dot eye + one wink > + smile + || blush
+    // 心动: one dot + one wink, smile, // blush pink
     heartbeat: `
-      <circle cx="62" cy="42" r="3.5" fill="${dk}"/>
-      <circle cx="63.5" cy="41" r="1.2" fill="#fff"/>
-      <path d="M76 40 L80 44 L84 40" stroke="${dk}" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M62 56 Q71 63 82 56" stroke="${dk}" stroke-width="2.2" fill="none" stroke-linecap="round"/>
-      ${blush(55, 50, 84, 50, '#D06080')}
+      <circle cx="24" cy="42" r="3.5" fill="${dk}"/>
+      <circle cx="25" cy="41" r="1.2" fill="#fff"/>
+      <path d="M38 40 L42 44 L46 40" stroke="${dk}" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M24 56 Q33 64 44 56" stroke="${dk}" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+      ${blush(14,49,44,49,'#D06880')}
     `,
-    // 兴奋: >< eyes + big open mouth + || blush
+    // 兴奋: >< eyes, big mouth + red tongue, // blush diagonal
     excited: `
-      <path d="M58 38 L64 42 L58 46" stroke="${dk}" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M86 38 L80 42 L86 46" stroke="${dk}" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-      <ellipse cx="71" cy="57" rx="6.5" ry="5" fill="${dk}"/>
-      <ellipse cx="71" cy="55" rx="5" ry="2.2" fill="${m.fill}" opacity="0.4"/>
-      ${blush(54, 48, 86, 48)}
+      <path d="M20 40 L26 44 L20 48" stroke="${dk}" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M48 40 L42 44 L48 48" stroke="${dk}" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <ellipse cx="33" cy="58" rx="7" ry="5.5" fill="${dk}"/>
+      <ellipse cx="33" cy="61" rx="5" ry="3" fill="#E88080" opacity="0.7"/>
+      ${blush(14,50,46,50)}
     `,
-    // 平静: closed eye arcs + gentle smile, no blush
+    // 平静: closed eye arcs ∪ shape, gentle smile
     calm: `
-      <path d="M59 42 Q64 37 69 42" stroke="${dk}" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-      <path d="M76 42 Q81 37 86 42" stroke="${dk}" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-      <path d="M65 54 Q72 58 80 54" stroke="${dk}" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <path d="M20 43 Q25 38 30 43" stroke="${dk}" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <path d="M36 43 Q41 38 46 43" stroke="${dk}" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <path d="M26 55 Q33 59 40 55" stroke="${dk}" stroke-width="2" fill="none" stroke-linecap="round"/>
     `,
-    // 心累: droopy arc eyes + puckered lips + tongue
+    // 心累: droopy ∩ eyes (sad arcs), puckered lips + tongue
     tired: `
-      <path d="M58 40 Q63 44 68 40" stroke="${dk}" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-      <path d="M76 40 Q81 44 86 40" stroke="${dk}" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-      <ellipse cx="71" cy="56" rx="3.5" ry="2.5" fill="${dk}" opacity="0.7"/>
-      <ellipse cx="71" cy="59" rx="3.5" ry="3" fill="#E8A0A0" opacity="0.65"/>
+      <path d="M20 42 Q25 46 30 42" stroke="${dk}" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <path d="M36 42 Q41 46 46 42" stroke="${dk}" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <ellipse cx="33" cy="56" rx="3.5" ry="2.5" fill="${dk}" opacity="0.65"/>
+      <ellipse cx="33" cy="59" rx="3.5" ry="3" fill="#E8A0A0" opacity="0.6"/>
     `,
-    // 生气: angry brows + dot eyes + wavy mouth
+    // 生气: SPIRAL eyes + flat frown + anger marks
     angry: `
-      <line x1="56" y1="34" x2="66" y2="38" stroke="${dk}" stroke-width="2.8" stroke-linecap="round"/>
-      <line x1="88" y1="34" x2="78" y2="38" stroke="${dk}" stroke-width="2.8" stroke-linecap="round"/>
-      <circle cx="62" cy="42" r="2.8" fill="${dk}"/>
-      <circle cx="82" cy="42" r="2.8" fill="${dk}"/>
-      <path d="M62 56 Q67 52 72 56 Q77 60 82 54" stroke="${dk}" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <path d="M22 40 Q22 36 26 36 Q30 36 30 40 Q30 44 26 44 Q24 44 24 42" stroke="${dk}" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <path d="M38 40 Q38 36 42 36 Q46 36 46 40 Q46 44 42 44 Q40 44 40 42" stroke="${dk}" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <line x1="26" y1="56" x2="42" y2="56" stroke="${dk}" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M28 54 Q30 52 32 54" stroke="${dk}" stroke-width="1.5" fill="none" stroke-linecap="round"/>
     `,
-    // 烦躁: furrowed brows + one dot one line eye + squiggly mouth + tongue
+    // 烦躁: furrowed brows + one dot one squint + squiggly mouth + tongue
     irritated: `
-      <line x1="57" y1="34" x2="66" y2="38" stroke="${dk}" stroke-width="2.5" stroke-linecap="round"/>
-      <line x1="87" y1="34" x2="78" y2="38" stroke="${dk}" stroke-width="2.5" stroke-linecap="round"/>
-      <circle cx="62" cy="43" r="2.8" fill="${dk}"/>
-      <path d="M76 42 Q81 45 86 42" stroke="${dk}" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-      <path d="M64 56 Q68 52 72 56" stroke="${dk}" stroke-width="2" fill="none" stroke-linecap="round"/>
-      <ellipse cx="72" cy="60" rx="3" ry="2.5" fill="#E8A0A0" opacity="0.6"/>
+      <line x1="18" y1="36" x2="28" y2="40" stroke="${dk}" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="48" y1="36" x2="38" y2="40" stroke="${dk}" stroke-width="2.5" stroke-linecap="round"/>
+      <circle cx="24" cy="44" r="2.8" fill="${dk}"/>
+      <path d="M36 43 Q41 46 46 43" stroke="${dk}" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <path d="M26 56 Q30 52 34 56" stroke="${dk}" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <ellipse cx="34" cy="60" rx="3" ry="2.5" fill="#E8A0A0" opacity="0.55"/>
     `,
-    // 伤心: big watery eyes + sad mouth + tear
+    // 伤心: big watery eyes + sad mouth + tear trail
     sad: `
-      <ellipse cx="62" cy="42" rx="4.5" ry="5.5" fill="${dk}"/>
-      <ellipse cx="82" cy="42" rx="4.5" ry="5.5" fill="${dk}"/>
-      <circle cx="64" cy="40" r="2.2" fill="#fff" opacity="0.8"/>
-      <circle cx="84" cy="40" r="2.2" fill="#fff" opacity="0.8"/>
-      <circle cx="60" cy="44" r="1" fill="#fff" opacity="0.35"/>
-      <circle cx="80" cy="44" r="1" fill="#fff" opacity="0.35"/>
-      <path d="M65 58 Q72 54 80 58" stroke="${dk}" stroke-width="2" fill="none" stroke-linecap="round"/>
-      <path d="M58 44 Q57 50 56 54" stroke="${m.shade}" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.5"/>
-      <ellipse cx="56" cy="56" rx="1.8" ry="2.2" fill="${m.shade}" opacity="0.5"/>
+      <ellipse cx="24" cy="42" rx="4.5" ry="5.5" fill="${dk}"/>
+      <ellipse cx="42" cy="42" rx="4.5" ry="5.5" fill="${dk}"/>
+      <circle cx="26" cy="40" r="2.2" fill="#fff" opacity="0.8"/>
+      <circle cx="44" cy="40" r="2.2" fill="#fff" opacity="0.8"/>
+      <circle cx="22" cy="44" r="0.9" fill="#fff" opacity="0.3"/>
+      <circle cx="40" cy="44" r="0.9" fill="#fff" opacity="0.3"/>
+      <path d="M26 58 Q33 54 40 58" stroke="${dk}" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <path d="M20 48 Q19 53 18 57" stroke="${m.s}" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.45"/>
+      <ellipse cx="18" cy="59" rx="1.8" ry="2" fill="${m.s}" opacity="0.45"/>
     `,
   };
-  return F[m.id] || F.calm;
+  return F[m.id]||F.calm;
 }
 
-function moonDeco(m) {
+function mDeco(m) {
   const D = {
     happy: `
-      <line x1="42" y1="16" x2="42" y2="28" stroke="${m.shade}" stroke-width="2.5" stroke-linecap="round" opacity="0.65"/>
-      <line x1="36" y1="22" x2="48" y2="22" stroke="${m.shade}" stroke-width="2.5" stroke-linecap="round" opacity="0.65"/>
-      <circle cx="36" cy="14" r="1.8" fill="${m.shade}" opacity="0.4"/>
+      <line x1="58" y1="20" x2="58" y2="32" stroke="${m.s}" stroke-width="2.5" stroke-linecap="round" opacity="0.6"/>
+      <line x1="52" y1="26" x2="64" y2="26" stroke="${m.s}" stroke-width="2.5" stroke-linecap="round" opacity="0.6"/>
+      <circle cx="66" cy="18" r="1.5" fill="${m.s}" opacity="0.35"/>
     `,
     heartbeat: `
-      <path d="M44 10 C44 4 49 3 51 8 C53 3 58 4 58 10 C58 17 51 22 51 22 C51 22 44 17 44 10Z" fill="#E85050" opacity="0.85"/>
+      <path d="M56 14 C56 8 61 7 63 12 C65 7 70 8 70 14 C70 21 63 26 63 26 C63 26 56 21 56 14Z" fill="#E85050" opacity="0.85"/>
     `,
     excited: `
-      <line x1="42" y1="12" x2="46" y2="20" stroke="${m.shade}" stroke-width="3" stroke-linecap="round" opacity="0.55"/>
-      <line x1="34" y1="18" x2="40" y2="24" stroke="${m.shade}" stroke-width="2.5" stroke-linecap="round" opacity="0.45"/>
-      <line x1="90" y1="14" x2="95" y2="10" stroke="${m.shade}" stroke-width="2.5" stroke-linecap="round" opacity="0.45"/>
+      <line x1="8" y1="14" x2="8" y2="24" stroke="${m.s}" stroke-width="2.5" stroke-linecap="round" opacity="0.55"/>
+      <line x1="4" y1="19" x2="12" y2="19" stroke="${m.s}" stroke-width="2.5" stroke-linecap="round" opacity="0.55"/>
+      <line x1="14" y1="8" x2="14" y2="16" stroke="${m.s}" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
     `,
     calm: ``,
     tired: `
-      <circle cx="48" cy="16" r="5" fill="${m.fill}" opacity="0.22"/>
-      <circle cx="42" cy="12" r="3.5" fill="${m.fill}" opacity="0.18"/>
-      <circle cx="54" cy="14" r="3" fill="${m.fill}" opacity="0.14"/>
+      <circle cx="62" cy="20" r="5" fill="${m.f}" opacity="0.2"/>
+      <circle cx="56" cy="16" r="3.5" fill="${m.f}" opacity="0.16"/>
+      <circle cx="68" cy="18" r="3" fill="${m.f}" opacity="0.13"/>
     `,
     angry: `
-      <path d="M62 6 Q59 0 62 -3" stroke="#BBB" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.45"/>
-      <path d="M72 3 Q69 -3 72 -6" stroke="#BBB" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.45"/>
-      <path d="M82 6 Q79 0 82 -3" stroke="#BBB" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.35"/>
+      <path d="M58 22 Q62 18 60 22 Q58 26 62 24 Q66 22 64 26" stroke="${m.s}" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.5"/>
+      <path d="M68 16 Q72 12 70 16 Q68 20 72 18" stroke="${m.s}" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.4"/>
     `,
     irritated: `
-      <path d="M40 16 Q44 12 42 16 Q40 20 44 18 Q48 16 46 20 Q44 24 48 22" stroke="${m.shade}" stroke-width="2.2" fill="none" stroke-linecap="round" opacity="0.45"/>
+      <path d="M56 22 Q60 18 58 22 Q56 26 60 24 Q64 22 62 26 Q60 30 64 28" stroke="${m.s}" stroke-width="2.2" fill="none" stroke-linecap="round" opacity="0.45"/>
     `,
     sad: `
-      <line x1="80" y1="10" x2="80" y2="22" stroke="${m.shade}" stroke-width="2.2" stroke-linecap="round" opacity="0.4"/>
-      <line x1="86" y1="12" x2="86" y2="24" stroke="${m.shade}" stroke-width="2.2" stroke-linecap="round" opacity="0.4"/>
-      <line x1="92" y1="10" x2="92" y2="22" stroke="${m.shade}" stroke-width="2.2" stroke-linecap="round" opacity="0.4"/>
+      <line x1="56" y1="16" x2="56" y2="28" stroke="${m.s}" stroke-width="2" stroke-linecap="round" opacity="0.35"/>
+      <line x1="62" y1="18" x2="62" y2="30" stroke="${m.s}" stroke-width="2" stroke-linecap="round" opacity="0.35"/>
+      <line x1="68" y1="16" x2="68" y2="28" stroke="${m.s}" stroke-width="2" stroke-linecap="round" opacity="0.35"/>
     `,
   };
-  return D[m.id] || '';
+  return D[m.id]||'';
 }
 
-// ===============================
-// STAR: Super round puffy blob-star
-// ===============================
-function starSVG(m, sz) {
-  const s = sz || 80;
-  return `<svg viewBox="0 0 100 100" width="${s}" height="${s}" xmlns="http://www.w3.org/2000/svg">
-    ${starDeco(m)}
-    <!-- Ultra-round blob star -->
+// ========================
+// STAR — Ultra round puffy blob
+// ========================
+function star(m, sz) {
+  return `<svg viewBox="0 0 100 100" width="${sz||80}" height="${sz||80}" xmlns="http://www.w3.org/2000/svg">
+    ${sDeco(m)}
     <path d="M50 6
-             C54 6 55 18 57 22 C59 26 66 26 70 24
-             C76 20 82 16 86 20 C90 24 86 32 84 36
-             C82 40 82 44 84 48 C86 52 94 54 94 58
-             C94 62 88 64 84 66 C80 68 78 70 76 74
-             C74 78 76 86 74 90 C72 94 66 92 62 90
-             C58 88 54 84 50 84 C46 84 42 88 38 90
-             C34 92 28 94 26 90 C24 86 26 78 24 74
-             C22 70 20 68 16 66 C12 64 6 62 6 58
-             C6 54 14 52 16 48 C18 44 18 40 16 36
-             C14 32 10 24 14 20 C18 16 24 20 30 24
-             C34 26 41 26 43 22 C45 18 46 6 50 6Z"
-      fill="${m.fill}"/>
-    <ellipse cx="36" cy="34" rx="8" ry="10" fill="#fff" opacity="0.07" transform="rotate(-8 36 34)"/>
-    ${starFace(m)}
+             C54 6 55 18 58 22 C61 26 68 27 72 24
+             C78 20 84 16 88 20 C92 24 88 32 86 36
+             C84 40 84 44 86 48 C88 52 96 54 96 58
+             C96 62 90 64 86 66 C82 68 80 72 78 76
+             C76 80 78 88 76 92 C74 96 68 94 64 92
+             C60 90 54 86 50 86 C46 86 40 90 36 92
+             C32 94 26 96 24 92 C22 88 24 80 22 76
+             C20 72 18 68 14 66 C10 64 4 62 4 58
+             C4 54 12 52 14 48 C16 44 16 40 14 36
+             C12 32 8 24 12 20 C16 16 22 20 28 24
+             C32 27 39 26 42 22 C45 18 46 6 50 6Z"
+      fill="${m.f}"/>
+    <ellipse cx="36" cy="34" rx="8" ry="10" fill="#fff" opacity="0.06" transform="rotate(-8 36 34)"/>
+    ${sFace(m)}
   </svg>`;
 }
 
-function starFace(m) {
-  function blush(x1, y1, x2, y2, color) {
+function sFace(m) {
+  const dk='#3A3A3A';
+  function blush(x1,y1,x2,y2,c) {
+    const cl=c||m.s;
     return `
-      <line x1="${x1}" y1="${y1}" x2="${x1}" y2="${y1+6}" stroke="${color||m.blush}" stroke-width="1.8" stroke-linecap="round" opacity="0.55"/>
-      <line x1="${x1+4}" y1="${y1}" x2="${x1+4}" y2="${y1+6}" stroke="${color||m.blush}" stroke-width="1.8" stroke-linecap="round" opacity="0.55"/>
-      <line x1="${x2}" y1="${y2}" x2="${x2}" y2="${y2+6}" stroke="${color||m.blush}" stroke-width="1.8" stroke-linecap="round" opacity="0.55"/>
-      <line x1="${x2+4}" y1="${y2}" x2="${x2+4}" y2="${y2+6}" stroke="${color||m.blush}" stroke-width="1.8" stroke-linecap="round" opacity="0.55"/>
+      <line x1="${x1}" y1="${y1}" x2="${x1+3}" y2="${y1+5}" stroke="${cl}" stroke-width="1.8" stroke-linecap="round" opacity="0.55"/>
+      <line x1="${x1+4}" y1="${y1-1}" x2="${x1+7}" y2="${y1+4}" stroke="${cl}" stroke-width="1.8" stroke-linecap="round" opacity="0.55"/>
+      <line x1="${x2}" y1="${y2}" x2="${x2+3}" y2="${y2+5}" stroke="${cl}" stroke-width="1.8" stroke-linecap="round" opacity="0.55"/>
+      <line x1="${x2+4}" y1="${y2-1}" x2="${x2+7}" y2="${y2+4}" stroke="${cl}" stroke-width="1.8" stroke-linecap="round" opacity="0.55"/>
     `;
   }
-  const dk = '#3A3A3A';
   const F = {
     happy: `
       <circle cx="38" cy="44" r="4" fill="${dk}"/>
       <circle cx="62" cy="44" r="4" fill="${dk}"/>
       <circle cx="39.5" cy="42.5" r="1.5" fill="#fff"/>
       <circle cx="63.5" cy="42.5" r="1.5" fill="#fff"/>
-      <path d="M36 58 Q50 68 64 58" stroke="${dk}" stroke-width="2" fill="none" stroke-linecap="round"/>
-      <path d="M36 58 Q50 68 64 58" fill="#E8A0A0" opacity="0.55"/>
-      ${blush(30, 52, 66, 52)}
+      <path d="M36 58 Q50 70 64 58" stroke="${dk}" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <path d="M36 58 Q50 70 64 58Z" fill="#E8A0A0" opacity="0.55"/>
+      ${blush(28,52,64,52)}
     `,
     heartbeat: `
       <circle cx="38" cy="44" r="4" fill="${dk}"/>
       <circle cx="39.5" cy="42.5" r="1.5" fill="#fff"/>
       <path d="M58 42 L62 46 L66 42" stroke="${dk}" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
       <path d="M38 58 Q50 66 64 58" stroke="${dk}" stroke-width="2.2" fill="none" stroke-linecap="round"/>
-      ${blush(30, 52, 66, 52, '#D06080')}
+      ${blush(28,52,64,52,'#D06880')}
     `,
     excited: `
       <path d="M34 42 L40 46 L34 50" stroke="${dk}" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
       <path d="M66 42 L60 46 L66 50" stroke="${dk}" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-      <ellipse cx="50" cy="60" rx="6.5" ry="5" fill="${dk}"/>
-      <ellipse cx="50" cy="58" rx="5" ry="2.2" fill="${m.fill}" opacity="0.4"/>
-      ${blush(28, 52, 66, 52)}
+      <ellipse cx="50" cy="60" rx="7" ry="5.5" fill="${dk}"/>
+      <ellipse cx="50" cy="63" rx="5" ry="3" fill="#E88080" opacity="0.7"/>
+      ${blush(26,52,64,52)}
     `,
     calm: `
       <path d="M34 46 Q39 41 44 46" stroke="${dk}" stroke-width="2.5" fill="none" stroke-linecap="round"/>
       <path d="M56 46 Q61 41 66 46" stroke="${dk}" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-      <path d="M42 58 Q50 62 58 58" stroke="${dk}" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <path d="M42 58 Q50 63 58 58" stroke="${dk}" stroke-width="2" fill="none" stroke-linecap="round"/>
     `,
     tired: `
       <path d="M34 44 Q39 48 44 44" stroke="${dk}" stroke-width="2.5" fill="none" stroke-linecap="round"/>
       <path d="M56 44 Q61 48 66 44" stroke="${dk}" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-      <ellipse cx="50" cy="58" rx="3.5" ry="2.5" fill="${dk}" opacity="0.7"/>
-      <ellipse cx="50" cy="61" rx="3.5" ry="3" fill="#E8A0A0" opacity="0.65"/>
+      <ellipse cx="50" cy="58" rx="3.5" ry="2.5" fill="${dk}" opacity="0.65"/>
+      <ellipse cx="50" cy="61" rx="3.5" ry="3" fill="#E8A0A0" opacity="0.6"/>
     `,
     angry: `
-      <line x1="30" y1="38" x2="42" y2="42" stroke="${dk}" stroke-width="2.8" stroke-linecap="round"/>
-      <line x1="70" y1="38" x2="58" y2="42" stroke="${dk}" stroke-width="2.8" stroke-linecap="round"/>
-      <circle cx="38" cy="46" r="2.8" fill="${dk}"/>
-      <circle cx="62" cy="46" r="2.8" fill="${dk}"/>
-      <path d="M38 60 Q44 56 50 60 Q56 64 62 58" stroke="${dk}" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <path d="M36 42 Q36 38 40 38 Q44 38 44 42 Q44 46 40 46 Q38 46 38 44" stroke="${dk}" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <path d="M56 42 Q56 38 60 38 Q64 38 64 42 Q64 46 60 46 Q58 46 58 44" stroke="${dk}" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <line x1="40" y1="58" x2="60" y2="58" stroke="${dk}" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M44 56 Q46 54 48 56" stroke="${dk}" stroke-width="1.5" fill="none" stroke-linecap="round"/>
     `,
     irritated: `
       <line x1="32" y1="38" x2="42" y2="42" stroke="${dk}" stroke-width="2.5" stroke-linecap="round"/>
       <line x1="68" y1="38" x2="58" y2="42" stroke="${dk}" stroke-width="2.5" stroke-linecap="round"/>
       <circle cx="38" cy="46" r="2.8" fill="${dk}"/>
-      <path d="M56 46 Q61 49 66 46" stroke="${dk}" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <path d="M56 45 Q61 48 66 45" stroke="${dk}" stroke-width="2.5" fill="none" stroke-linecap="round"/>
       <path d="M42 58 Q46 54 50 58" stroke="${dk}" stroke-width="2" fill="none" stroke-linecap="round"/>
-      <ellipse cx="50" cy="62" rx="3" ry="2.5" fill="#E8A0A0" opacity="0.6"/>
+      <ellipse cx="50" cy="62" rx="3" ry="2.5" fill="#E8A0A0" opacity="0.55"/>
     `,
     sad: `
       <ellipse cx="38" cy="44" rx="5" ry="6" fill="${dk}"/>
@@ -321,71 +285,55 @@ function starFace(m) {
       <circle cx="36" cy="46" r="1" fill="#fff" opacity="0.3"/>
       <circle cx="60" cy="46" r="1" fill="#fff" opacity="0.3"/>
       <path d="M42 62 Q50 58 58 62" stroke="${dk}" stroke-width="2" fill="none" stroke-linecap="round"/>
-      <path d="M36 48 Q35 54 34 58" stroke="${m.shade}" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.5"/>
-      <ellipse cx="34" cy="60" rx="1.8" ry="2.2" fill="${m.shade}" opacity="0.5"/>
+      <path d="M34 48 Q33 54 32 58" stroke="${m.s}" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.45"/>
+      <ellipse cx="32" cy="60" rx="1.8" ry="2" fill="${m.s}" opacity="0.45"/>
     `,
   };
-  return F[m.id] || F.calm;
+  return F[m.id]||F.calm;
 }
 
-function starDeco(m) {
+function sDeco(m) {
   const D = {
     happy: `
-      <line x1="76" y1="20" x2="76" y2="30" stroke="${m.shade}" stroke-width="2.5" stroke-linecap="round" opacity="0.6"/>
-      <line x1="71" y1="25" x2="81" y2="25" stroke="${m.shade}" stroke-width="2.5" stroke-linecap="round" opacity="0.6"/>
-      <circle cx="70" cy="17" r="1.5" fill="${m.shade}" opacity="0.35"/>
+      <line x1="76" y1="20" x2="76" y2="30" stroke="${m.s}" stroke-width="2.5" stroke-linecap="round" opacity="0.55"/>
+      <line x1="71" y1="25" x2="81" y2="25" stroke="${m.s}" stroke-width="2.5" stroke-linecap="round" opacity="0.55"/>
+      <circle cx="70" cy="17" r="1.5" fill="${m.s}" opacity="0.3"/>
     `,
     heartbeat: `
       <path d="M28 8 C28 2 33 1 35 6 C37 1 42 2 42 8 C42 15 35 20 35 20 C35 20 28 15 28 8Z" fill="#E85050" opacity="0.85"/>
     `,
     excited: `
-      <line x1="78" y1="8" x2="82" y2="2" stroke="${m.shade}" stroke-width="3" stroke-linecap="round" opacity="0.55"/>
-      <line x1="84" y1="14" x2="90" y2="10" stroke="${m.shade}" stroke-width="2.5" stroke-linecap="round" opacity="0.45"/>
-      <line x1="16" y1="14" x2="10" y2="10" stroke="${m.shade}" stroke-width="2.5" stroke-linecap="round" opacity="0.45"/>
+      <line x1="24" y1="8" x2="24" y2="18" stroke="${m.s}" stroke-width="2.5" stroke-linecap="round" opacity="0.55"/>
+      <line x1="19" y1="13" x2="29" y2="13" stroke="${m.s}" stroke-width="2.5" stroke-linecap="round" opacity="0.55"/>
+      <line x1="16" y1="4" x2="16" y2="10" stroke="${m.s}" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
     `,
     calm: ``,
     tired: `
-      <circle cx="74" cy="16" r="5" fill="${m.fill}" opacity="0.2"/>
-      <circle cx="80" cy="12" r="3.5" fill="${m.fill}" opacity="0.16"/>
-      <circle cx="68" cy="13" r="3" fill="${m.fill}" opacity="0.13"/>
+      <circle cx="74" cy="16" r="5" fill="${m.f}" opacity="0.2"/>
+      <circle cx="80" cy="12" r="3.5" fill="${m.f}" opacity="0.16"/>
+      <circle cx="68" cy="13" r="3" fill="${m.f}" opacity="0.13"/>
     `,
     angry: `
-      <path d="M40 2 Q37 -4 40 -6" stroke="#BBB" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.45"/>
-      <path d="M50 0 Q47 -6 50 -8" stroke="#BBB" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.45"/>
-      <path d="M60 2 Q57 -4 60 -6" stroke="#BBB" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.35"/>
+      <path d="M72 22 Q76 18 74 22 Q72 26 76 24 Q80 22 78 26" stroke="${m.s}" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.5"/>
+      <path d="M80 14 Q84 10 82 14 Q80 18 84 16" stroke="${m.s}" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.4"/>
     `,
     irritated: `
-      <path d="M72 16 Q76 12 74 16 Q72 20 76 18 Q80 16 78 20" stroke="${m.shade}" stroke-width="2.2" fill="none" stroke-linecap="round" opacity="0.45"/>
+      <path d="M72 16 Q76 12 74 16 Q72 20 76 18 Q80 16 78 20 Q76 24 80 22" stroke="${m.s}" stroke-width="2.2" fill="none" stroke-linecap="round" opacity="0.45"/>
     `,
     sad: `
-      <line x1="66" y1="14" x2="66" y2="26" stroke="${m.shade}" stroke-width="2.2" stroke-linecap="round" opacity="0.4"/>
-      <line x1="72" y1="16" x2="72" y2="28" stroke="${m.shade}" stroke-width="2.2" stroke-linecap="round" opacity="0.4"/>
-      <line x1="78" y1="14" x2="78" y2="26" stroke="${m.shade}" stroke-width="2.2" stroke-linecap="round" opacity="0.4"/>
+      <line x1="66" y1="14" x2="66" y2="26" stroke="${m.s}" stroke-width="2" stroke-linecap="round" opacity="0.35"/>
+      <line x1="72" y1="16" x2="72" y2="28" stroke="${m.s}" stroke-width="2" stroke-linecap="round" opacity="0.35"/>
+      <line x1="78" y1="14" x2="78" y2="26" stroke="${m.s}" stroke-width="2" stroke-linecap="round" opacity="0.35"/>
     `,
   };
-  return D[m.id] || '';
+  return D[m.id]||'';
 }
 
-// ===== Render =====
-document.getElementById('moonGrid').innerHTML = MOODS.map(m =>
-  `<div class="icon-cell">${moonSVG(m,80)}<span class="icon-label">${m.label}</span></div>`
-).join('');
-
-document.getElementById('starGrid').innerHTML = MOODS.map(m =>
-  `<div class="icon-cell">${starSVG(m,80)}<span class="icon-label">${m.label}</span></div>`
-).join('');
-
-document.getElementById('sizePreview').innerHTML =
-  [{s:22,l:'日历'},{s:36,l:'详情'},{s:52,l:'选择'},{s:80,l:'大图'}].map(sz =>
-    `<div class="size-item"><div style="display:flex;gap:6px;">${moonSVG(MOODS[0],sz.s)}${starSVG(MOODS[1],sz.s)}</div><span class="size-label">${sz.l} ${sz.s}px</span></div>`
-  ).join('');
-
-document.getElementById('calPreview').innerHTML =
-  [{d:12,u:0,n:1},{d:13,u:3,n:0},{d:14,u:2,n:2},{d:15,u:7,n:3},{d:16,u:1,n:1},{d:17},{d:18}].map(day =>
-    `<div class="cal-cell"><span class="day-n">${day.d}</span>
-    ${day.u!==undefined ? moonSVG(MOODS[day.u],20) : '<div style="width:20px;height:20px"></div>'}
-    ${day.u!==undefined ? starSVG(MOODS[day.n],20) : '<div style="width:20px;height:20px"></div>'}</div>`
-  ).join('');
+// Render
+document.getElementById('mG').innerHTML=M.map(m=>`<div class="ic">${moon(m,80)}<span class="il">${m.l}</span></div>`).join('');
+document.getElementById('sG').innerHTML=M.map(m=>`<div class="ic">${star(m,80)}<span class="il">${m.l}</span></div>`).join('');
+document.getElementById('szP').innerHTML=[{z:22,l:'日历'},{z:36,l:'详情'},{z:52,l:'选择'},{z:80,l:'大图'}].map(s=>`<div class="si"><div style="display:flex;gap:6px">${moon(M[0],s.z)}${star(M[1],s.z)}</div><span class="sl">${s.l} ${s.z}px</span></div>`).join('');
+document.getElementById('cP').innerHTML=[{d:12,u:0,n:1},{d:13,u:3,n:0},{d:14,u:2,n:2},{d:15,u:7,n:3},{d:16,u:1,n:1},{d:17},{d:18}].map(d=>`<div class="cc"><span class="dn">${d.d}</span>${d.u!==undefined?moon(M[d.u],20):'<div style="width:20px;height:20px"></div>'}${d.u!==undefined?star(M[d.n],20):'<div style="width:20px;height:20px"></div>'}</div>`).join('');
 </script>
 </body>
 </html>
