@@ -70,11 +70,7 @@ body {
   position: relative; z-index: 2;
 }
 .header-avatar.npc { margin-left: -14px; z-index: 1; }
-.header-avatar.user {
-  background: linear-gradient(135deg, #C4B5FD, #E89AAF);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 22px; color: #fff;
-}
+.header-avatar.user { }
 /* NPC bubble — positioned above NPC avatar */
 .npc-bubble-wrap { position: relative; }
 .npc-bubble {
@@ -479,7 +475,8 @@ body {
   <div class="status-bar"></div>
   <div class="header-section">
     <div class="header-avatars">
-      <div class="header-avatar user">🌙</div>
+      <img class="header-avatar user" src="https://i.pinimg.com/736x/4e/d1/58/4ed158e0e6513816ab5ad98a1db627a6.jpg" alt="用户"
+        onerror="this.style.background='linear-gradient(135deg,#C4B5FD,#E89AAF)';this.textContent='🌙';">
       <div class="npc-bubble-wrap">
         <div class="npc-bubble">今天过得怎么样？✨</div>
         <img class="header-avatar npc" src="https://xingyeai-images-cdn.oss-cn-shanghai.aliyuncs.com/talkie-user-img/148772284551305/354206459928687.jpeg" alt="江晦"
