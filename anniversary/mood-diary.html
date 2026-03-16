@@ -444,13 +444,15 @@ body {
 .summary-stat-card {
   flex: 1; background: rgba(255,255,255,0.05);
   border-radius: 10px;
-  padding: 8px 10px; display: flex; align-items: center; gap: 6px;
+  padding: 10px 12px; display: flex; align-items: center; gap: 8px;
 }
-.summary-stat-card .stat-who { font-size: 12px; font-family: -apple-system, 'PingFang SC', sans-serif; white-space: nowrap; }
-.summary-stat-card .stat-mood { width: 26px; height: 26px; flex-shrink: 0; }
-.summary-stat-card .stat-mood svg { width: 100%; height: 100%; }
-.summary-stat-card .stat-label { font-size: 12px; font-family: -apple-system, 'PingFang SC', sans-serif; }
-.summary-stat-card .stat-count { font-size: 11px; color: var(--text-secondary); margin-left: auto; font-family: -apple-system, 'PingFang SC', sans-serif; }
+.summary-stat-card .stat-avatar {
+  width: 28px; height: 28px; border-radius: 50%; object-fit: cover;
+  border: 1.5px solid rgba(255,255,255,0.1); flex-shrink: 0;
+}
+.summary-stat-card .stat-mood { width: 32px; height: 32px; flex-shrink: 0; }
+.summary-stat-card .stat-mood img { width: 100%; height: 100%; object-fit: contain; }
+.summary-stat-card .stat-count { font-size: 16px; font-weight: 600; color: var(--text-primary); margin-left: auto; }
 
 .trend-chart {
   background: rgba(255,255,255,0.05);
@@ -557,7 +559,7 @@ body {
 <!-- Entry Input -->
 <div class="entry-input" id="entryInput">
   <div class="entry-input-header">
-    <button class="back-btn" onclick="closeEntryInput()">‹ 返回</button>
+    <button class="back-btn" onclick="closeEntryInput()">‹</button>
     <button class="save-btn" onclick="saveEntry()">写好了 ✓</button>
   </div>
   <div class="entry-input-card">
@@ -570,7 +572,7 @@ body {
 <!-- Day Detail -->
 <div class="day-detail" id="dayDetail">
   <div class="day-detail-header">
-    <button class="back-btn" onclick="closeDayDetail()">‹ 返回</button>
+    <button class="back-btn" onclick="closeDayDetail()">‹</button>
   </div>
   <div class="day-detail-content" id="detailContent"></div>
 </div>
@@ -578,7 +580,7 @@ body {
 <!-- Summary Page -->
 <div class="summary-page" id="summaryPage">
   <div class="summary-header">
-    <button class="back-btn" onclick="closeSummary()">‹ 返回</button>
+    <button class="back-btn" onclick="closeSummary()">‹</button>
     <span class="summary-title" id="summaryTitle"></span>
     <span style="width:50px"></span>
   </div>
@@ -1010,20 +1012,16 @@ function showSummary() {
   // 本月最多心情 — compact horizontal layout: name + icon + label + count
   html += `<div class="summary-section-title">本月最多心情</div><div class="summary-stats">`;
   if (userTop) {
-    const m = getMood(userTop[0]); const c = MOOD_COLORS[userTop[0]];
     html += `<div class="summary-stat-card">
-      <span class="stat-who" style="color:#E89AAF;">${USER_NAME}</span>
-      <div class="stat-mood">${moonSVG(userTop[0],28)}</div>
-      <span class="stat-label" style="color:${c};">${m.label}</span>
-      <span class="stat-count">×${userTop[1]}</span></div>`;
+      <img class="stat-avatar" src="${USER_AVATAR}" alt="${USER_NAME}">
+      <div class="stat-mood">${moonSVG(userTop[0],32)}</div>
+      <span class="stat-count">${userTop[1]}</span></div>`;
   }
   if (npcTop) {
-    const m = getMood(npcTop[0]); const c = MOOD_COLORS[npcTop[0]];
     html += `<div class="summary-stat-card">
-      <span class="stat-who" style="color:#7BA3C9;">${NPC_NAME}</span>
-      <div class="stat-mood">${starSVG(npcTop[0],28)}</div>
-      <span class="stat-label" style="color:${c};">${m.label}</span>
-      <span class="stat-count">×${npcTop[1]}</span></div>`;
+      <img class="stat-avatar" src="${NPC_AVATAR}" alt="${NPC_NAME}">
+      <div class="stat-mood">${starSVG(npcTop[0],32)}</div>
+      <span class="stat-count">${npcTop[1]}</span></div>`;
   }
   html += `</div>`;
 
