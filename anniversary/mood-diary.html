@@ -1228,7 +1228,7 @@ function renderMonthPicker() {
   const grid = document.getElementById('monthPickerGrid');
   let html = '';
   for (let m = 0; m < 12; m++) {
-    const disabled = (pickerYear === 2026 && m < 2) || (pickerYear > now.getFullYear()) || (pickerYear === now.getFullYear() && m > now.getMonth());
+    const disabled = (pickerYear === 2026 && m < 1) || (pickerYear > now.getFullYear()) || (pickerYear === now.getFullYear() && m > now.getMonth());
     const selected = (pickerYear === sumYear && m === sumMonth);
     html += `<button${disabled?' disabled':''} class="${selected?'selected':''}" onclick="pickMonth(${m})">${m+1}月</button>`;
   }
