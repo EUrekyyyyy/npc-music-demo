@@ -403,16 +403,28 @@ body {
 }
 .summary-page.active { display: flex; }
 .summary-header {
-  padding: 56px 20px 12px; display: flex;
-  justify-content: space-between; align-items: center;
+  padding: env(safe-area-inset-top, 20px) 16px 8px;
+  padding-top: calc(env(safe-area-inset-top, 20px) + 36px);
+  display: flex; align-items: center; gap: 10px;
 }
 .summary-header .back-btn {
   background: #2C2C2E; border: none; color: rgba(255,255,255,0.8);
   font-size: 14px; cursor: pointer; padding: 6px 14px; border-radius: 16px;
 }
 .summary-title {
-  font-size: 18px; font-family: -apple-system, 'PingFang SC', sans-serif; color: var(--text-primary);
+  font-size: 18px; font-weight: 600; color: var(--text-primary); flex: 1;
 }
+.summary-month-nav {
+  display: flex; align-items: center; gap: 4px;
+}
+.summary-month-nav button {
+  background: #2C2C2E; border: none; color: rgba(255,255,255,0.7);
+  width: 28px; height: 28px; border-radius: 50%; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px;
+}
+.summary-month-nav button:disabled { opacity: 0.3; cursor: default; }
+.summary-month-nav button:active:not(:disabled) { background: #3C3C3E; }
 .summary-content {
   flex: 1; overflow-y: auto; padding: 0 16px 40px;
   -webkit-overflow-scrolling: touch;
@@ -469,7 +481,6 @@ body {
 /* ===== Mood Distribution — Mirrored Bars ===== */
 .summary-section-title {
   font-size: 15px; margin: 16px 0 8px; color: var(--text-primary);
-  text-align: center;
 }
 .mood-dist {
   background: rgba(255,255,255,0.04); border-radius: 12px; padding: 14px 8px;
@@ -658,7 +669,10 @@ body {
   <div class="summary-header">
     <button class="back-btn" onclick="closeSummary()">‹</button>
     <span class="summary-title" id="summaryTitle"></span>
-    <span style="width:50px"></span>
+    <div class="summary-month-nav">
+      <button id="sumPrev" onclick="sumChangeMonth(-1)">‹</button>
+      <button id="sumNext" onclick="sumChangeMonth(1)">›</button>
+    </div>
   </div>
   <div class="summary-content" id="summaryContent"></div>
 </div>
@@ -1063,13 +1077,23 @@ function buildJarHtml(moods, type, jarW, jarH, iconSize) {
 }
 
 function showSummary() {
-  document.getElementById('summaryTitle').textContent = `${currentYear}年${currentMonth+1}月`;
+  sumYear = currentYear; sumMonth = currentMonth;
+  showSummaryForMonth(sumYear, sumMonth);
+}
+function showSummaryForMonth(year, month) {
+  document.getElementById('summaryTitle').textContent = `${year}年${month+1}月`;
+  // Update nav button states
+  const prevBtn = document.getElementById('sumPrev');
+  const nextBtn = document.getElementById('sumNext');
+  if (prevBtn) prevBtn.disabled = (year === 2026 && month <= 2);
+  const now = new Date();
+  if (nextBtn) nextBtn.disabled = (year >= now.getFullYear() && month >= now.getMonth());
   const content = document.getElementById('summaryContent');
-  const daysInMonth = new Date(currentYear, currentMonth+1, 0).getDate();
+  const daysInMonth = new Date(year, month+1, 0).getDate();
   const userMoods=[], npcMoods=[], userCount={}, npcCount={}, userDay=[], npcDay=[];
 
   for (let d=1; d<=daysInMonth; d++) {
-    const key = `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const key = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
     const entry = diaryData[key];
     if (entry) {
       if (entry.user) { userMoods.push(entry.user.mood); userCount[entry.user.mood]=(userCount[entry.user.mood]||0)+1; userDay.push({day:d,mood:entry.user.mood}); }
@@ -1140,6 +1164,22 @@ function showSummary() {
   setTimeout(() => drawTrend(userDay, npcDay, daysInMonth), 80);
 }
 function closeSummary() { document.getElementById('summaryPage').classList.remove('active','slide-up'); }
+
+// Summary month navigation
+let sumYear, sumMonth;
+function sumChangeMonth(delta) {
+  let newMonth = sumMonth + delta;
+  let newYear = sumYear;
+  if (newMonth > 11) { newMonth = 0; newYear++; }
+  if (newMonth < 0) { newMonth = 11; newYear--; }
+  // Don't go before 2026-03
+  if (newYear < 2026 || (newYear === 2026 && newMonth < 2)) return;
+  // Don't go past current month
+  const now = new Date();
+  if (newYear > now.getFullYear() || (newYear === now.getFullYear() && newMonth > now.getMonth())) return;
+  sumYear = newYear; sumMonth = newMonth;
+  showSummaryForMonth(sumYear, sumMonth);
+}
 
 function moodVal(id) { return {heartbeat:4,happy:3,calm:2,tired:1,sad:0}[id]??2; }
 
